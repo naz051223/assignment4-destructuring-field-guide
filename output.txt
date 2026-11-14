@@ -1,0 +1,120 @@
+
+> destructuring-guide@0.0.0 all
+> npm run js && npm run ts && npm run review
+
+
+> destructuring-guide@0.0.0 js
+> node js/arrays.mjs && node js/objects.mjs && node js/params.mjs && node js/pitfalls.mjs && tsx js/props.jsx
+
+form 1: 40 8
+form 2: objects ["parameters","props"]
+form 3: JavaScript TypeScript
+form 4: 30 null 2
+form 5: Review closures planned
+form 6: Review closures
+form 7: 40 null
+form 8: s1 {"title":"Review closures","status":"planned"}
+form 9: Library B closures
+form 10: status planned
+form 11: {"title":"Free practice","minutes":40}
+form 11 custom: {"title":"React","minutes":25}
+form 11 array: 48
+form 12 object: reading 20
+form 12 object: coding 40
+form 12 map: Monday 2
+form 12 map: Tuesday 3
+pitfall 1: TypeError: Cannot destructure property 'minutes' of 'undefined' as it is undefined.
+pitfall 2: null
+pitfall 3 invalid: SyntaxError: Unexpected token '='
+pitfall 3 fixed: 25
+pitfall 4: Library C s1 s2
+pitfall 5 object: React practice planned
+pitfall 5 array: planned React practice
+P1 object: <section><h2>Study</h2>Closures</section>
+P1 pattern: <section><h2>Study</h2>Closures</section>
+P2 nested: <section><h2>Study</h2>Practice</section>
+P2 attribute: <section><h2>Study</h2>Practice</section>
+P2 both: <section><h2>Study</h2>Nested</section>
+P3 string: <section><h2>Study</h2>Read</section>
+P3 string zero: <section><h2>Study</h2>0</section>
+P3 numeric zero: <section><h2>Study</h2>0</section>
+P3 element: <section><h2>Study</h2><strong>Code</strong></section>
+P3 several: <section><h2>Study</h2><b>Read</b><i>Code</i></section>
+P3 undefined: <section><h2>Study</h2></section>
+P3 null: <section><h2>Study</h2></section>
+P3 false: <section><h2>Study</h2></section>
+P3 diagnostic: Functions are not valid as a React child. This may happen if you return %s instead of <%s /> from render. Or maybe you meant to call this function rather than return it. children children
+P3 raw function: <section><h2>Study</h2></section>
+P3 invoked function: <section><b>25 min</b></section>
+P4 separated: <section id="s1" data-topic="props" title="Session">Read</section>
+P4 explicit last: <section title="Explicit">Read</section>
+P4 spread last: <section title="Spread">Read</section>
+P5 slots: <article><header><h2>Plan</h2></header><main><p>Read</p></main><footer><small>Done</small></footer></article>
+P5 composition: <article><header><h2>Plan</h2></header><main><p>Read</p></main><footer><small>Done</small></footer></article>
+P6 undefined: <h2>Free practice</h2>
+P6 null: <h2></h2>
+P7 JS: No static props type checking; see ts/props.tsx and compiler probes.
+
+> destructuring-guide@0.0.0 ts
+> tsx ts/arrays.ts && tsx ts/objects.ts && tsx ts/params.ts && tsx ts/types.ts && tsx ts/props.tsx
+
+form 1: 40 8
+form 2: objects ["parameters","props"]
+form 3: JavaScript TypeScript
+form 4: 30 null 2
+form 5: Review closures planned
+form 6: Review closures
+form 7: 40 null
+form 8: s1 {"title":"Review closures","status":"planned"}
+form 9: Library B closures
+form 10: status planned
+form 11: {"title":"Free practice","minutes":40}
+form 11 custom: {"title":"React","minutes":25}
+form 11 array: 48
+form 12 object: reading 20
+form 12 object: coding 40
+form 12 map: Monday 2
+form 12 map: Tuesday 3
+T1: 25 number 25
+T2: 40 closures 25 props
+T3: undefined free practice
+T4: undefined 40 null
+T5: undefined 25
+P1 object: <section><h2>Study</h2>Closures</section>
+P1 pattern: <section><h2>Study</h2>Closures</section>
+P2 nested: <section><h2>Study</h2>Practice</section>
+P2 attribute: <section><h2>Study</h2>Practice</section>
+P3 string: <section><h2>Study</h2>Read</section>
+P3 string zero: <section><h2>Study</h2>0</section>
+P3 numeric zero: <section><h2>Study</h2>0</section>
+P3 element: <section><h2>Study</h2><strong>Code</strong></section>
+P3 several: <section><h2>Study</h2><b>Read</b><i>Code</i></section>
+P3 undefined: <section><h2>Study</h2></section>
+P3 null: <section><h2>Study</h2></section>
+P3 false: <section><h2>Study</h2></section>
+P3 invoked function: <section><b>25 min</b></section>
+P4 separated: <section id="s1" data-topic="props" title="Session">Read</section>
+P4 explicit last: <section title="Explicit">Read</section>
+P4 spread last: <section title="Spread">Read</section>
+P5 slots: <article><header><h2>Plan</h2></header><main><p>Read</p></main><footer><small>Done</small></footer></article>
+P5 composition: <article><header><h2>Plan</h2></header><main><p>Read</p></main><footer><small>Done</small></footer></article>
+P6 undefined: <h2>Free practice</h2>
+P6 null: <h2></h2>
+P7 ReactNode: <section><h2>Typed</h2>7</section>
+P7 PropsWithChildren: <article><em>Review</em></article>
+P7 ComponentProps: <button type="button" disabled="">Start</button>
+
+> destructuring-guide@0.0.0 review
+> tsx js/review.jsx
+
+0 0
+Haftalık plan
+React çalışması
+40
+B
+original: <section>0</section>
+checked: <section></section>
+<section><strong>5</strong></section>
+review string length: 5
+review later binding: ReferenceError: Cannot access 'b' before initialization
+review earlier binding: 2 2
