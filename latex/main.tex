@@ -76,7 +76,7 @@
 \lstdefinelanguage{ts}[]{TypeScript}{}
 \lstdefinelanguage{text}{}
 \lstdefinelanguage{sh}{}
-\lstset{basicstyle=\ttfamily\footnotesize,backgroundcolor=\color{codebg},breaklines=true,breakatwhitespace=false,columns=fullflexible,keepspaces=true,showstringspaces=false,frame=single,framerule=0pt,xleftmargin=4pt,xrightmargin=4pt,aboveskip=8pt,belowskip=8pt,tabsize=2,literate={🧠}{{[U+1F9E0]}}1 {ı}{{\i}}1 {İ}{{\.{I}}}1 {ş}{{\c{s}}}1 {Ş}{{\c{S}}}1 {ğ}{{\u{g}}}1 {Ğ}{{\u{G}}}1 {ü}{{\"u}}1 {ö}{{\"o}}1 {ç}{{\c{c}}}1 {–}{{-}}1 {—}{{-}}1}
+\lstset{basicstyle=\ttfamily\footnotesize,backgroundcolor=\color{codebg},breaklines=true,breakatwhitespace=false,columns=fullflexible,keepspaces=true,showstringspaces=false,frame=single,framerule=0pt,xleftmargin=4pt,xrightmargin=4pt,aboveskip=8pt,belowskip=8pt,tabsize=2,escapeinside={(*@}{@*)}}
 \AtBeginEnvironment{longtable}{\footnotesize}
 \setlength{\parskip}{5pt}
 \setlength{\parindent}{0pt}
@@ -88,6 +88,7 @@
 
 
 \AtBeginDocument{\raggedright}
+
 
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -139,7 +140,7 @@ npm run diagnose # separate intentional compiler failures
 
 \end{minipage}\par
 
-\passthrough{\lstinline!output.txt!} contains the actual output of the
+\texttt{output.\allowbreak{}txt} contains the actual output of the
 current project. The JS and TS versions print the same values for forms
 1--12. The all command also runs the guided-review examples through npm
 run review.
@@ -150,11 +151,10 @@ run review.
 
 \subsection{Form 1: values by position}\label{form-1-values-by-position}
 
-\textbf{Syntax:}
-\passthrough{\lstinline!const [work, pause] = sessionLengths(40)!}
+\textbf{Syntax:} \texttt{const [work, pause] = sessionLengths(40)}
 
-\textbf{Example} (\passthrough{\lstinline!js/arrays.mjs!}, typed version
-in \passthrough{\lstinline!ts/arrays.ts!}):
+\textbf{Example} (\texttt{js/\allowbreak{}arrays.\allowbreak{}mjs},
+typed version in \texttt{ts/\allowbreak{}arrays.\allowbreak{}ts}):
 
 \begin{minipage}{\linewidth}
 
@@ -168,24 +168,22 @@ console.log('form 1:', work, pause)
 
 \end{minipage}\par
 
-\textbf{Output:} \passthrough{\lstinline!form 1: 40 8!}
+\textbf{Output:} \texttt{form 1:\allowbreak{} 40 8}
 
 \textbf{Use it when:} a function returns a small ordered group of
 related values.
 
 \textbf{Watch out:} names do not select positions. Swapping the names
 swaps their meaning. In plain assignments, save the result once, then
-read \passthrough{\lstinline!result[0]!} and
-\passthrough{\lstinline!result[1]!}. The TS return type
-\passthrough{\lstinline![number, number]!} guarantees those two
-positions exist.
+read \texttt{result[0]} and \texttt{result[1]}. The TS return type
+\texttt{[number, number]} guarantees those two positions exist.
 
 \subsection{Form 2: skip and rest}\label{form-2-skip-and-rest}
 
 \textbf{Syntax:}
-\passthrough{\lstinline!const [, nextTopic, ...laterTopics] = topics!}
+\texttt{const [, nextTopic, .\allowbreak{}.\allowbreak{}.\allowbreak{}laterTopics] = topics}
 
-\textbf{Example} (\passthrough{\lstinline!js/arrays.mjs!}):
+\textbf{Example} (\texttt{js/\allowbreak{}arrays.\allowbreak{}mjs}):
 
 \begin{minipage}{\linewidth}
 
@@ -198,24 +196,21 @@ console.log('form 2:', nextTopic, JSON.stringify(laterTopics))
 \end{minipage}\par
 
 \textbf{Output:}
-\passthrough{\lstinline!form 2: objects ["parameters","props"]!}
+\texttt{form 2:\allowbreak{} objects ["parameters","props"]}
 
 \textbf{Use it when:} only one position and the remaining items matter.
 
 \textbf{Watch out:} rest must be last. It creates a new array without
 changing the source. For this array the corresponding operations are
-\passthrough{\lstinline!topics[1]!} and
-\passthrough{\lstinline!topics.slice(2)!}. With
-\passthrough{\lstinline!noUncheckedIndexedAccess!}, TS gives
-\passthrough{\lstinline!nextTopic!} type
-\passthrough{\lstinline!string | undefined!}.
+\texttt{topics[1]} and \texttt{topics.\allowbreak{}slice(2)}. With
+\texttt{noUncheckedIndexedAccess}, TS gives \texttt{nextTopic} type
+\texttt{string | undefined}.
 
 \subsection{Form 3: swap}\label{form-3-swap}
 
-\textbf{Syntax:}
-\passthrough{\lstinline![morning, evening] = [evening, morning]!}
+\textbf{Syntax:} \texttt{[morning, evening] = [evening, morning]}
 
-\textbf{Example} (\passthrough{\lstinline!js/arrays.mjs!}):
+\textbf{Example} (\texttt{js/\allowbreak{}arrays.\allowbreak{}mjs}):
 
 \begin{minipage}{\linewidth}
 
@@ -228,22 +223,22 @@ console.log('form 3:', morning, evening)
 
 \end{minipage}\par
 
-\textbf{Output:} \passthrough{\lstinline!form 3: JavaScript TypeScript!}
+\textbf{Output:} \texttt{form 3:\allowbreak{} JavaScript TypeScript}
 
 \textbf{Use it when:} exchanging two existing variables.
 
 \textbf{Watch out:} use mutable bindings. The leading semicolon prevents
 the array expression from continuing the preceding statement. Without
-destructuring, save \passthrough{\lstinline!morning!} in a temporary
-variable before overwriting it. TS also requires each assigned value to
-be compatible with its destination variable.
+destructuring, save \texttt{morning} in a temporary variable before
+overwriting it. TS also requires each assigned value to be compatible
+with its destination variable.
 
 \subsection{Form 4: array defaults}\label{form-4-array-defaults}
 
 \textbf{Syntax:}
-\passthrough{\lstinline!const [duration = 30, reminder = 'enabled', rounds = 2] = settings!}
+\texttt{const [duration = 30, reminder = 'enabled', rounds = 2] = settings}
 
-\textbf{Example} (\passthrough{\lstinline!js/arrays.mjs!}):
+\textbf{Example} (\texttt{js/\allowbreak{}arrays.\allowbreak{}mjs}):
 
 \begin{minipage}{\linewidth}
 
@@ -255,24 +250,22 @@ console.log('form 4:', duration, reminder, rounds)
 
 \end{minipage}\par
 
-\textbf{Output:} \passthrough{\lstinline!form 4: 30 null 2!}
+\textbf{Output:} \texttt{form 4:\allowbreak{} 30 null 2}
 
 \textbf{Use it when:} missing positions should have fallback values.
 
 \textbf{Watch out:} undefined and a missing position trigger defaults;
 null does not. The plain version checks each indexed value with
-\passthrough{\lstinline!=== undefined!} before choosing a fallback. In
-TS the first two values use a two-element tuple; a separate empty
-\passthrough{\lstinline!number[]!} demonstrates the missing rounds
-position without indexing past a tuple.
+\texttt{=== undefined} before choosing a fallback. In TS the first two
+values use a two-element tuple; a separate empty \texttt{number[]}
+demonstrates the missing rounds position without indexing past a tuple.
 
 \subsection{Form 5: properties by name}\label{form-5-properties-by-name}
 
-\textbf{Syntax:}
-\passthrough{\lstinline!let \{ title, status \} = session!}
+\textbf{Syntax:} \texttt{let \{ title, status \} = session}
 
-\textbf{Example} (\passthrough{\lstinline!js/objects.mjs!}, typed
-version in \passthrough{\lstinline!ts/objects.ts!}):
+\textbf{Example} (\texttt{js/\allowbreak{}objects.\allowbreak{}mjs},
+typed version in \texttt{ts/\allowbreak{}objects.\allowbreak{}ts}):
 
 \begin{minipage}{\linewidth}
 
@@ -284,25 +277,24 @@ console.log('form 5:', title, status)
 
 \end{minipage}\par
 
-\textbf{Output:}
-\passthrough{\lstinline!form 5: Review closures planned!}
+\textbf{Output:} \texttt{form 5:\allowbreak{} Review closures planned}
 
 \textbf{Use it when:} several fields of the same object are needed
 locally.
 
 \textbf{Watch out:} object fields are selected by name, regardless of
 their order. Plain assignments are
-\passthrough{\lstinline!let title = session.title!} and
-\passthrough{\lstinline!let status = session.status!}. Reassigning these
+\texttt{let title = session.\allowbreak{}title} and
+\texttt{let status = session.\allowbreak{}status}. Reassigning these
 string variables does not update the source object.
 
 \subsection{Form 6: rename}\label{form-6-rename}
 
 \textbf{Syntax:}
-\passthrough{\lstinline!const \{ title: heading \} = session!}
+\texttt{const \{ title:\allowbreak{} heading \} = session}
 
-\textbf{Example} (\passthrough{\lstinline!js/objects.mjs!}, using the
-session from form 5):
+\textbf{Example} (\texttt{js/\allowbreak{}objects.\allowbreak{}mjs},
+using the session from form 5):
 
 \begin{minipage}{\linewidth}
 
@@ -313,23 +305,22 @@ console.log('form 6:', heading)
 
 \end{minipage}\par
 
-\textbf{Output:} \passthrough{\lstinline!form 6: Review closures!}
+\textbf{Output:} \texttt{form 6:\allowbreak{} Review closures}
 
 \textbf{Use it when:} a local name would be clearer or the original name
 is already used.
 
-\textbf{Watch out:} this declares \passthrough{\lstinline!heading!}, not
-a new \passthrough{\lstinline!title!} binding. It means
-\passthrough{\lstinline!const heading = session.title!}. The colon is a
+\textbf{Watch out:} this declares \texttt{heading}, not a new
+\texttt{title} binding. It means
+\texttt{const heading = session.\allowbreak{}title}. The colon is a
 rename, including in TS; a type annotation belongs after the whole
 pattern.
 
 \subsection{Form 7: object defaults}\label{form-7-object-defaults}
 
-\textbf{Syntax:}
-\passthrough{\lstinline!const \{ minutes = 40 \} = options!}
+\textbf{Syntax:} \texttt{const \{ minutes = 40 \} = options}
 
-\textbf{Example} (\passthrough{\lstinline!js/objects.mjs!}):
+\textbf{Example} (\texttt{js/\allowbreak{}objects.\allowbreak{}mjs}):
 
 \begin{minipage}{\linewidth}
 
@@ -341,23 +332,22 @@ console.log('form 7:', minutes, explicitNull)
 
 \end{minipage}\par
 
-\textbf{Output:} \passthrough{\lstinline!form 7: 40 null!}
+\textbf{Output:} \texttt{form 7:\allowbreak{} 40 null}
 
 \textbf{Use it when:} an optional configuration field needs a fallback.
 
 \textbf{Watch out:} the fallback does not replace null or protect
 against a null source object. Plain code reads the property, then
 substitutes 40 only if it is undefined. The TS settings type allows
-\passthrough{\lstinline!number | null!}; a default removes undefined,
-not null.
+\texttt{number | null}; a default removes undefined, not null.
 
 \subsection{Form 8: object rest}\label{form-8-object-rest}
 
 \textbf{Syntax:}
-\passthrough{\lstinline!const \{ id, ...details \} = session!}
+\texttt{const \{ id, .\allowbreak{}.\allowbreak{}.\allowbreak{}details \} = session}
 
-\textbf{Example} (\passthrough{\lstinline!js/objects.mjs!}, using the
-session from form 5):
+\textbf{Example} (\texttt{js/\allowbreak{}objects.\allowbreak{}mjs},
+using the session from form 5):
 
 \begin{minipage}{\linewidth}
 
@@ -369,7 +359,7 @@ console.log('form 8:', id, JSON.stringify(details))
 \end{minipage}\par
 
 \textbf{Output:}
-\passthrough{\lstinline!form 8: s1 \{"title":"Review closures","status":"planned"\}!}
+\texttt{form 8:\allowbreak{} s1 \{"title":\allowbreak{}"Review closures","status":\allowbreak{}"planned"\}}
 
 \textbf{Use it when:} separating an identifier from the remaining
 fields.
@@ -377,15 +367,16 @@ fields.
 \textbf{Watch out:} rest is a shallow copy of remaining own enumerable
 properties. Nested object references remain shared. For this specific
 plain object, the expanded version reads id, title and status separately
-and builds a details object. \passthrough{\lstinline!...details!} in an
+and builds a details object.
+\texttt{.\allowbreak{}.\allowbreak{}.\allowbreak{}details} in an
 expression is spread: it expands fields instead of collecting them.
 
 \subsection{Form 9: nested patterns}\label{form-9-nested-patterns}
 
 \textbf{Syntax:}
-\passthrough{\lstinline!const \{ room: \{ label \}, topics: [firstTopic] \} = plan!}
+\texttt{const \{ room:\allowbreak{} \{ label \}, topics:\allowbreak{} [firstTopic] \} = plan}
 
-\textbf{Example} (\passthrough{\lstinline!js/objects.mjs!}):
+\textbf{Example} (\texttt{js/\allowbreak{}objects.\allowbreak{}mjs}):
 
 \begin{minipage}{\linewidth}
 
@@ -397,23 +388,23 @@ console.log('form 9:', label, firstTopic)
 
 \end{minipage}\par
 
-\textbf{Output:} \passthrough{\lstinline!form 9: Library B closures!}
+\textbf{Output:} \texttt{form 9:\allowbreak{} Library B closures}
 
 \textbf{Use it when:} a few values inside a known structure are needed.
 
 \textbf{Watch out:} this does not declare room or topics. A missing room
 throws before label can be read. Plain assignments read
-\passthrough{\lstinline!plan.room.label!} and
-\passthrough{\lstinline!plan.topics[0]!}. The TS array element remains
+\texttt{plan.\allowbreak{}room.\allowbreak{}label} and
+\texttt{plan.\allowbreak{}topics[0]}. The TS array element remains
 possibly undefined, because the topics array may be empty.
 
 \subsection{Form 10: computed property}\label{form-10-computed-property}
 
 \textbf{Syntax:}
-\passthrough{\lstinline!const \{ [key]: selectedValue \} = session!}
+\texttt{const \{ [key]:\allowbreak{} selectedValue \} = session}
 
-\textbf{Example} (\passthrough{\lstinline!js/objects.mjs!}, using the
-session from form 5):
+\textbf{Example} (\texttt{js/\allowbreak{}objects.\allowbreak{}mjs},
+using the session from form 5):
 
 \begin{minipage}{\linewidth}
 
@@ -425,24 +416,22 @@ console.log('form 10:', key, selectedValue)
 
 \end{minipage}\par
 
-\textbf{Output:} \passthrough{\lstinline!form 10: status planned!}
+\textbf{Output:} \texttt{form 10:\allowbreak{} status planned}
 
 \textbf{Use it when:} a variable decides which property to read.
 
-\textbf{Watch out:} \passthrough{\lstinline![key]!} evaluates the
-variable; \passthrough{\lstinline!key!} without brackets would select a
-property literally named key. Plain code is
-\passthrough{\lstinline!const selectedValue = session[key]!}. In TS,
-\passthrough{\lstinline!keyof Session!} restricts the key to known
-property names.
+\textbf{Watch out:} \texttt{[key]} evaluates the variable; \texttt{key}
+without brackets would select a property literally named key. Plain code
+is \texttt{const selectedValue = session[key]}. In TS,
+\texttt{keyof Session} restricts the key to known property names.
 
 \subsection{Form 11: parameters}\label{form-11-parameters}
 
 \textbf{Syntax:}
-\passthrough{\lstinline!function makeSession(\{ title = 'Free practice', minutes = 40 \} = \{\})!}
+\texttt{function makeSession(\{ title = 'Free practice', minutes = 40 \} = \{\})}
 
-\textbf{Example} (\passthrough{\lstinline!js/params.mjs!}, typed version
-in \passthrough{\lstinline!ts/params.ts!}):
+\textbf{Example} (\texttt{js/\allowbreak{}params.\allowbreak{}mjs},
+typed version in \texttt{ts/\allowbreak{}params.\allowbreak{}ts}):
 
 \begin{minipage}{\linewidth}
 
@@ -475,20 +464,19 @@ form 11 array: 48
 \textbf{Use it when:} callers should supply named options, or a small
 tuple parameter.
 
-\textbf{Watch out:} the outer \passthrough{\lstinline!= \{\}!} handles a
-missing argument; the inner defaults handle missing fields. Neither
-replaces a null argument. Without a parameter pattern, receive
-\passthrough{\lstinline!options = \{\}!} and read each field inside the
-function. TS writes \passthrough{\lstinline!: Options!} after the object
-pattern; its fields must be optional for \passthrough{\lstinline!\{\}!}
-to work.
+\textbf{Watch out:} the outer \texttt{= \{\}} handles a missing
+argument; the inner defaults handle missing fields. Neither replaces a
+null argument. Without a parameter pattern, receive
+\texttt{options = \{\}} and read each field inside the function. TS
+writes \texttt{:\allowbreak{} Options} after the object pattern; its
+fields must be optional for \texttt{\{\}} to work.
 
 \subsection{Form 12: loop entries}\label{form-12-loop-entries}
 
 \textbf{Syntax:}
-\passthrough{\lstinline!for (const [topic, minutes] of Object.entries(targets))!}
+\texttt{for (const [topic, minutes] of Object.\allowbreak{}entries(targets))}
 
-\textbf{Example} (\passthrough{\lstinline!js/params.mjs!}):
+\textbf{Example} (\texttt{js/\allowbreak{}params.\allowbreak{}mjs}):
 
 \begin{minipage}{\linewidth}
 
@@ -525,15 +513,15 @@ form 12 map: Tuesday 3
 \textbf{Watch out:} use for\ldots of for entries. for\ldots in
 enumerates property names instead. Without destructuring, receive an
 entry variable, then read entry{[}0{]} and entry{[}1{]}. Here TS uses
-\passthrough{\lstinline!Record<string, number>!} and
-\passthrough{\lstinline!Map<string, number>!} to describe the values.
+\texttt{Record<string, number>} and \texttt{Map<string, number>} to
+describe the values.
 
 \section{Pitfalls}\label{pitfalls}
 
-Code: \passthrough{\lstinline!js/pitfalls.mjs!}. The deliberately
-invalid assignment is compiled inside
-\passthrough{\lstinline!new Function!} and caught; otherwise a syntax
-error would prevent the whole file running.
+Code: \texttt{js/\allowbreak{}pitfalls.\allowbreak{}mjs}. The
+deliberately invalid assignment is compiled inside \texttt{new Function}
+and caught; otherwise a syntax error would prevent the whole file
+running.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -541,119 +529,114 @@ error would prevent the whole file running.
 \item
   Destructuring undefined throws before a property can be read. The
   actual output was
-  \passthrough{\lstinline!pitfall 1: TypeError: Cannot destructure property 'minutes' of 'undefined' as it is undefined.!}
+  \texttt{pitfall 1:\allowbreak{} TypeError:\allowbreak{} Cannot destructure property 'minutes' of 'undefined' as it is undefined.\allowbreak{}}
   Check the source first, or use an appropriate parameter default for
   undefined. Null also cannot be destructured; an undefined-only default
   does not fix null.
 \item
   Defaults are not null replacement.
-  \passthrough{\lstinline!\{ minutes = 40 \} = \{ minutes: null \}!}
-  printed \passthrough{\lstinline!pitfall 2: null!}, because the default
-  runs only for undefined.
+  \texttt{\{ minutes = 40 \} = \{ minutes:\allowbreak{} null \}} printed
+  \texttt{pitfall 2:\allowbreak{} null}, because the default runs only
+  for undefined.
 \item
-  A statement starting with \passthrough{\lstinline!\{!} is parsed as a
-  block, not an object assignment pattern. The unparenthesized attempt
-  printed
-  \passthrough{\lstinline!pitfall 3 invalid: SyntaxError: Unexpected token '='!}.
-  \passthrough{\lstinline!(\{ minutes: assignedMinutes \} = \{ minutes: 25 \})!}
-  printed \passthrough{\lstinline!pitfall 3 fixed: 25!} because
-  parentheses make it an expression.
+  A statement starting with \texttt{\{} is parsed as a block, not an
+  object assignment pattern. The unparenthesized attempt printed
+  \texttt{pitfall 3 invalid:\allowbreak{} SyntaxError:\allowbreak{} Unexpected token '='}.
+  \texttt{(\{ minutes:\allowbreak{} assignedMinutes \} = \{ minutes:\allowbreak{} 25 \})}
+  printed \texttt{pitfall 3 fixed:\allowbreak{} 25} because parentheses
+  make it an expression.
 \item
   Object values can be shared references. Changing the destructured room
   changed the original, while changing the copied rest object's string
-  id did not. \passthrough{\lstinline!pitfall 4: Library C s1 s2!} shows
+  id did not. \texttt{pitfall 4:\allowbreak{} Library C s1 s2} shows
   this is a shallow operation, not a deep copy.
 \item
   Object patterns select names, array patterns select positions.
   Reordered object properties still printed
-  \passthrough{\lstinline!pitfall 5 object: React practice planned!};
-  the array printed
-  \passthrough{\lstinline!pitfall 5 array: planned React practice!}
-  because its positions differ.
+  \texttt{pitfall 5 object:\allowbreak{} React practice planned}; the
+  array printed
+  \texttt{pitfall 5 array:\allowbreak{} planned React practice} because
+  its positions differ.
 \end{enumerate}
 
 \section{TypeScript topics T1--T5}\label{typescript-topics-t1t5}
 
-Code: \passthrough{\lstinline!ts/types.ts!}. TypeScript checks patterns
-before execution; it does not change the JavaScript rules for choosing
-values.
+Code: \texttt{ts/\allowbreak{}types.\allowbreak{}ts}. TypeScript checks
+patterns before execution; it does not change the JavaScript rules for
+choosing values.
 
 \subsection{T1: a colon can rename}\label{t1-a-colon-can-rename}
 
-\passthrough{\lstinline!const \{ minutes: string \} = \{ minutes: 25 \}!}
+\texttt{const \{ minutes:\allowbreak{} string \} = \{ minutes:\allowbreak{} 25 \}}
 creates a variable called string, whose value is a number. It does not
 annotate minutes with the string type. The typed form is
-\passthrough{\lstinline!const \{ minutes: duration \}: \{ minutes: number \} = ...!}.
-Actual output: \passthrough{\lstinline!T1: 25 number 25!}. Calling
-\passthrough{\lstinline!string.toUpperCase()!} produced TS2339 in the
+\texttt{const \{ minutes:\allowbreak{} duration \}:\allowbreak{} \{ minutes:\allowbreak{} number \} = .\allowbreak{}.\allowbreak{}.\allowbreak{}}.
+Actual output: \texttt{T1:\allowbreak{} 25 number 25}. Calling
+\texttt{string.\allowbreak{}toUpperCase()} produced TS2339 in the
 compiler experiment.
 
 \subsection{T2: tuples and as const}\label{t2-tuples-and-as-const}
 
-\passthrough{\lstinline!sessionSummary(): [number, string]!} promises a
+\texttt{sessionSummary():\allowbreak{} [number, string]} promises a
 number and a string in that order.
-\passthrough{\lstinline!const fixed = [25, 'props'] as const!} infers
-the readonly tuple \passthrough{\lstinline!readonly [25, 'props']!}.
-Destructuring keeps the specific element types. Actual output:
-\passthrough{\lstinline!T2: 40 closures 25 props!}. The readonly type
+\texttt{const fixed = [25, 'props'] as const} infers the readonly tuple
+\texttt{readonly [25, 'props']}. Destructuring keeps the specific
+element types. Actual output:
+\texttt{T2:\allowbreak{} 40 closures 25 props}. The readonly type
 prevents assignments to tuple positions through this binding; it does
 not freeze an object at runtime.
 
 \subsection{T3: unchecked array access}\label{t3-unchecked-array-access}
 
-For \passthrough{\lstinline!const [first] = topics!} with
-\passthrough{\lstinline!topics: string[]!}, first is
-\passthrough{\lstinline!string | undefined!}. An empty array is legal,
-so calling a string method immediately is unsafe. Check
-\passthrough{\lstinline"first !== undefined"} first, or use
-\passthrough{\lstinline![safeFirst = 'free practice']!}. Actual output:
-\passthrough{\lstinline!T3: undefined free practice!}. The unsafe method
+For \texttt{const [first] = topics} with
+\texttt{topics:\allowbreak{} string[]}, first is
+\texttt{string | undefined}. An empty array is legal, so calling a
+string method immediately is unsafe. Check \texttt{first !== undefined}
+first, or use \texttt{[safeFirst = 'free practice']}. Actual output:
+\texttt{T3:\allowbreak{} undefined free practice}. The unsafe method
 call produced TS18048:
-\passthrough{\lstinline!'first' is possibly 'undefined'.!}
+\texttt{'first' is possibly 'undefined'.\allowbreak{}}
 
 \subsection{T4: optional fields and
 defaults}\label{t4-optional-fields-and-defaults}
 
-With \passthrough{\lstinline!minutes?: number!}, an ordinary
-destructured value is \passthrough{\lstinline!number | undefined!}.
-Adding \passthrough{\lstinline!minutes = 40!} gives a number. If the
-field also permits null, null remains in the type and the runtime value.
-Actual output: \passthrough{\lstinline!T4: undefined 40 null!}. The
-nullable method call produced TS18047:
-\passthrough{\lstinline!'minutes' is possibly 'null'.!}
+With \texttt{minutes?:\allowbreak{} number}, an ordinary destructured
+value is \texttt{number | undefined}. Adding \texttt{minutes = 40} gives
+a number. If the field also permits null, null remains in the type and
+the runtime value. Actual output:
+\texttt{T4:\allowbreak{} undefined 40 null}. The nullable method call
+produced TS18047: \texttt{'minutes' is possibly 'null'.\allowbreak{}}
 
 \subsection{T5: wrong property and fix}\label{t5-wrong-property-and-fix}
 
 The source has a minutes property, but
-\passthrough{\lstinline!\{ duration: wrongName \}!} asks for duration.
-The actual diagnostic is TS2339:
-\passthrough{\lstinline!Property 'duration' does not exist on type '\{ minutes: number; \}'.!}
-The one \passthrough{\lstinline!@ts-expect-error!} in the project marks
-this intentional error. The fix is
-\passthrough{\lstinline!\{ minutes: correctedName \}!}. Actual output:
-\passthrough{\lstinline!T5: undefined 25!}. Suppressing an error does
-not repair the runtime property lookup. An unnecessary expect-error
-itself makes the check fail.
+\texttt{\{ duration:\allowbreak{} wrongName \}} asks for duration. The
+actual diagnostic is TS2339:
+\texttt{Property 'duration' does not exist on type '\{ minutes:\allowbreak{} number; \}'.\allowbreak{}}
+The one \texttt{@ts-expect-error} in the project marks this intentional
+error. The fix is \texttt{\{ minutes:\allowbreak{} correctedName \}}.
+Actual output: \texttt{T5:\allowbreak{} undefined 25}. Suppressing an
+error does not repair the runtime property lookup. An unnecessary
+expect-error itself makes the check fail.
 
 \section{Props and children P1--P7}\label{props-and-children-p1p7}
 
-Runnable sources: \passthrough{\lstinline!js/props.jsx!} and
-\passthrough{\lstinline!ts/props.tsx!}. They use
-\passthrough{\lstinline!renderToStaticMarkup!}, so the output below is
-actual HTML from server rendering, not a browser screenshot or a
-prediction. It does not demonstrate browser events. The output excerpts
-after this section are copied from the real run.
+Runnable sources: \texttt{js/\allowbreak{}props.\allowbreak{}jsx} and
+\texttt{ts/\allowbreak{}props.\allowbreak{}tsx}. They use
+\texttt{renderToStaticMarkup}, so the output below is actual HTML from
+server rendering, not a browser screenshot or a prediction. It does not
+demonstrate browser events. The output excerpts after this section are
+copied from the real run.
 
 \subsection{P1: one props object, two ways to read
 it}\label{p1-one-props-object-two-ways-to-read-it}
 
-\passthrough{\lstinline!CardA(props)!} reads
-\passthrough{\lstinline!props.title!} and
-\passthrough{\lstinline!props.children!} inside its body.
-\passthrough{\lstinline!Card(\{ title, children \})!} takes those same
-fields apart at the parameter boundary. This combines form 5 (named
-object properties) with form 11 (a parameter pattern). Both receive one
-object, not two positional arguments, and both render the same HTML.
+\texttt{CardA(props)} reads \texttt{props.\allowbreak{}title} and
+\texttt{props.\allowbreak{}children} inside its body.
+\texttt{Card(\{ title, children \})} takes those same fields apart at
+the parameter boundary. This combines form 5 (named object properties)
+with form 11 (a parameter pattern). Both receive one object, not two
+positional arguments, and both render the same HTML.
 
 \begin{minipage}{\linewidth}
 
@@ -668,16 +651,16 @@ function Card({ title, children }) {
 \subsection{P2: children is a field in that
 object}\label{p2-children-is-a-field-in-that-object}
 
-\passthrough{\lstinline!<Card title="Study">Practice</Card>!} and
-\passthrough{\lstinline!<Card title="Study" children="Practice" />!}
-render identically. In the JS conflict experiment, nested content wins
-over the children attribute:
-\passthrough{\lstinline!<Card children="Attribute">Nested</Card>!}
-renders Nested. TypeScript rejects that spelling with TS2710, so the TS
-runnable file does not include the rejected expression. It is recorded
-in \passthrough{\lstinline!compiler-diagnostics.txt!}. Children is part
-of props; separating it is a useful convention, not a second argument
-that React supplies.
+\texttt{<Card title="Study">Practice</\allowbreak{}Card>} and
+\texttt{<Card title="Study" children="Practice" /\allowbreak{}>} render
+identically. In the JS conflict experiment, nested content wins over the
+children attribute:
+\texttt{<Card children="Attribute">Nested</\allowbreak{}Card>} renders
+Nested. TypeScript rejects that spelling with TS2710, so the TS runnable
+file does not include the rejected expression. It is recorded in
+\texttt{compiler-diagnostics.\allowbreak{}txt}. Children is part of
+props; separating it is a useful convention, not a second argument that
+React supplies.
 
 \subsection{P3: the value of children
 matters}\label{p3-the-value-of-children-matters}
@@ -690,8 +673,7 @@ section and heading still render.
 A function is different: React does not call an arbitrary function child
 for us. The JS raw-function experiment logs React's actual diagnostic
 and renders no child content. A render-prop component instead explicitly
-calls \passthrough{\lstinline!children(25)!} and renders its returned
-element:
+calls \texttt{children(25)} and renders its returned element:
 
 \begin{minipage}{\linewidth}
 
@@ -704,13 +686,12 @@ function RenderCard({ children }) {
 \end{minipage}\par
 
 The TS type for this API is
-\passthrough{\lstinline!\{ children: (minutes: number) => ReactNode \}!}.
+\texttt{\{ children:\allowbreak{} (minutes:\allowbreak{} number) => ReactNode \}}.
 That is a different contract from
-\passthrough{\lstinline!children?: ReactNode!}. The JS example
-temporarily redirects console.error to console.log so the real React
-diagnostic is included in output.txt, and restores it in finally. The
-\passthrough{\lstinline!\%s!} markers in that captured diagnostic are
-React's raw logging arguments.
+\texttt{children?:\allowbreak{} ReactNode}. The JS example temporarily
+redirects console.error to console.log so the real React diagnostic is
+included in output.txt, and restores it in finally. The \texttt{\%s}
+markers in that captured diagnostic are React's raw logging arguments.
 
 \subsection{P4: separate component props, forward DOM
 props}\label{p4-separate-component-props-forward-dom-props}
@@ -729,8 +710,7 @@ Title and children are consumed by the component; id and data-topic
 remain in rest. The section receives the remaining fields through
 expression spread. Only valid DOM attributes should be forwarded; custom
 component-only fields should be extracted first. In TS,
-\passthrough{\lstinline!ComponentProps<'section'>!} supplies DOM prop
-types.
+\texttt{ComponentProps<'section'>} supplies DOM prop types.
 
 A later explicit title overrides an earlier spread title. A later spread
 title overrides an earlier explicit title. There is no title collision
@@ -771,44 +751,42 @@ function Composition({ children }) {
 \subsection{P6: undefined triggers a default, null does
 not}\label{p6-undefined-triggers-a-default-null-does-not}
 
-\passthrough{\lstinline!function DefaultCard(\{ title = 'Free practice' \})!}
-uses a property default. Undefined produces
-\passthrough{\lstinline!<h2>Free practice</h2>!}; null produces
-\passthrough{\lstinline!<h2></h2>!}. In TS the prop is
-\passthrough{\lstinline!title?: string | null!} so both experiments are
+\texttt{function DefaultCard(\{ title = 'Free practice' \})} uses a
+property default. Undefined produces
+\texttt{<h2>Free practice</\allowbreak{}h2>}; null produces
+\texttt{<h2></\allowbreak{}h2>}. In TS the prop is
+\texttt{title?:\allowbreak{} string | null} so both experiments are
 permitted. A default does not normalize every empty value. If the design
 should replace both null and undefined, an explicit
-\passthrough{\lstinline!title ?? 'Free practice'!} would do that.
+\texttt{title ?? 'Free practice'} would do that.
 
 \subsection{P7: three useful props
 types}\label{p7-three-useful-props-types}
 
-\passthrough{\lstinline!\{ title: string; children?: ReactNode \}!}
+\texttt{\{ title:\allowbreak{} string; children?:\allowbreak{} ReactNode \}}
 requires title and permits optional renderable children, including text,
 numbers, elements, null and booleans. It rejects an ordinary function
 child; functions need a separate render-prop type. It also rejects an
-arbitrary object such as \passthrough{\lstinline!\{ topic: 'read' \}!}
-as rendered content.
+arbitrary object such as \texttt{\{ topic:\allowbreak{} 'read' \}} as
+rendered content.
 
-\passthrough{\lstinline!PropsWithChildren<\{ title: string \}>!} adds
+\texttt{PropsWithChildren<\{ title:\allowbreak{} string \}>} adds
 optional ReactNode children to the named props. It does not make title
 optional or require children to be supplied. Our Composition uses
-\passthrough{\lstinline!PropsWithChildren!} without additional required
-props.
+\texttt{PropsWithChildren} without additional required props.
 
-\passthrough{\lstinline!ComponentProps<'button'>!} reuses the native
-button props contract, including children, disabled, type and event
-handler types. TypedButton forwards the remaining props after extracting
-children. It accepts type=``button'' and disabled, and rejects href
-because a button is not an anchor. Server-rendered output shows the
-disabled attribute; an event callback would require a browser
-interaction to demonstrate.
+\texttt{ComponentProps<'button'>} reuses the native button props
+contract, including children, disabled, type and event handler types.
+TypedButton forwards the remaining props after extracting children. It
+accepts type=``button'' and disabled, and rejects href because a button
+is not an anchor. Server-rendered output shows the disabled attribute;
+an event callback would require a browser interaction to demonstrate.
 
 The real rejected cases and full messages are in
-\passthrough{\lstinline!compiler-diagnostics.txt!}: TS2322 for a
-function child, TS2353 for an object child, TS2322 for href on a button,
-and TS2710 for children specified twice. The probes ran separately from
-the valid project; no extra suppressions were added to make them pass.
+\texttt{compiler-diagnostics.\allowbreak{}txt}: TS2322 for a function
+child, TS2353 for an object child, TS2322 for href on a button, and
+TS2710 for children specified twice. The probes ran separately from the
+valid project; no extra suppressions were added to make them pass.
 
 Typed API definitions from ts/props.tsx:
 
@@ -898,11 +876,11 @@ Actual error when wrong
 \bottomrule\noalign{}
 \endlastfoot
 1, tuple return & Positions select values & Return
-\passthrough{\lstinline![number, string]!} & TS2339: toUpperCase does
-not exist on number \\
+\texttt{[number, string]} & TS2339: toUpperCase does not exist on
+number \\
 2, skipped array item & An absent position yields undefined & Narrow
-\passthrough{\lstinline!string \\| undefined!} & TS18048: first is
-possibly undefined \\
+\texttt{string \textbackslash{}| undefined} & TS18048: first is possibly
+undefined \\
 3, swap & RHS is read before assignments & Compatible destination types
 & TS2322: string is not assignable to number \\
 6, rename & Colon selects a new variable name & Annotation after the
@@ -917,8 +895,7 @@ TS2339: label does not exist on room-or-undefined \\
 10, computed key & The key expression selects a property & Use keyof the
 source type & TS2322: unknown is not assignable to minutes \\
 11, options default & Empty argument defaults to an object & Fields must
-allow \passthrough{\lstinline!\{\}!} & TS2741: title is missing in type
-\{\} \\
+allow \texttt{\{\}} & TS2741: title is missing in type \{\} \\
 12, entry loop & Each iteration supplies a pair & Record and Map value
 types & TS2339: toUpperCase does not exist on number \\
 P7, children & Props remain one runtime object & ReactNode or a
@@ -933,7 +910,7 @@ Node.js 22.23.3, npm 10.9.9. Both npm run all and npm run check passed.
 output.txt is the actual current run. compiler-diagnostics.txt contains
 separately collected intentional failures, not failures hidden in the
 project check. Reproduce them with
-\passthrough{\lstinline!node tools/check-probes.cjs!}.
+\texttt{node tools/\allowbreak{}check-probes.\allowbreak{}cjs}.
 
 The guided-review log below records actual predictions and results from
 the discussion. It includes five wrong-prediction cases (entries 1, 2,
@@ -946,12 +923,12 @@ independently. Bonuses 1--3 are included; Bonus 4 is still in progress.
 The complete guide, including the required entries, pitfalls, React
 discussion, comparison table, bonus investigations, source analyses and
 personal log, is also provided as
-\passthrough{\lstinline!latex/main.tex!} and
-\passthrough{\lstinline!latex/main.pdf!}. It is not an abridged summary.
-The source uses listings for code, actual LaTeX tables, and a linked
-contents page. In the PDF's listings, {[}U+1F9E0{]} represents the brain
-symbol exactly; the executable source files and recorded output retain
-the original Unicode symbol.
+\texttt{latex/\allowbreak{}main.\allowbreak{}tex} and
+\texttt{latex/\allowbreak{}main.\allowbreak{}pdf}. It is not an abridged
+summary. The source uses listings for code, actual LaTeX tables, and a
+linked contents page. In the PDF's listings, {[}U+1F9E0{]} represents
+the brain symbol exactly; the executable source files and recorded
+output retain the original Unicode symbol.
 
 The source was generated from this README with Pandoc 3.14 and compiled
 with Tectonic 0.17.0. From the assignment4 project root, after
@@ -960,7 +937,7 @@ installing those tools:
 \begin{minipage}{\linewidth}
 
 \begin{lstlisting}[language=sh]
-pandoc README.md --standalone --shift-heading-level-by=-1 --toc --number-sections --listings --pdf-engine=xelatex --lua-filter=latex/layout.lua -V documentclass=article -V papersize=a4 -V fontsize=10pt -V geometry:margin=22mm -V title="Destructuring Field Guide" -V author="Tuba Nazlı İpekyüz - 2200004532" -V date="14 November 2026" -H latex/style.tex -o latex/main.tex
+pandoc README.md --standalone --shift-heading-level-by=-1 --toc --number-sections --listings --pdf-engine=xelatex --lua-filter=latex/layout.lua -V documentclass=article -V papersize=a4 -V fontsize=10pt -V geometry:margin=22mm -V title="Destructuring Field Guide" -V author="Tuba Nazl(*@\texttt{ı}@*) (*@\texttt{İ}@*)peky(*@\texttt{ü}@*)z - 2200004532" -V date="14 November 2026" -H latex/style.tex -o latex/main.tex
 tectonic --keep-logs --keep-intermediates --outdir latex latex/main.tex
 \end{lstlisting}
 
@@ -973,8 +950,8 @@ creates the PDF. Required TeX packages are downloaded on the first
 Tectonic run. Compilation and visual checks are recorded in
 VERIFICATION.md. The desktop LaTeX editor can also compile main.tex.
 With Pandoc and Tectonic on PATH,
-\passthrough{\lstinline!npm run build:guide!} runs these steps and adds
-the identity comment to the generated source.
+\texttt{npm run build:\allowbreak{}guide} runs these steps and adds the
+identity comment to the generated source.
 
 \section{Bonus 4: Git repository}\label{bonus-4-git-repository}
 
@@ -987,12 +964,13 @@ same day. No dates have been fabricated.
 \section{Bonus 2: Depth}\label{bonus-2-depth}
 
 These are additional investigations, not just a list of syntax forms.
-The complete experiments are in \passthrough{\lstinline!js/depth.mjs!}
-and \passthrough{\lstinline!ts/depth.ts!}; run
-\passthrough{\lstinline!npm run depth!}. Actual output is in
-\passthrough{\lstinline!depth-output.txt!} and is also included by
-\passthrough{\lstinline!npm run all!}. These assistant-run experiments
-are separate from the student's personal log.
+The complete experiments are in
+\texttt{js/\allowbreak{}depth.\allowbreak{}mjs} and
+\texttt{ts/\allowbreak{}depth.\allowbreak{}ts}; run
+\texttt{npm run depth}. Actual output is in
+\texttt{depth-output.\allowbreak{}txt} and is also included by
+\texttt{npm run all}. These assistant-run experiments are separate from
+the student's personal log.
 
 \subsection{D1: an array pattern consumes an
 iterator}\label{d1-an-array-pattern-consumes-an-iterator}
@@ -1003,12 +981,11 @@ yields entry pairs, so the nested pattern first takes an entry and then
 its key and value.
 
 The string experiment distinguishes string iteration from indexed
-length: \passthrough{\lstinline!'🧠A'.length!} is 3 UTF-16 code units,
-but the iterator yields two code points. Consequently
-\passthrough{\lstinline![symbol, letter]!} receives the brain symbol and
-A. This does not mean string iteration splits user-perceived grapheme
-clusters: combining marks and multi-code-point emoji can still occupy
-several iterations.
+length: \texttt{'[U+1F9E0]A'.\allowbreak{}length} is 3 UTF-16 code
+units, but the iterator yields two code points. Consequently
+\texttt{[symbol, letter]} receives the brain symbol and A. This does not
+mean string iteration splits user-perceived grapheme clusters: combining
+marks and multi-code-point emoji can still occupy several iterations.
 
 The generator experiment logs start and closed, but never logs second
 yield reached. The pattern only requests its first value and then closes
@@ -1027,11 +1004,11 @@ order}\label{d2-defaults-are-lazy-and-dependencies-have-an-order}
 
 The three default expressions are calls to the same counter-incrementing
 function. The values 0 and null do not trigger defaults; undefined does.
-The result is \passthrough{\lstinline!0 30 null 1!}, including exactly
-one function call. With an earlier binding,
-\passthrough{\lstinline![work = 40, pause = work / 5]!} produces 40 and
-8. Reading a later uninitialized binding throws a ReferenceError instead
-of waiting for its default to be assigned.
+The result is \texttt{0 30 null 1}, including exactly one function call.
+With an earlier binding,
+\texttt{[work = 40, pause = work /\allowbreak{} 5]} produces 40 and 8.
+Reading a later uninitialized binding throws a ReferenceError instead of
+waiting for its default to be assigned.
 
 A second experiment uses getters. Although minutes appears first in the
 source object, the pattern asks for title first. The logged order is
@@ -1043,14 +1020,14 @@ not override the explicit pattern order.
 \subsection{D3: assignments, catch, and loop
 inputs}\label{d3-assignments-catch-and-loop-inputs}
 
-\passthrough{\lstinline![destination.minutes, destination.pause] = [40, 8]!}
+\texttt{[destination.\allowbreak{}minutes, destination.\allowbreak{}pause] = [40, 8]}
 writes existing object properties; it does not declare variables called
 destination.minutes. The parentheses-free array assignment is preceded
-by a semicolon for safe parsing.
-\passthrough{\lstinline!catch (\{ message \})!} extracts the message
-from the Error object we deliberately throw. It is not a universally
-safe catch pattern: JavaScript can throw null or other values, so
-unknown exceptions should usually be checked before destructuring.
+by a semicolon for safe parsing. \texttt{catch (\{ message \})} extracts
+the message from the Error object we deliberately throw. It is not a
+universally safe catch pattern: JavaScript can throw null or other
+values, so unknown exceptions should usually be checked before
+destructuring.
 
 The for\ldots in loop prints the array's enumerable index keys 0 and 1.
 The for\ldots of loop prints its values arrays and props. Destructuring
@@ -1060,23 +1037,22 @@ input.
 \subsection{D4: type-level extraction is not runtime
 destructuring}\label{d4-type-level-extraction-is-not-runtime-destructuring}
 
-First uses \passthrough{\lstinline!infer Head!} in a conditional tuple
-type; Rest uses \passthrough{\lstinline!infer Tail!}. The readonly
-prefix permits input from an as-const tuple. For our tuple, First is the
-literal type 40 and Rest is the tuple type {[}`closures', true{]}. Rest
-itself is not readonly in this particular utility. The annotations check
-the values assigned to the variables; they do not create or slice
-runtime arrays.
+First uses \texttt{infer Head} in a conditional tuple type; Rest uses
+\texttt{infer Tail}. The readonly prefix permits input from an as-const
+tuple. For our tuple, First is the literal type 40 and Rest is the tuple
+type {[}`closures', true{]}. Rest itself is not readonly in this
+particular utility. The annotations check the values assigned to the
+variables; they do not create or slice runtime arrays.
 
 The utility is deliberately limited to non-empty tuple shapes.
-\passthrough{\lstinline!First<[]>!} and
-\passthrough{\lstinline!First<string[]>!} are never here, since neither
-type promises an initial position. \passthrough{\lstinline!Rest<[]>!} is
-{[}{]}. A different definition would be needed for arbitrary arrays.
-\passthrough{\lstinline!Parameters<typeof planSession>!} extracts
-\passthrough{\lstinline![topic: string, minutes: number]!}; the runtime
-spread passes those two argument values to the existing function. These
-features are checked by TypeScript and erased before execution.
+\texttt{First<[]>} and \texttt{First<string[]>} are never here, since
+neither type promises an initial position. \texttt{Rest<[]>} is {[}{]}.
+A different definition would be needed for arbitrary arrays.
+\texttt{Parameters<typeof planSession>} extracts
+\texttt{[topic:\allowbreak{} string, minutes:\allowbreak{} number]}; the
+runtime spread passes those two argument values to the existing
+function. These features are checked by TypeScript and erased before
+execution.
 
 \subsection{D5: a readability refactoring with a defined behavior
 change}\label{d5-a-readability-refactoring-with-a-defined-behavior-change}
@@ -1094,10 +1070,10 @@ speed claim is made: these tiny runs are not a performance benchmark.
 investigation}\label{complete-runnable-javascript-investigation}
 
 \begin{lstlisting}
-// Tuba Nazlı İpekyüz — 2200004532
+// Tuba Nazl(*@\texttt{ı}@*) (*@\texttt{İ}@*)peky(*@\texttt{ü}@*)z (*@\texttt{—}@*) 2200004532
 // Bonus 2: investigate iterator behavior, evaluation order and readability.
-const [symbol, letter] = '🧠A'
-console.log('depth string:', symbol, letter, '🧠A'.length)
+const [symbol, letter] = '[U+1F9E0]A'
+console.log('depth string:', symbol, letter, '[U+1F9E0]A'.length)
 const [firstUnique, ...otherUnique] = new Set(['arrays', 'arrays', 'props'])
 console.log('depth Set:', firstUnique, JSON.stringify(otherUnique))
 const [[day, minutes]] = new Map([['Monday', 40]])
@@ -1174,7 +1150,7 @@ console.log('depth readable missing:', readable({ sessions: [] }))
 investigation}\label{complete-typescript-investigation}
 
 \begin{lstlisting}
-// Tuba Nazlı İpekyüz — 2200004532
+// Tuba Nazl(*@\texttt{ı}@*) (*@\texttt{İ}@*)peky(*@\texttt{ü}@*)z (*@\texttt{—}@*) 2200004532
 // Bonus 2: type-level tuple extraction, distinct from runtime destructuring.
 export {}
 type First<T extends readonly unknown[]> = T extends readonly [infer Head, ...unknown[]] ? Head : never
@@ -1203,7 +1179,7 @@ console.log('depth TS empty Rest:', JSON.stringify(emptyRest))
 > destructuring-guide@0.0.0 depth
 > node js/depth.mjs && tsx ts/depth.ts
 
-depth string: 🧠 A 3
+depth string: [U+1F9E0] A 3
 depth Set: arrays ["props"]
 depth Map: Monday 40
 depth generator: start
@@ -1241,13 +1217,13 @@ utility}.
 
 The five cases below come from three sources: the instructor's
 Assignment 3 Task Manager starter
-(\passthrough{\lstinline!Downloads/starter.zip!}, not my completed
-Assignment 3), the installed TypeScript 5.8.3 package, and TanStack
-Query at immutable revision
-\passthrough{\lstinline!36dd7927c85ce6cee37ab1eb3af25e7fc7ccbb14!}.
-Source line numbers refer to those exact copies. Extracted evidence and
-SHA-256 identifiers are in
-\passthrough{\lstinline!references/source-excerpts.txt!}; full
+(\texttt{Downloads/\allowbreak{}starter.\allowbreak{}zip}, not my
+completed Assignment 3), the installed TypeScript 5.8.3 package, and
+TanStack Query at immutable revision
+\texttt{36dd7927c85ce6cee37ab1eb3af25e7fc7ccbb14}. Source line numbers
+refer to those exact copies. Extracted evidence and SHA-256 identifiers
+are in
+\texttt{references/\allowbreak{}source-excerpts.\allowbreak{}txt}; full
 third-party projects are not redistributed. The expansions are
 explanations of the selected operations, not replacement projects. In
 particular, React hooks must still be called once at the component's top
@@ -1257,7 +1233,8 @@ level.
 object}\label{case-1-taskrow-receives-one-props-object}
 
 Source: Assignment 3 starter,
-\passthrough{\lstinline!starter/src/TaskRow.tsx!}, line 5.
+\texttt{starter/\allowbreak{}src/\allowbreak{}TaskRow.\allowbreak{}tsx},
+line 5.
 
 \begin{minipage}{\linewidth}
 
@@ -1294,7 +1271,8 @@ small component's dependencies visible.
 pair}\label{case-2-usereducer-returns-a-pair}
 
 Source: Assignment 3 starter,
-\passthrough{\lstinline!starter/src/App.tsx!}, line 37.
+\texttt{starter/\allowbreak{}src/\allowbreak{}App.\allowbreak{}tsx},
+line 37.
 
 \begin{minipage}{\linewidth}
 
@@ -1327,7 +1305,7 @@ similar braces.
 fields}\label{case-3-a-library-helper-extracts-pattern-fields}
 
 Source:
-\passthrough{\lstinline!node\_modules/typescript/lib/typescript.js!},
+\texttt{node\_modules/\allowbreak{}typescript/\allowbreak{}lib/\allowbreak{}typescript.\allowbreak{}js},
 version 5.8.3, lines 3631--3633; same function is visible in the
 \href{https://unpkg.com/typescript@5.8.3/lib/typescript.js}{versioned
 package}.
@@ -1366,7 +1344,7 @@ it.
 simplify}\label{case-4-a-dense-library-pattern-i-would-simplify}
 
 Source: TypeScript 5.8.3,
-\passthrough{\lstinline!node\_modules/typescript/lib/typescript.js!},
+\texttt{node\_modules/\allowbreak{}typescript/\allowbreak{}lib/\allowbreak{}typescript.\allowbreak{}js},
 line 4872, inside tryParseComponents. The preceding lines check that the
 regular expression match exists.
 
@@ -1497,16 +1475,16 @@ files.
 run}\label{i-expected-the-default-function-to-run}
 
 In the guided-review experiment in
-\passthrough{\lstinline!js/default-review.mjs!}, I expected fallback()
-to run. What surprised me was that it did not. The assistant ran the
-example on this computer and the real output was
-\passthrough{\lstinline!0 0!}: minutes stayed 0 and calls stayed 0. I
-did not understand this rule clearly before the experiment: a
-destructuring default is used only when the property is missing or its
-value is undefined. Since 0 is an existing value, the default expression
-is not evaluated at all. There was no error message. The lesson is not
-only that 0 is preserved, but that a function used as the default will
-not be called unless that default is needed.
+\texttt{js/\allowbreak{}default-review.\allowbreak{}mjs}, I expected
+fallback() to run. What surprised me was that it did not. The assistant
+ran the example on this computer and the real output was \texttt{0 0}:
+minutes stayed 0 and calls stayed 0. I did not understand this rule
+clearly before the experiment: a destructuring default is used only when
+the property is missing or its value is undefined. Since 0 is an
+existing value, the default expression is not evaluated at all. There
+was no error message. The lesson is not only that 0 is preserved, but
+that a function used as the default will not be called unless that
+default is needed.
 
 \begin{minipage}{\linewidth}
 
@@ -1522,8 +1500,11 @@ console.log(minutes, calls)
 
 \end{minipage}\par
 
+\Needspace{7\baselineskip}
+
 Run separately with
-\passthrough{\lstinline!node js/default-review.mjs!}. Actual output:
+\texttt{node js/\allowbreak{}default-review.\allowbreak{}mjs}. Actual
+output:
 
 \begin{minipage}{\linewidth}
 
@@ -1536,17 +1517,18 @@ Run separately with
 \subsection{2. I expected renaming to change the existing title
 variable}\label{i-expected-renaming-to-change-the-existing-title-variable}
 
-For the experiment in \passthrough{\lstinline!js/rename-review.mjs!}, I
-predicted that both console.log calls would print React çalışması. I
-thought the destructuring assignment had made the two variables equal,
-so the existing title would change too. The assistant ran the example on
-this computer. The actual output was:
+For the experiment in
+\texttt{js/\allowbreak{}rename-review.\allowbreak{}mjs}, I predicted
+that both console.log calls would print React çalışması. I thought the
+destructuring assignment had made the two variables equal, so the
+existing title would change too. The assistant ran the example on this
+computer. The actual output was:
 
 \begin{minipage}{\linewidth}
 
 \begin{lstlisting}
-Haftalık plan
-React çalışması
+Haftal(*@\texttt{ı}@*)k plan
+React (*@\texttt{ç}@*)al(*@\texttt{ı}@*)(*@\texttt{ş}@*)mas(*@\texttt{ı}@*)
 \end{lstlisting}
 
 \end{minipage}\par
@@ -1554,8 +1536,8 @@ React çalışması
 \begin{minipage}{\linewidth}
 
 \begin{lstlisting}
-const title = 'Haftalık plan'
-const session = { title: 'React çalışması' }
+const title = 'Haftal(*@\texttt{ı}@*)k plan'
+const session = { title: 'React (*@\texttt{ç}@*)al(*@\texttt{ı}@*)(*@\texttt{ş}@*)mas(*@\texttt{ı}@*)' }
 const { title: heading } = session
 console.log(title)
 console.log(heading)
@@ -1565,21 +1547,21 @@ console.log(heading)
 
 In this declaration, title inside the pattern selects the source
 property; heading is the new binding. It is equivalent to
-\passthrough{\lstinline!const heading = session.title!}. It does not
-assign anything to the existing title variable, which keeps Haftalık
-plan. There was no error message. The distinction I needed to make was
-between selecting a property by its name and assigning to an existing
-variable of that name. Run separately with
-\passthrough{\lstinline!node js/rename-review.mjs!}.
+\texttt{const heading = session.\allowbreak{}title}. It does not assign
+anything to the existing title variable, which keeps Haftalık plan.
+There was no error message. The distinction I needed to make was between
+selecting a property by its name and assigning to an existing variable
+of that name. Run separately with
+\texttt{node js/\allowbreak{}rename-review.\allowbreak{}mjs}.
 
 \subsection{3. I compared a number with a shared nested
 object}\label{i-compared-a-number-with-a-shared-nested-object}
 
 In the guided-review example in
-\passthrough{\lstinline!js/reference-review.mjs!}, I correctly predicted
-40 and B for the final two console.log calls. My reasoning was that
-minutes received 40 at the destructuring step, session.minutes was later
-set to 60, and the room label was later set to B. The distinction
+\texttt{js/\allowbreak{}reference-review.\allowbreak{}mjs}, I correctly
+predicted 40 and B for the final two console.log calls. My reasoning was
+that minutes received 40 at the destructuring step, session.minutes was
+later set to 60, and the room label was later set to B. The distinction
 clarified in the discussion was that changing session.minutes does not
 reassign the separate minutes binding, whereas room and session.room
 refer to the same nested object.
@@ -1600,6 +1582,8 @@ console.log(session.room.label)
 
 \end{minipage}\par
 
+\Needspace{7\baselineskip}
+
 The assistant ran the example on this computer. Actual output:
 
 \begin{minipage}{\linewidth}
@@ -1615,7 +1599,7 @@ This comparison helped clarify why destructuring is not a deep copy: a
 number binding keeps the value it received, while a nested object
 reference still points to the source's object. There was no error
 message. Run separately with
-\passthrough{\lstinline!node js/reference-review.mjs!}.
+\texttt{node js/\allowbreak{}reference-review.\allowbreak{}mjs}.
 
 \subsection{4. I overlooked the zero passed to a conditional
 child}\label{i-overlooked-the-zero-passed-to-a-conditional-child}
@@ -1629,7 +1613,7 @@ operand, but overlooked this input.
 
 \begin{lstlisting}
 function Session({ count }) {
-  return <section>{count && <span>Çalışma var</span>}</section>
+  return <section>{count && <span>(*@\texttt{Ç}@*)al(*@\texttt{ı}@*)(*@\texttt{ş}@*)ma var</span>}</section>
 }
 // Rendered usage: <Session count={0} />
 \end{lstlisting}
@@ -1637,18 +1621,21 @@ function Session({ count }) {
 \end{minipage}\par
 
 The assistant rendered the example on this computer. The actual HTML was
-\passthrough{\lstinline!<section>0</section>!}. The important
-distinction is that \&\& returns the operand 0, not the boolean false.
-React displays numeric 0 as text even though 0 is falsy in a JavaScript
-condition. Reading the supplied prop carefully and distinguishing
-short-circuit evaluation from React rendering explains the result.
+\texttt{<section>0</\allowbreak{}section>}. The important distinction is
+that \&\& returns the operand 0, not the boolean false. React displays
+numeric 0 as text even though 0 is falsy in a JavaScript condition.
+Reading the supplied prop carefully and distinguishing short-circuit
+evaluation from React rendering explains the result.
 
-In \passthrough{\lstinline!js/children-review.jsx!}, the revised
-condition is
-\passthrough{\lstinline!count > 0 \&\& <span>Çalışma var</span>!}. With
+\Needspace{7\baselineskip}
+
+In \texttt{js/\allowbreak{}children-review.\allowbreak{}jsx}, the
+revised condition is
+\texttt{count > 0 \&\& <span>Çalışma var</\allowbreak{}span>}. With
 count=0, that expression returns false, which React omits from the
 rendered content. There was no error message. Run separately with
-\passthrough{\lstinline!npx tsx js/children-review.jsx!}. Actual output:
+\texttt{npx tsx js/\allowbreak{}children-review.\allowbreak{}jsx}.
+Actual output:
 
 \begin{minipage}{\linewidth}
 
@@ -1683,6 +1670,8 @@ function Card({ children }) {
 
 \end{minipage}\par
 
+\Needspace{7\baselineskip}
+
 The assistant rendered the example on this computer. Actual HTML:
 
 \begin{minipage}{\linewidth}
@@ -1696,16 +1685,16 @@ The assistant rendered the example on this computer. Actual HTML:
 React does not automatically invoke an ordinary function child. This
 component explicitly calls the supplied function and renders its
 returned element. The function-child API needs a TS signature such as
-\passthrough{\lstinline!\{ children: (number: number) => ReactNode \}!},
+\texttt{\{ children:\allowbreak{} (number:\allowbreak{} number) => ReactNode \}},
 rather than ordinary ReactNode children. There was no error message for
 this example. Run separately with
-\passthrough{\lstinline!npx tsx js/function-review.jsx!}.
+\texttt{npx tsx js/\allowbreak{}function-review.\allowbreak{}jsx}.
 
 \subsection{6. I predicted the wrong length for a destructured string
 property}\label{i-predicted-the-wrong-length-for-a-destructured-string-property}
 
 For
-\passthrough{\lstinline!const \{ length \} = 'React'; console.log(length)!},
+\texttt{const \{ length \} = 'React'; console.\allowbreak{}log(length)},
 I predicted 2. I later explained that I had been thinking of React as
 one whole word rather than considering its individual characters. I had
 not distinguished word count from string length when interpreting the
@@ -1717,14 +1706,14 @@ length is 5. String length counts UTF-16 code units in general, which
 need not equal the number of visible characters. This case showed that
 an object pattern can read a property from a non-null primitive value
 too. There was no error message. The runnable case is in
-\passthrough{\lstinline!js/edge-review.mjs!}.
+\texttt{js/\allowbreak{}edge-review.\allowbreak{}mjs}.
 
 \subsection{7. I expected a later default binding to be
 available}\label{i-expected-a-later-default-binding-to-be-available}
 
-For \passthrough{\lstinline!const [a = b, b = 2] = []!}, I predicted b
-for a and 2 for b. The assistant ran the experiment on this computer.
-Instead of printing values, it threw the exact error:
+For \texttt{const [a = b, b = 2] = []}, I predicted b for a and 2 for b.
+The assistant ran the experiment on this computer. Instead of printing
+values, it threw the exact error:
 
 \begin{minipage}{\linewidth}
 
@@ -1751,6 +1740,6 @@ console.log(a, b) // actual output: 2 2
 \end{minipage}\par
 
 Both the caught failure and the working version are in
-\passthrough{\lstinline!js/edge-review.mjs!}.
+\texttt{js/\allowbreak{}edge-review.\allowbreak{}mjs}.
 
 \end{document}

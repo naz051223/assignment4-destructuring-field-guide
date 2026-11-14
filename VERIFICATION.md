@@ -1,29 +1,41 @@
-# Verification
+# Verification — required guide and bonus edition
 
-Node.js 22.23.3, npm 10.9.9; TypeScript and React versions are pinned by package-lock.json.
+Owner: Tuba Nazlı İpekyüz, 2200004532.
+Node.js 22.23.3, npm 10.9.9. Dependencies are pinned by package-lock.json.
 
-Implemented and checked:
-- Forms 1–12 in JavaScript and TypeScript.
-- Five runnable JavaScript pitfalls and TypeScript topics T1–T5.
-- React P1–P7; rejected cases are recorded separately by the compiler probe runner.
-- All guided-review scripts are included in npm run all through npm run review.
-- README includes real outputs, an eleven-row comparison table and seven review-log entries.
-- Log entries 1, 2, 4, 6 and 7 contain actual wrong predictions from the conversation;
-  entries 3 and 5 preserve correct follow-up answers.
-- All source headers include Tuba Nazlı İpekyüz, 2200004532.
+Required guide: forms 1–12 in JS and strict TS, five JS pitfalls, T1–T5,
+React P1–P7, real output and the comparison table are implemented.
+Seven guided-review log entries distinguish student predictions from assistant runs.
 
-npm run all: passed.
-npm run check: passed, with strict and noUncheckedIndexedAccess enabled.
-npm run diagnose: completed, recording deliberately rejected in-memory examples.
-No any annotations or ts-ignore directives were added. Only T5 uses ts-expect-error.
+Commands checked:
+- npm run all: passed, including review and depth experiments.
+- npm run check: passed with strict and noUncheckedIndexedAccess.
+- npm run diagnose: separate deliberate compiler failures reproduced.
+- npm run build:guide: complete README converted to TeX and compiled successfully.
 
-output.txt is real stdout from npm run all. The JS raw-function demonstration
-captures React's actual console.error arguments into stdout and restores the logger.
-compiler-diagnostics.txt is generated separately by node tools/check-probes.cjs.
+Bonus 1: complete 19-page A4 LaTeX/PDF guide, linked contents, listings and real tables.
+Built with Pandoc 3.14 and Tectonic 0.17.0. All pages rendered and visually reviewed;
+short code blocks stay together. Final TeX log has no overfull/underfull boxes,
+missing-character diagnostics or compilation errors. The Fontconfig environment
+notice did not prevent use of the bundled fonts; fonts are embedded in the PDF.
 
-The runs were performed by the assistant on this computer; student predictions
-and explanations were collected in a guided review and are identified as such.
-No bonuses are claimed. The student should review the guide before submission.
+Bonus 2: iterator closing, string/Set/Map iteration, lazy defaults and getter order,
+assignment targets, catch and loops, conditional tuple types, Parameters and a
+readability/robustness comparison. Code and actual depth output are included.
 
-Final package check: extracted assignment4.zip into a separate empty directory; npm ci succeeded from the local cache, npm run all passed, npm run check passed, and the clean output matched the submitted output.txt after newline normalization.
+Bonus 3: five cases from the instructor's Assignment 3 starter, TypeScript 5.8.3
+and a pinned TanStack Query revision. Includes expanded equivalents, one readability
+criticism, a props-versus-children analysis, exact lines and hashed source evidence.
 
+Bonus 4 is NOT complete: local commits use genuine timestamps. GitHub publication,
+instructor access and work across several days remain. GIT-NEXT-STEPS.md explains
+how to restore the bundled local history and publish it after normal authentication.
+
+No any annotations or ts-ignore directives were introduced. Only T5 uses
+ts-expect-error. output.txt is real stdout from the complete npm run all.
+The raw-function demonstration captures React's console.error arguments into stdout.
+Compiler experiments are separate, intentional failures, not hidden project errors.
+
+The package excludes node_modules, .git and intermediate TeX build files.
+The source and PDF cover the same complete guide. Review the explanations before
+submission; bonus points depend on the instructor's assessment of understanding.
