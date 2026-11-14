@@ -27,9 +27,9 @@ Bonus 3: five cases from the instructor's Assignment 3 starter, TypeScript 5.8.3
 and a pinned TanStack Query revision. Includes expanded equivalents, one readability
 criticism, a props-versus-children analysis, exact lines and hashed source evidence.
 
-Bonus 4 is NOT complete: local commits use genuine timestamps. GitHub publication,
-instructor access and work across several days remain. GIT-NEXT-STEPS.md explains
-how to restore the bundled local history and publish it after normal authentication.
+Bonus 4 is NOT complete: GitHub publication is verified, with genuine commit timestamps.
+Instructor access and work across several days remain. GIT-NEXT-STEPS.md explains
+how to restore the bundled local history and continue work on the published repository.
 
 No any annotations or ts-ignore directives were introduced. Only T5 uses
 ts-expect-error. output.txt is real stdout from the complete npm run all.
@@ -41,4 +41,7 @@ The source and PDF cover the same complete guide. Review the explanations before
 submission; bonus points depend on the instructor's assessment of understanding.
 
 Clean-clone validation completed on 14 November 2026: restored the real Git history from the bundle into a separate directory; npm install succeeded from cache, npm run all and npm run check passed, and the output matched output.txt. See CLEAN-CLONE-CHECK.txt. The ZIP also preserves the history bundle; all current commits are dated today, so the several-day Bonus 4 condition is still pending.
+
+
+Remote publication verified: https://github.com/naz051223/assignment4-destructuring-field-guide (PRIVATE). The initial remote HEAD matched c157664fc82d790bab905b49d14ee0bf73c0ac26, preserving the five original commits. README and PDF are updated with the actual repository link.
 

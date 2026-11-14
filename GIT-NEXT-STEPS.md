@@ -1,42 +1,43 @@
-# Bonus 4: Git repository — remaining steps
+# Bonus 4: Git repository — current status
 
-Owner: naz051223. A local repository with genuine commit timestamps has been
-created. No remote repository or instructor permission has been claimed as done.
+Published private repository:
+https://github.com/naz051223/assignment4-destructuring-field-guide
 
-## Restore the preserved history
+The five original commits were uploaded with their real history. The README/PDF
+publication update is recorded in an additional real commit. All of today's
+commits retain 14 November 2026 timestamps.
 
-The ZIP includes assignment4-history.bundle. From the extracted assignment4 folder:
+## Work on the existing repository
+
+From a normal authenticated Git terminal:
+
+```sh
+git clone https://github.com/naz051223/assignment4-destructuring-field-guide.git
+cd assignment4-destructuring-field-guide
+npm install
+npm run all
+npm run check
+```
+
+The ZIP also preserves assignment4-history.bundle as an offline history backup.
+To restore it:
 
 ```sh
 git clone assignment4-history.bundle assignment4-repository
 cd assignment4-repository
-git log --date=short --format="%h %ad %s"
-```
-
-## Publish when signed in
-
-Create an empty private GitHub repository named assignment4-destructuring-field-guide
-under naz051223, without adding a README, license or .gitignore on GitHub. Then,
-from the restored repository:
-
-```sh
 git remote set-url origin https://github.com/naz051223/assignment4-destructuring-field-guide.git
-git push -u origin main
 ```
 
-From the original local project, where no origin has been added yet, use
-`git remote add origin ...` instead of `git remote set-url origin ...`.
-Normal GitHub authentication is required; do not put passwords or tokens in the
-README or chat. The account's current authentication is not bundled in the ZIP.
-
-## Complete the assignment's history and access conditions
+## Conditions still remaining
 
 Continue real review and improvements on later days. The handout asks for at least
-five meaningful commits over several days; commits made today do not by themselves
-satisfy that requirement. Useful future changes include explaining a depth case in
-your own words, checking an additional React edge case, or improving a real-code
-analysis after understanding it. Do not change timestamps to simulate earlier work.
+five meaningful commits over several days. The commit count is satisfied, but
+commits made on one day do not satisfy the several-day condition.
 
-Add the actual repository link to the Bonus 4 section of README, grant the instructor
-access according to CATS, rebuild the PDF with npm run build:guide, and regenerate
-the final ZIP. Keep the repository private until you choose otherwise.
+When the instructor's GitHub username is announced, grant the instructor access
+according to CATS. Rebuild the PDF and export a newly named ZIP after subsequent
+changes. Preserve the completed Bonus 1–3 ZIP backup.
+
+If GitHub CLI authorization is revoked after today's upload, normal reauthorization
+or another supported authentication method is required for later private-repository
+pushes. The repository and commits remain on GitHub when CLI access is revoked.

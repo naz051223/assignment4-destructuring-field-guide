@@ -3,7 +3,7 @@
 Name: Tuba Nazlı İpekyüz  
 Student number: 2200004532
 
-Bonuses claimed: **Bonus 1: LaTeX**, **Bonus 2: Depth**, **Bonus 3: Real code**. **Bonus 4: Git repository** remains in progress and is not yet claimed.
+Bonuses claimed: **Bonus 1: LaTeX**, **Bonus 2: Depth**, **Bonus 3: Real code**. **Bonus 4: Git repository** is published; instructor access and work over several days remain in progress.
 
 This guide uses a study-session planner. The examples and explanations were
 prepared with AI assistance and need student review and explanation before submission.
@@ -589,10 +589,18 @@ are recorded in VERIFICATION.md. The desktop LaTeX editor can also compile main.
 
 ## Bonus 4: Git repository
 
-Account: naz051223 on GitHub. Local Git history has been started with real commit
-timestamps. The remote repository URL and instructor access are still pending.
-This bonus is not yet claimed: its several-day history requirement cannot be
-satisfied by multiple commits made on the same day. No dates have been fabricated.
+[https://github.com/naz051223/assignment4-destructuring-field-guide](https://github.com/naz051223/assignment4-destructuring-field-guide)
+
+The project is published in a private repository under naz051223. The five original
+commits were pushed with their real history preserved. The repository has a
+.gitignore excluding node_modules, and a clean local clone was installed and run
+successfully. The current work was committed on 14 November 2026.
+
+This bonus is not yet claimed as fully complete: the instructor's GitHub username
+has not been announced, so instructor access remains pending. The handout also
+asks for meaningful work over several days. Further actual review and improvements
+will be committed on the days they are done. No timestamps have been changed to
+simulate earlier work. Several commits on one day do not satisfy that condition.
 
 ## Bonus 2: Depth
 
@@ -980,7 +988,7 @@ The following references were consulted to check behavior, not copied as example
 Submit one assignment4 folder inside the ZIP, without node_modules. The guide,
 source files, package files, tsconfig.json, output.txt and compiler-diagnostics.txt
 are included. Install dependencies again with npm install after extracting.
-Bonuses 1–3 are included; Bonus 4 remains pending a remote repository, instructor access and genuine work over several days.
+Bonuses 1–3 are included; Bonus 4 has a private remote repository; instructor access and genuine work over several days remain pending.
 
 ## My own log
 
