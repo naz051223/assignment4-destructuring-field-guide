@@ -7,9 +7,10 @@
     "js": "node js/arrays.mjs && node js/objects.mjs && node js/params.mjs && node js/pitfalls.mjs && tsx js/props.jsx",
     "ts": "tsx ts/arrays.ts && tsx ts/objects.ts && tsx ts/params.ts && tsx ts/types.ts && tsx ts/props.tsx",
     "check": "tsc --noEmit",
-    "all": "npm run js && npm run ts && npm run review",
+    "all": "npm run js && npm run ts && npm run review && npm run depth",
     "review": "tsx js/review.jsx",
-    "diagnose": "node tools/check-probes.cjs"
+    "diagnose": "node tools/check-probes.cjs",
+    "depth": "node js/depth.mjs && tsx ts/depth.ts"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

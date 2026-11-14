@@ -1,0 +1,28 @@
+
+> destructuring-guide@0.0.0 depth
+> node js/depth.mjs && tsx ts/depth.ts
+
+depth string: 🧠 A 3
+depth Set: arrays ["props"]
+depth Map: Monday 40
+depth generator: start
+depth generator: closed
+depth generator result: arrays
+depth array-like: TypeError: {(intermediate value)(intermediate value)} is not iterable
+depth lazy defaults: 0 30 null 1
+depth earlier default: 40 8
+depth later default: ReferenceError: Cannot access 'later' before initialization
+depth getter order: ["title","minutes"] React 30 2
+depth targets: {"minutes":40,"pause":8}
+depth catch: Session unavailable
+depth for-in: 0
+depth for-in: 1
+depth for-of: arrays
+depth for-of: props
+depth compact: Tuba: 40 min
+depth readable: Tuba: 40 min
+depth compact missing: TypeError: Cannot read properties of undefined (reading 'name')
+depth readable missing: Incomplete plan
+depth TS infer: 40 ["closures",true]
+depth TS Parameters: props: 25 min
+depth TS empty Rest: []

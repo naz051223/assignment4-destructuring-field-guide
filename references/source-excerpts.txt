@@ -1,0 +1,80 @@
+Third-party source excerpts for Bonus 3. Original line numbers preserved.
+
+Assignment 3 instructor starter: TaskRow
+Source: work/assignment3-starter/starter/src/TaskRow.tsx
+SHA-256: 9daec39682aae3d339b807155aa7af7af155e3be60eff00adb7c6309f75a0033
+1: import type { Task } from './taskReducer'
+2: 
+3: type TaskRowProps = { task: Task; onNext: () => void; onDelete: () => void }
+4: 
+5: export default function TaskRow({ task, onNext, onDelete }: TaskRowProps) {
+6:   return (
+7:     <li style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+8:       <span style={{ flex: 1 }}>{task.title}</span>
+9:       <em>{task.status}</em>
+10:       <button onClick={onNext}>Next</button>
+11:       <button onClick={onDelete}>Delete</button>
+12:     </li>
+13:   )
+14: }
+
+Assignment 3 instructor starter: App
+Source: work/assignment3-starter/starter/src/App.tsx
+SHA-256: 3707e66ec09d1543ae0a5a70d165777268166992282fd27aa849f49c04b8eeef
+21: function TaskList({ tasks, dispatch }: { tasks: Task[]; dispatch: Dispatch<Action> }) {
+22:   return (
+23:     <ul>
+24:       {tasks.map((t) => (
+25:         <TaskRow
+26:           key={t.id}
+27:           task={t}
+28:           onNext={() => dispatch({ type: 'advance', id: t.id })}
+29:           onDelete={() => dispatch({ type: 'remove', id: t.id })}
+30:         />
+31:       ))}
+32:     </ul>
+33:   )
+34: }
+35: 
+36: export default function App() {
+37:   const [tasks, dispatch] = useReducer(taskReducer, [])
+38:   return (
+39:     <main>
+40:       <h1>Task Manager</h1>
+41:       <AddForm dispatch={dispatch} />
+42:       <TaskList tasks={tasks} dispatch={dispatch} />
+43:     </main>
+
+Installed TypeScript 5.8.3
+Source: outputs/assignment4/node_modules/typescript/lib/typescript.js
+SHA-256: dd17428736a07e1db1a138d8a14295ddb2699ba780ee15038acdd2c6da5373a0
+3631: function patternText({ prefix, suffix }) {
+3632:   return `${prefix}*${suffix}`;
+3633: }
+4869: function tryParseComponents(text) {
+4870:   const match = versionRegExp.exec(text);
+4871:   if (!match) return void 0;
+4872:   const [, major, minor = "0", patch = "0", prerelease = "", build2 = ""] = match;
+4873:   if (prerelease && !prereleaseRegExp.test(prerelease)) return void 0;
+4874:   if (build2 && !buildRegExp.test(build2)) return void 0;
+4875:   return {
+
+TanStack Query revision 36dd7927c85ce6cee37ab1eb3af25e7fc7ccbb14
+Source: work/real-code/tanstack-simple.tsx
+SHA-256: e3f05d7f65309571155f27cdeb4e55e7967fd2c44d534316e622709fc5022b2b
+20: function Example() {
+21:   const { isPending, error, data, isFetching } = useQuery({
+22:     queryKey: ['repoData'],
+23:     queryFn: async () => {
+24:       const response = await fetch(
+25:         'https://api.github.com/repos/TanStack/query',
+26:       )
+27:       if (!response.ok) throw new Error('Failed to fetch repo data')
+28:       return await response.json()
+29:     },
+30:   })
+31: 
+32:   if (isPending) return 'Loading...'
+33: 
+34:   if (error) return 'An error has occurred: ' + error.message
+

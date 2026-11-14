@@ -3,7 +3,7 @@
 Name: Tuba Nazlı İpekyüz  
 Student number: 2200004532
 
-Bonuses claimed: none yet.
+Bonuses in progress: Bonus 1: LaTeX; Bonus 2: Depth; Bonus 3: Real code. Bonus 4: Git repository is being prepared and is not yet claimed.
 
 This guide uses a study-session planner. The examples and explanations were
 prepared with AI assistance and need student review and explanation before submission.
@@ -570,6 +570,374 @@ output.txt is the actual current run. compiler-diagnostics.txt contains separate
 collected intentional failures, not failures hidden in the project check. Reproduce them with `node tools/check-probes.cjs`.
 
 The guided-review log below records actual predictions and results from the discussion. It includes five wrong-prediction cases (entries 1, 2, 4, 6 and 7), plus correct follow-up comparisons (3 and 5). The student should review the complete guide and practise explaining the code independently. No optional bonuses are claimed.
+
+## Bonus 2: Depth
+
+These are additional investigations, not just a list of syntax forms. The complete
+experiments are in `js/depth.mjs` and `ts/depth.ts`; run `npm run depth`.
+Actual output is in `depth-output.txt` and is also included by `npm run all`.
+These assistant-run experiments are separate from the student's personal log.
+
+### D1: an array pattern consumes an iterator
+
+A string, Set, Map and generator all supply iterators. A Set removes duplicates
+and yields its remaining values in insertion order. A Map yields entry pairs,
+so the nested pattern first takes an entry and then its key and value.
+
+The string experiment distinguishes string iteration from indexed length:
+`'🧠A'.length` is 3 UTF-16 code units, but the iterator yields two code points.
+Consequently `[symbol, letter]` receives the brain symbol and A. This does not
+mean string iteration splits user-perceived grapheme clusters: combining marks
+and multi-code-point emoji can still occupy several iterations.
+
+The generator experiment logs start and closed, but never logs second yield
+reached. The pattern only requests its first value and then closes the iterator;
+the generator's finally block runs. Rest would instead consume the remaining
+values, so applying rest to an infinite generator would never finish.
+
+The object with index 0 and length 1 is array-like but supplies no iterator.
+Its failure demonstrates why an array pattern is not just syntactic indexing.
+This interpretation follows the specification's iterator binding initialization
+and iterator-closing rules, rather than treating every object as an array.
+
+### D2: defaults are lazy and dependencies have an order
+
+The three default expressions are calls to the same counter-incrementing function.
+The values 0 and null do not trigger defaults; undefined does. The result is
+`0 30 null 1`, including exactly one function call. With an earlier binding,
+`[work = 40, pause = work / 5]` produces 40 and 8. Reading a later uninitialized
+binding throws a ReferenceError instead of waiting for its default to be assigned.
+
+A second experiment uses getters. Although minutes appears first in the source
+object, the pattern asks for title first. The logged order is title, minutes.
+The default runs only after the minutes getter returns undefined. The final call
+count is 2 because the earlier experiment had already called fallback once.
+The source object's insertion order does not override the explicit pattern order.
+
+### D3: assignments, catch, and loop inputs
+
+`[destination.minutes, destination.pause] = [40, 8]` writes existing object
+properties; it does not declare variables called destination.minutes.
+The parentheses-free array assignment is preceded by a semicolon for safe parsing.
+`catch ({ message })` extracts the message from the Error object we deliberately
+throw. It is not a universally safe catch pattern: JavaScript can throw null or
+other values, so unknown exceptions should usually be checked before destructuring.
+
+The for...in loop prints the array's enumerable index keys 0 and 1. The for...of
+loop prints its values arrays and props. Destructuring cannot compensate for
+choosing a loop that supplies the wrong kind of input.
+
+### D4: type-level extraction is not runtime destructuring
+
+First uses `infer Head` in a conditional tuple type; Rest uses `infer Tail`.
+The readonly prefix permits input from an as-const tuple. For our tuple, First is
+the literal type 40 and Rest is the tuple type ['closures', true]. Rest itself is
+not readonly in this particular utility. The annotations check the values assigned
+to the variables; they do not create or slice runtime arrays.
+
+The utility is deliberately limited to non-empty tuple shapes. `First<[]>` and
+`First<string[]>` are never here, since neither type promises an initial position.
+`Rest<[]>` is []. A different definition would be needed for arbitrary arrays.
+`Parameters<typeof planSession>` extracts `[topic: string, minutes: number]`;
+the runtime spread passes those two argument values to the existing function.
+These features are checked by TypeScript and erased before execution.
+
+### D5: a readability refactoring with a defined behavior change
+
+The compact nested pattern aliases student and duration in one line. It works for
+the complete plan but fails when owner is absent. The readable function names the
+intermediate objects, checks missing values, and returns Incomplete plan. Both
+versions print Tuba: 40 min for the valid input. For the missing input, the compact
+version throws while the readable version handles it. This is a robustness change
+as well as a readability refactoring; they are not equivalent for all inputs.
+No speed claim is made: these tiny runs are not a performance benchmark.
+
+### Complete runnable JavaScript investigation
+
+```js
+// Tuba Nazlı İpekyüz — 2200004532
+// Bonus 2: investigate iterator behavior, evaluation order and readability.
+const [symbol, letter] = '🧠A'
+console.log('depth string:', symbol, letter, '🧠A'.length)
+const [firstUnique, ...otherUnique] = new Set(['arrays', 'arrays', 'props'])
+console.log('depth Set:', firstUnique, JSON.stringify(otherUnique))
+const [[day, minutes]] = new Map([['Monday', 40]])
+console.log('depth Map:', day, minutes)
+function* planned() {
+  try {
+    console.log('depth generator: start')
+    yield 'arrays'
+    console.log('depth generator: second yield reached')
+    yield 'props'
+  } finally {
+    console.log('depth generator: closed')
+  }
+}
+const [onlyFirst] = planned()
+console.log('depth generator result:', onlyFirst)
+// This is array-like but not iterable: an array pattern requires an iterator.
+try {
+  const [value] = { 0: 'arrays', length: 1 }
+  console.log(value)
+} catch (error) {
+  console.log('depth array-like:', error.name + ': ' + error.message)
+}
+
+let calls = 0
+function fallback() { calls++; return 30 }
+const [zero = fallback(), missing = fallback(), explicitNull = fallback()] = [0, undefined, null]
+console.log('depth lazy defaults:', zero, missing, explicitNull, calls)
+const [work = 40, pause = work / 5] = []
+console.log('depth earlier default:', work, pause)
+try {
+  const [early = later, later = 2] = []
+  console.log(early, later)
+} catch (error) {
+  console.log('depth later default:', error.name + ': ' + error.message)
+}
+const reads = []
+const settings = {
+  get minutes() { reads.push('minutes'); return undefined },
+  get title() { reads.push('title'); return 'React' }
+}
+const { title, minutes: duration = fallback() } = settings
+console.log('depth getter order:', JSON.stringify(reads), title, duration, calls)
+
+const destination = { minutes: 0, pause: 0 }
+;[destination.minutes, destination.pause] = [40, 8]
+console.log('depth targets:', JSON.stringify(destination))
+try { throw new Error('Session unavailable') }
+catch ({ message }) { console.log('depth catch:', message) }
+const topics = ['arrays', 'props']
+for (const index in topics) console.log('depth for-in:', index)
+for (const topic of topics) console.log('depth for-of:', topic)
+
+// A compact nested pattern can fail at an intermediate missing object.
+function compact(plan) {
+  const { owner: { name: student }, sessions: [{ minutes: duration }] } = plan
+  return `${student}: ${duration} min`
+}
+function readable(plan) {
+  const owner = plan.owner
+  const firstSession = plan.sessions?.[0]
+  if (owner == null || firstSession == null) return 'Incomplete plan'
+  return `${owner.name}: ${firstSession.minutes} min`
+}
+const completePlan = { owner: { name: 'Tuba' }, sessions: [{ minutes: 40 }] }
+console.log('depth compact:', compact(completePlan))
+console.log('depth readable:', readable(completePlan))
+try { console.log(compact({ sessions: [] })) }
+catch (error) { console.log('depth compact missing:', error.name + ': ' + error.message) }
+console.log('depth readable missing:', readable({ sessions: [] }))
+```
+
+### Complete TypeScript investigation
+
+```ts
+// Tuba Nazlı İpekyüz — 2200004532
+// Bonus 2: type-level tuple extraction, distinct from runtime destructuring.
+export {}
+type First<T extends readonly unknown[]> = T extends readonly [infer Head, ...unknown[]] ? Head : never
+type Rest<T extends readonly unknown[]> = T extends readonly [unknown, ...infer Tail] ? Tail : []
+const session = [40, 'closures', true] as const
+const first: First<typeof session> = session[0]
+const rest: Rest<typeof session> = [session[1], session[2]]
+console.log('depth TS infer:', first, JSON.stringify(rest))
+function planSession(topic: string, minutes: number): string {
+  return `${topic}: ${minutes} min`
+}
+const argumentsForPlan: Parameters<typeof planSession> = ['props', 25]
+console.log('depth TS Parameters:', planSession(...argumentsForPlan))
+// An ordinary possibly-empty array does not guarantee a first tuple position.
+type EmptyFirst = First<[]>
+type ArrayFirst = First<string[]>
+// Both aliases are never for this non-empty-tuple utility. No value is invented.
+const emptyRest: Rest<[]> = []
+console.log('depth TS empty Rest:', JSON.stringify(emptyRest))
+// Keep the limitation explicit; this utility is for tuples, not arbitrary arrays.
+```
+
+### Actual depth output
+
+```text
+> destructuring-guide@0.0.0 depth
+> node js/depth.mjs && tsx ts/depth.ts
+
+depth string: 🧠 A 3
+depth Set: arrays ["props"]
+depth Map: Monday 40
+depth generator: start
+depth generator: closed
+depth generator result: arrays
+depth array-like: TypeError: {(intermediate value)(intermediate value)} is not iterable
+depth lazy defaults: 0 30 null 1
+depth earlier default: 40 8
+depth later default: ReferenceError: Cannot access 'later' before initialization
+depth getter order: ["title","minutes"] React 30 2
+depth targets: {"minutes":40,"pause":8}
+depth catch: Session unavailable
+depth for-in: 0
+depth for-in: 1
+depth for-of: arrays
+depth for-of: props
+depth compact: Tuba: 40 min
+depth readable: Tuba: 40 min
+depth compact missing: TypeError: Cannot read properties of undefined (reading 'name')
+depth readable missing: Incomplete plan
+depth TS infer: 40 ["closures",true]
+depth TS Parameters: props: 25 min
+depth TS empty Rest: []
+```
+
+References: [ECMAScript iterator binding initialization](https://tc39.es/ecma262/multipage/ecmascript-language-statements-and-declarations.html#sec-destructuring-binding-patterns-runtime-semantics-iteratorbindinginitialization), [TypeScript conditional types](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html), [Parameters utility](https://www.typescriptlang.org/docs/handbook/utility-types.html#parameterstype).
+
+## Bonus 3: Real code
+
+The five cases below come from three sources: the instructor's Assignment 3 Task
+Manager starter (`Downloads/starter.zip`, not my completed Assignment 3), the
+installed TypeScript 5.8.3 package, and TanStack Query at immutable revision
+`36dd7927c85ce6cee37ab1eb3af25e7fc7ccbb14`. Source line numbers refer to those exact
+copies. Extracted evidence and SHA-256 identifiers are in
+`references/source-excerpts.txt`; full third-party projects are not redistributed.
+The expansions are explanations of the selected operations, not replacement
+projects. In particular, React hooks must still be called once at the component's
+top level.
+
+### Case 1: TaskRow receives one props object
+
+Source: Assignment 3 starter, `starter/src/TaskRow.tsx`, line 5.
+
+```tsx
+export default function TaskRow({ task, onNext, onDelete }: TaskRowProps) {
+```
+
+Forms: 5 and 11. Expanded parameter access:
+
+```tsx
+export default function TaskRow(props: TaskRowProps) {
+  const task = props.task
+  const onNext = props.onNext
+  const onDelete = props.onDelete
+  // The original return body follows unchanged.
+}
+```
+
+Task, onNext and onDelete are named props supplied by TaskList. There is no
+children field in TaskRowProps, and the component does not read children.
+The text Next and Delete belongs to the inner button elements' children;
+it is not content passed to TaskRow. At the call site, key={t.id} is React's
+special list identity rather than an ordinary field available as props.key.
+The short parameter pattern makes this small component's dependencies visible.
+
+### Case 2: useReducer returns a pair
+
+Source: Assignment 3 starter, `starter/src/App.tsx`, line 37.
+
+```tsx
+const [tasks, dispatch] = useReducer(taskReducer, [])
+```
+
+Form: 1. Expanded:
+
+```tsx
+const reducerResult = useReducer(taskReducer, [])
+const tasks = reducerResult[0]
+const dispatch = reducerResult[1]
+```
+
+Tasks is the current state; dispatch is the action-dispatching function. Their
+positions carry the meaning, not their chosen names. Calling useReducer twice
+would not be an equivalent expansion: it would create two hook instances.
+Imports in this file use named-import syntax, which should not be counted as an
+object destructuring example despite the similar braces.
+
+### Case 3: a library helper extracts pattern fields
+
+Source: `node_modules/typescript/lib/typescript.js`, version 5.8.3,
+lines 3631–3633; same function is visible in the
+[versioned package](https://unpkg.com/typescript@5.8.3/lib/typescript.js).
+
+```js
+function patternText({ prefix, suffix }) {
+  return `${prefix}*${suffix}`;
+}
+```
+
+Forms: 5 and 11. Expanded:
+
+```js
+function patternText(pattern) {
+  const prefix = pattern.prefix
+  const suffix = pattern.suffix
+  return `${prefix}*${suffix}`
+}
+```
+
+This helper builds text for a wildcard pattern. The object fields describe the
+parts surrounding the wildcard; they are not arguments passed separately.
+Neither version accepts a null or undefined pattern. Here the two-field pattern
+is short and clear enough that I would keep it.
+
+### Case 4: a dense library pattern I would simplify
+
+Source: TypeScript 5.8.3, `node_modules/typescript/lib/typescript.js`, line 4872,
+inside tryParseComponents. The preceding lines check that the regular expression
+match exists.
+
+```js
+const [, major, minor = "0", patch = "0", prerelease = "", build2 = ""] = match;
+```
+
+Forms: 2 (skip), 4 (defaults). Expanded:
+
+```js
+const major = match[1]
+const minor = match[2] === undefined ? '0' : match[2]
+const patch = match[3] === undefined ? '0' : match[3]
+const prerelease = match[4] === undefined ? '' : match[4]
+const build2 = match[5] === undefined ? '' : match[5]
+```
+
+The first match element is the whole matched text, so the leading comma skips it.
+Optional capture groups receive defaults. In this location, the destructuring
+makes review harder: five positional groups and a skipped whole match require
+counting commas and consulting the regex. I would use named capture groups or
+extract a documented parsing helper in hand-maintained code. The emitted build2
+name is also less descriptive than buildMetadata, although editing generated
+library output itself would be inappropriate. The expansion assumes an ordinary
+RegExp match array with stable indexed values, which is what this function uses.
+
+### Case 5: an open-source hook result
+
+Source: TanStack Query,
+[examples/react/simple/src/index.tsx, lines 21–30](https://github.com/TanStack/query/blob/36dd7927c85ce6cee37ab1eb3af25e7fc7ccbb14/examples/react/simple/src/index.tsx#L21-L30).
+
+```tsx
+const { isPending, error, data, isFetching } = useQuery({
+  // The original query options and query function follow here.
+})
+```
+
+Form: 5. Expanded access, preserving one hook call:
+
+```tsx
+const query = useQuery({
+  // Keep the original options unchanged.
+})
+const isPending = query.isPending
+const error = query.error
+const data = query.data
+const isFetching = query.isFetching
+```
+
+This is not destructured props: it takes fields from a hook's return object.
+The component checks pending and error states before rendering data and separately
+uses isFetching for an updating indicator. Runtime property selection is the same
+in the expansion. TypeScript narrowing can depend on retaining related fields
+from a discriminated result together; the clearest typed rewrite can instead keep
+query.isPending and query.data on the query object. I would retain the original
+short destructuring here. The queryFn's network request was inspected as source,
+not run as part of this assignment's deterministic examples.
 
 ## Sources and assistance
 
