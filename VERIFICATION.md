@@ -39,3 +39,6 @@ Compiler experiments are separate, intentional failures, not hidden project erro
 The package excludes node_modules, .git and intermediate TeX build files.
 The source and PDF cover the same complete guide. Review the explanations before
 submission; bonus points depend on the instructor's assessment of understanding.
+
+Clean-clone validation completed on 14 November 2026: restored the real Git history from the bundle into a separate directory; npm install succeeded from cache, npm run all and npm run check passed, and the output matched output.txt. See CLEAN-CLONE-CHECK.txt. The ZIP also preserves the history bundle; all current commits are dated today, so the several-day Bonus 4 condition is still pending.
+

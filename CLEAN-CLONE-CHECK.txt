@@ -1,0 +1,17 @@
+CLEAN CLONE VERIFICATION — 14 November 2026
+
+Tested snapshot: 9c9bfdf (full guide, LaTeX/PDF, depth experiments, real-code analysis).
+Cloned from assignment4-history.bundle into a separate directory.
+Node.js: 22.23.3. npm: 10.9.9.
+
+npm install --offline --no-audit --no-fund: PASS (existing local npm cache).
+npm run all: PASS.
+npm run check: PASS.
+The clean run output matched the submitted output.txt after newline normalization.
+
+PDF verification: 19 A4 pages; full guide; all pages rendered and inspected;
+no overfull/underfull boxes or missing-character messages in the final TeX log.
+All nine font subsets are embedded. Turkish output strings were checked in PDF text.
+
+This verification does not claim remote GitHub publication, instructor access,
+or a history spread over several days. Those Bonus 4 conditions remain pending.
