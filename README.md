@@ -3,7 +3,7 @@
 Name: Tuba Nazlı İpekyüz  
 Student number: 2200004532
 
-Bonuses in progress: Bonus 1: LaTeX; Bonus 2: Depth; Bonus 3: Real code. Bonus 4: Git repository is being prepared and is not yet claimed.
+Bonuses claimed: **Bonus 1: LaTeX**, **Bonus 2: Depth**, **Bonus 3: Real code**. **Bonus 4: Git repository** remains in progress and is not yet claimed.
 
 This guide uses a study-session planner. The examples and explanations were
 prepared with AI assistance and need student review and explanation before submission.
@@ -503,13 +503,6 @@ function TypedButton({ children, ...rest }: ComponentProps<'button'>) {
 
 
 ```text
-pitfall 1: TypeError: Cannot destructure property 'minutes' of 'undefined' as it is undefined.
-pitfall 2: null
-pitfall 3 invalid: SyntaxError: Unexpected token '='
-pitfall 3 fixed: 25
-pitfall 4: Library C s1 s2
-pitfall 5 object: React practice planned
-pitfall 5 array: planned React practice
 P1 object: <section><h2>Study</h2>Closures</section>
 P1 pattern: <section><h2>Study</h2>Closures</section>
 P2 nested: <section><h2>Study</h2>Practice</section>
@@ -563,13 +556,43 @@ compiler experiments, saved with their source in compiler-diagnostics.txt.
 | 12, entry loop | Each iteration supplies a pair | Record and Map value types | TS2339: toUpperCase does not exist on number |
 | P7, children | Props remain one runtime object | ReactNode or a render-function signature | TS2322: function is not assignable to ReactNode |
 
-## Verification and remaining work
+## Verification and review
 
 Node.js 22.23.3, npm 10.9.9. Both npm run all and npm run check passed.
 output.txt is the actual current run. compiler-diagnostics.txt contains separately
 collected intentional failures, not failures hidden in the project check. Reproduce them with `node tools/check-probes.cjs`.
 
-The guided-review log below records actual predictions and results from the discussion. It includes five wrong-prediction cases (entries 1, 2, 4, 6 and 7), plus correct follow-up comparisons (3 and 5). The student should review the complete guide and practise explaining the code independently. No optional bonuses are claimed.
+The guided-review log below records actual predictions and results from the discussion. It includes five wrong-prediction cases (entries 1, 2, 4, 6 and 7), plus correct follow-up comparisons (3 and 5). The student should review the complete guide and practise explaining the code independently. Bonuses 1–3 are included; Bonus 4 is still in progress.
+
+## Bonus 1: LaTeX
+
+The complete guide, including the required entries, pitfalls, React discussion,
+comparison table, bonus investigations, source analyses and personal log, is also
+provided as `latex/main.tex` and `latex/main.pdf`. It is not an abridged summary.
+The source uses listings for code, actual LaTeX tables, and a linked contents page.
+In the PDF's listings, [U+1F9E0] represents the brain symbol exactly; the executable
+source files and recorded output retain the original Unicode symbol.
+
+The source was generated from this README with Pandoc 3.14 and compiled with
+Tectonic 0.17.0. From the assignment4 project root, after installing those tools:
+
+```sh
+pandoc README.md --standalone --shift-heading-level-by=-1 --toc --number-sections --listings --pdf-engine=xelatex --lua-filter=latex/layout.lua -V documentclass=article -V papersize=a4 -V fontsize=10pt -V geometry:margin=22mm -V title="Destructuring Field Guide" -V author="Tuba Nazlı İpekyüz - 2200004532" -V date="14 November 2026" -H latex/style.tex -o latex/main.tex
+tectonic --keep-logs --keep-intermediates --outdir latex latex/main.tex
+```
+
+Tectonic compiles the saved LaTeX source with its XeTeX-based engine. Pandoc's
+pdf-engine flag selects the appropriate Unicode-aware source preamble here;
+Pandoc is generating TeX, while the second command creates the PDF. Required TeX
+packages are downloaded on the first Tectonic run. Compilation and visual checks
+are recorded in VERIFICATION.md. The desktop LaTeX editor can also compile main.tex. With Pandoc and Tectonic on PATH, `npm run build:guide` runs these steps and adds the identity comment to the generated source.
+
+## Bonus 4: Git repository
+
+Account: naz051223 on GitHub. Local Git history has been started with real commit
+timestamps. The remote repository URL and instructor access are still pending.
+This bonus is not yet claimed: its several-day history requirement cannot be
+satisfied by multiple commits made on the same day. No dates have been fabricated.
 
 ## Bonus 2: Depth
 
@@ -957,7 +980,7 @@ The following references were consulted to check behavior, not copied as example
 Submit one assignment4 folder inside the ZIP, without node_modules. The guide,
 source files, package files, tsconfig.json, output.txt and compiler-diagnostics.txt
 are included. Install dependencies again with npm install after extracting.
-Optional LaTeX, depth, real-project analysis and repository bonuses are not claimed.
+Bonuses 1–3 are included; Bonus 4 remains pending a remote repository, instructor access and genuine work over several days.
 
 ## My own log
 
@@ -1150,12 +1173,4 @@ console.log(a, b) // actual output: 2 2
 ```
 
 Both the caught failure and the working version are in `js/edge-review.mjs`.
-Their actual output, included in the complete npm run all output, is:
-
-```text
-review string length: 5
-review later binding: ReferenceError: Cannot access 'b' before initialization
-review earlier binding: 2 2
-```
-
 

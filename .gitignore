@@ -1,2 +1,8 @@
 node_modules
 dist
+latex/*.aux
+latex/*.log
+latex/*.out
+latex/*.toc
+latex/*.xdv
+assignment4-history.bundle

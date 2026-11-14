@@ -1,0 +1,32 @@
+% Tuba Nazlı İpekyüz — 2200004532
+\usepackage{xcolor}
+\usepackage{etoolbox}
+\usepackage{needspace}
+\usepackage{xurl}
+\usepackage{newunicodechar}
+\definecolor{codebg}{HTML}{F4F6F8}
+\definecolor{accent}{HTML}{174A67}
+\AtBeginDocument{\hypersetup{linkcolor=accent,urlcolor=accent}}
+\setlength{\emergencystretch}{4em}
+\newunicodechar{🧠}{\texttt{[U+1F9E0]}}
+\lstdefinelanguage{JavaScript}{morekeywords={const,let,function,return,if,else,for,of,in,try,catch,finally,throw,new,import,from,export,default,class,extends,async,await,yield},sensitive=true,morecomment=[l]{//},morecomment=[s]{/*}{*/},morestring=[b]',morestring=[b]",morestring=[b]`}
+\lstdefinelanguage{TypeScript}[]{JavaScript}{morekeywords={type,infer,readonly,unknown,never,as,keyof,interface}}
+\lstdefinelanguage{jsx}[]{JavaScript}{}
+\lstdefinelanguage{tsx}[]{TypeScript}{}
+\lstdefinelanguage{js}[]{JavaScript}{}
+\lstdefinelanguage{ts}[]{TypeScript}{}
+\lstdefinelanguage{text}{}
+\lstdefinelanguage{sh}{}
+\lstset{basicstyle=\ttfamily\footnotesize,backgroundcolor=\color{codebg},breaklines=true,breakatwhitespace=false,columns=fullflexible,keepspaces=true,showstringspaces=false,frame=single,framerule=0pt,xleftmargin=4pt,xrightmargin=4pt,aboveskip=8pt,belowskip=8pt,tabsize=2,literate={🧠}{{[U+1F9E0]}}1 {ı}{{\i}}1 {İ}{{\.{I}}}1 {ş}{{\c{s}}}1 {Ş}{{\c{S}}}1 {ğ}{{\u{g}}}1 {Ğ}{{\u{G}}}1 {ü}{{\"u}}1 {ö}{{\"o}}1 {ç}{{\c{c}}}1 {–}{{-}}1 {—}{{-}}1}
+\AtBeginEnvironment{longtable}{\footnotesize}
+\setlength{\parskip}{5pt}
+\setlength{\parindent}{0pt}
+
+
+
+\pretocmd{\section}{\Needspace{14\baselineskip}}{}{}
+\pretocmd{\subsection}{\Needspace{14\baselineskip}}{}{}
+
+
+\AtBeginDocument{\raggedright}
+
