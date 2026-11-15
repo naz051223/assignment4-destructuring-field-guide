@@ -569,56 +569,61 @@ choosing values.
 \subsection{T1: a colon can rename}\label{t1-a-colon-can-rename}
 
 \texttt{const \{ minutes:\allowbreak{} string \} = \{ minutes:\allowbreak{} 25 \}}
-creates a variable called string, whose value is a number. It does not
-annotate minutes with the string type. The typed form is
+creates a variable named string. Its value is 25, so its type is number.
+The word string here is a name, not a type. To add a type, write it
+after the whole pattern:
 \texttt{const \{ minutes:\allowbreak{} duration \}:\allowbreak{} \{ minutes:\allowbreak{} number \} = .\allowbreak{}.\allowbreak{}.\allowbreak{}}.
 Actual output: \texttt{T1:\allowbreak{} 25 number 25}. Calling
-\texttt{string.\allowbreak{}toUpperCase()} produced TS2339 in the
-compiler experiment.
+\texttt{string.\allowbreak{}toUpperCase()} gives TS2339 because numbers
+do not have that method.
 
 \subsection{T2: tuples and as const}\label{t2-tuples-and-as-const}
 
-\texttt{sessionSummary():\allowbreak{} [number, string]} promises a
-number and a string in that order.
-\texttt{const fixed = [25, 'props'] as const} infers the readonly tuple
-\texttt{readonly [25, 'props']}. Destructuring keeps the specific
-element types. Actual output:
-\texttt{T2:\allowbreak{} 40 closures 25 props}. The readonly type
-prevents assignments to tuple positions through this binding; it does
-not freeze an object at runtime.
+\texttt{sessionSummary():\allowbreak{} [number, string]} returns two
+items: a number, then a string. This type is called a tuple. It tells
+TypeScript the type at each position.
+\texttt{const fixed = [25, 'props'] as const} gives the type
+\texttt{readonly [25, 'props']}. It keeps those exact values as types
+and prevents changing the tuple's positions through this variable. It
+does not freeze the array at runtime. Actual output:
+\texttt{T2:\allowbreak{} 40 closures 25 props}.
 
 \subsection{T3: unchecked array access}\label{t3-unchecked-array-access}
 
-For \texttt{const [first] = topics} with
-\texttt{topics:\allowbreak{} string[]}, first is
-\texttt{string | undefined}. An empty array is legal, so calling a
-string method immediately is unsafe. Check \texttt{first !== undefined}
-first, or use \texttt{[safeFirst = 'free practice']}. Actual output:
-\texttt{T3:\allowbreak{} undefined free practice}. The unsafe method
-call produced TS18048:
+A \texttt{string[]} can be empty. With noUncheckedIndexedAccess enabled,
+\texttt{const [first] = topics} gives first the type
+\texttt{string | undefined}. Before calling a string method, check
+\texttt{first !== undefined}. Another option is a default:
+\texttt{[safeFirst = 'free practice']}. Actual output:
+\texttt{T3:\allowbreak{} undefined free practice}. Calling the method
+without a check gives TS18048:
 \texttt{'first' is possibly 'undefined'.\allowbreak{}}
 
 \subsection{T4: optional fields and
 defaults}\label{t4-optional-fields-and-defaults}
 
-With \texttt{minutes?:\allowbreak{} number}, an ordinary destructured
-value is \texttt{number | undefined}. Adding \texttt{minutes = 40} gives
-a number. If the field also permits null, null remains in the type and
-the runtime value. Actual output:
-\texttt{T4:\allowbreak{} undefined 40 null}. The nullable method call
-produced TS18047: \texttt{'minutes' is possibly 'null'.\allowbreak{}}
+The question mark in \texttt{minutes?:\allowbreak{} number} means the
+property can be missing. Without a default, the extracted value has type
+\texttt{number | undefined}. With \texttt{minutes = 40}, it has type
+number. A default is used when the value is undefined or has not been
+supplied. It is not used for null. If null is allowed, it stays in the
+type and the value. Actual output:
+\texttt{T4:\allowbreak{} undefined 40 null}. Calling a number method on
+a possibly null value gives TS18047:
+\texttt{'minutes' is possibly 'null'.\allowbreak{}}
 
 \subsection{T5: wrong property and fix}\label{t5-wrong-property-and-fix}
 
-The source has a minutes property, but
-\texttt{\{ duration:\allowbreak{} wrongName \}} asks for duration. The
-actual diagnostic is TS2339:
+The source has minutes, but
+\texttt{\{ duration:\allowbreak{} wrongName \}} asks for duration.
+TypeScript reports TS2339:
 \texttt{Property 'duration' does not exist on type '\{ minutes:\allowbreak{} number; \}'.\allowbreak{}}
-The one \texttt{@ts-expect-error} in the project marks this intentional
-error. The fix is \texttt{\{ minutes:\allowbreak{} correctedName \}}.
-Actual output: \texttt{T5:\allowbreak{} undefined 25}. Suppressing an
-error does not repair the runtime property lookup. An unnecessary
-expect-error itself makes the check fail.
+The one allowed \texttt{@ts-expect-error} marks this example. The fix is
+to ask for the existing property:
+\texttt{\{ minutes:\allowbreak{} correctedName \}}. Actual output:
+\texttt{T5:\allowbreak{} undefined 25}. The comment lets us demonstrate
+the error; it does not fix the property lookup. TypeScript also reports
+an error if an expect-error comment is no longer needed.
 
 \section{Props and children P1--P7}\label{props-and-children-p1p7}
 
@@ -913,11 +918,11 @@ separately collected intentional failures, not failures hidden in the
 project check. Reproduce them with
 \texttt{node tools/\allowbreak{}check-probes.\allowbreak{}cjs}.
 
-The guided-review log below records actual predictions and results from
-the discussion. It includes five wrong-prediction cases (entries 1, 2,
-4, 6 and 7), plus correct follow-up comparisons (3 and 5). The student
-should review the complete guide and practise explaining the code
-independently. Bonuses 1--3 are included; Bonus 4 is still in progress.
+The log records my real guesses, surprises and follow-up answers. It
+includes more than five wrong guesses or surprises, and also records
+answers I got right. AI help and assistant-run experiments are stated
+clearly. I still need to explain the whole guide in my own words.
+Bonuses 1--3 are included; Bonus 4 is in progress.
 
 \section{Bonus 1: LaTeX}\label{bonus-1-latex}
 
@@ -958,18 +963,17 @@ identity comment to the generated source.
 
 \url{https://github.com/naz051223/assignment4-destructuring-field-guide}
 
-The project is published in a private repository under naz051223. The
-five original commits were pushed with their real history preserved. The
-repository has a .gitignore excluding node\_modules, and a clean local
-clone was installed and run successfully. Further reviews are saved as
-new commits.
+The project has a private repository under naz051223. The initial work
+is uploaded. The newer review commits are saved locally and still need
+to be pushed. The .gitignore excludes node\_modules. A clean clone of
+the initial version was installed and run successfully. The local
+history now includes work on two days.
 
-This bonus is not yet claimed as fully complete: the instructor's GitHub
-username has not been announced, so instructor access remains pending.
-The handout also asks for meaningful work over several days. Further
-actual review and improvements will be committed on the days they are
-done. No timestamps have been changed to simulate earlier work. Several
-commits on one day do not satisfy that condition.
+Bonus 4 is still in progress. The instructor's GitHub username is not
+known, so access has not been added. The handout asks for at least five
+meaningful commits over several days. There are more than five local
+commits, but further real review on another day and uploading the newer
+work are still planned.
 
 \section{Bonus 2: Depth}\label{bonus-2-depth}
 
@@ -985,96 +989,94 @@ the student's personal log.
 \subsection{D1: an array pattern consumes an
 iterator}\label{d1-an-array-pattern-consumes-an-iterator}
 
-A string, Set, Map and generator all supply iterators. A Set removes
-duplicates and yields its remaining values in insertion order. A Map
-yields entry pairs, so the nested pattern first takes an entry and then
-its key and value.
+An array pattern reads values through an iterator: a way to get one
+value at a time. Strings, Set, Map and generators all provide one. A Set
+removes duplicates and keeps insertion order. A Map gives key-value
+pairs. The nested pattern in our example takes the first pair, then its
+key and value.
 
-The string experiment distinguishes string iteration from indexed
-length: \texttt{'[U+1F9E0]A'.\allowbreak{}length} is 3 UTF-16 code
-units, but the iterator yields two code points. Consequently
-\texttt{[symbol, letter]} receives the brain symbol and A. This does not
-mean string iteration splits user-perceived grapheme clusters: combining
-marks and multi-code-point emoji can still occupy several iterations.
+The string \texttt{'[U+1F9E0]A'} gives two values when iterated: the
+emoji and A. Its length is 3 because string length counts UTF-16 code
+units, and this emoji uses two units. Iteration counts code points here.
+It does not always separate text into visible characters: a visible
+character can contain more than one code point.
 
-The generator experiment logs start and closed, but never logs second
-yield reached. The pattern only requests its first value and then closes
-the iterator; the generator's finally block runs. Rest would instead
-consume the remaining values, so applying rest to an infinite generator
-would never finish.
+The generator logs start and closed. It does not reach the second yield.
+The pattern asks for one value, then closes the iterator, which runs
+finally. A rest pattern would keep reading the remaining values. With an
+infinite generator, collecting all remaining values would not finish.
 
-The object with index 0 and length 1 is array-like but supplies no
-iterator. Its failure demonstrates why an array pattern is not just
-syntactic indexing. This interpretation follows the specification's
-iterator binding initialization and iterator-closing rules, rather than
-treating every object as an array.
+The plain object with index 0 and length 1 has no iterator. Its array
+pattern throws a TypeError. Having numbered properties is not enough.
 
 \subsection{D2: defaults are lazy and dependencies have an
 order}\label{d2-defaults-are-lazy-and-dependencies-have-an-order}
 
-The three default expressions are calls to the same counter-incrementing
-function. The values 0 and null do not trigger defaults; undefined does.
-The result is \texttt{0 30 null 1}, including exactly one function call.
-With an earlier binding,
-\texttt{[work = 40, pause = work /\allowbreak{} 5]} produces 40 and 8.
-Reading a later uninitialized binding throws a ReferenceError instead of
-waiting for its default to be assigned.
+The default function increases a counter. Values 0 and null keep their
+values; undefined calls the function. The result is
+\texttt{0 30 null 1}: one call, not three.
 
-A second experiment uses getters. Although minutes appears first in the
-source object, the pattern asks for title first. The logged order is
-title, minutes. The default runs only after the minutes getter returns
-undefined. The final call count is 2 because the earlier experiment had
-already called fallback once. The source object's insertion order does
-not override the explicit pattern order.
+In \texttt{[work = 40, pause = work /\allowbreak{} 5]}, work is ready
+before pause uses it. The result is 40 and 8. Reading a later variable
+before it is initialized throws a ReferenceError.
+
+The getter example records when each property is read. The pattern asks
+for title first, so the order is title, minutes, even though the object
+lists minutes first. The minutes getter returns undefined, so its
+default runs. The final counter is 2 because the earlier experiment
+already called the function once.
 
 \subsection{D3: assignments, catch, and loop
 inputs}\label{d3-assignments-catch-and-loop-inputs}
 
 \texttt{[destination.\allowbreak{}minutes, destination.\allowbreak{}pause] = [40, 8]}
-writes existing object properties; it does not declare variables called
-destination.minutes. The parentheses-free array assignment is preceded
-by a semicolon for safe parsing. \texttt{catch (\{ message \})} extracts
-the message from the Error object we deliberately throw. It is not a
-universally safe catch pattern: JavaScript can throw null or other
-values, so unknown exceptions should usually be checked before
-destructuring.
+changes existing properties. It does not declare new variables. The
+leading semicolon keeps the array assignment separate from the previous
+statement.
 
-The for\ldots in loop prints the array's enumerable index keys 0 and 1.
-The for\ldots of loop prints its values arrays and props. Destructuring
-cannot compensate for choosing a loop that supplies the wrong kind of
-input.
+\texttt{catch (\{ message \})} reads message from the Error object we
+throw. It is not safe for every possible thrown value: JavaScript can
+also throw null. For unknown errors, check the value before taking its
+properties.
+
+Our for\ldots in loop gives the array's index keys, 0 and 1. The
+for\ldots of loop gives its values, arrays and props. Choose the loop
+based on which values you need.
 
 \subsection{D4: type-level extraction is not runtime
 destructuring}\label{d4-type-level-extraction-is-not-runtime-destructuring}
 
-First uses \texttt{infer Head} in a conditional tuple type; Rest uses
-\texttt{infer Tail}. The readonly prefix permits input from an as-const
-tuple. For our tuple, First is the literal type 40 and Rest is the tuple
-type {[}`closures', true{]}. Rest itself is not readonly in this
-particular utility. The annotations check the values assigned to the
-variables; they do not create or slice runtime arrays.
+First and Rest work on types. First finds the first type in a non-empty
+tuple; Rest finds the remaining types. The keyword infer names the part
+that was found. The readonly pattern also accepts tuples created with as
+const.
 
-The utility is deliberately limited to non-empty tuple shapes.
-\texttt{First<[]>} and \texttt{First<string[]>} are never here, since
-neither type promises an initial position. \texttt{Rest<[]>} is {[}{]}.
-A different definition would be needed for arbitrary arrays.
-\texttt{Parameters<typeof planSession>} extracts
-\texttt{[topic:\allowbreak{} string, minutes:\allowbreak{} number]}; the
-runtime spread passes those two argument values to the existing
-function. These features are checked by TypeScript and erased before
-execution.
+For our tuple, First is the type 40 and Rest is
+\texttt{['closures', true]}. The resulting Rest type is not readonly in
+this example. These types check our variables; they do not create or cut
+up an array at runtime.
+
+\texttt{First<[]>} and \texttt{First<string[]>} are never here: neither
+promises a first item. \texttt{Rest<[]>} is {[}{]}. This helper is for
+tuples; ordinary arrays need a different rule.
+\texttt{Parameters<typeof planSession>} gets the function's parameter
+types:
+\texttt{[topic:\allowbreak{} string, minutes:\allowbreak{} number]}. The
+spread passes our two values to the function. TypeScript removes these
+type rules before execution.
 
 \subsection{D5: a readability refactoring with a defined behavior
 change}\label{d5-a-readability-refactoring-with-a-defined-behavior-change}
 
-The compact nested pattern aliases student and duration in one line. It
-works for the complete plan but fails when owner is absent. The readable
-function names the intermediate objects, checks missing values, and
-returns Incomplete plan. Both versions print Tuba: 40 min for the valid
-input. For the missing input, the compact version throws while the
-readable version handles it. This is a robustness change as well as a
-readability refactoring; they are not equivalent for all inputs. No
-speed claim is made: these tiny runs are not a performance benchmark.
+The compact function reads several nested values in one pattern. It
+works for the complete plan, but throws when owner is missing. The
+longer version uses separate variables and checks missing objects first.
+It returns Incomplete plan for missing data.
+
+Both print Tuba: 40 min for the complete plan. They behave differently
+for missing data, so the rewrite changes error handling as well as
+readability. These small runs do not measure performance, so I do not
+claim either is faster.
 
 \subsection{Complete runnable JavaScript
 investigation}\label{complete-runnable-javascript-investigation}
@@ -1225,19 +1227,17 @@ utility}.
 
 \section{Bonus 3: Real code}\label{bonus-3-real-code}
 
-The five cases below come from three sources: the instructor's
-Assignment 3 Task Manager starter
-(\texttt{Downloads/\allowbreak{}starter.\allowbreak{}zip}, not my
-completed Assignment 3), the installed TypeScript 5.8.3 package, and
-TanStack Query at immutable revision
-\texttt{36dd7927c85ce6cee37ab1eb3af25e7fc7ccbb14}. Source line numbers
-refer to those exact copies. Extracted evidence and SHA-256 identifiers
-are in
+These five cases use the instructor's Assignment 3 Task Manager starter
+(\texttt{Downloads/\allowbreak{}starter.\allowbreak{}zip}), the
+installed TypeScript 5.8.3 package, and TanStack Query at the fixed
+revision \texttt{36dd7927c85ce6cee37ab1eb3af25e7fc7ccbb14}. Source line
+numbers refer to those exact copies. Extracted evidence and SHA-256
+identifiers are in
 \texttt{references/\allowbreak{}source-excerpts.\allowbreak{}txt}; full
-third-party projects are not redistributed. The expansions are
-explanations of the selected operations, not replacement projects. In
-particular, React hooks must still be called once at the component's top
-level.
+third-party projects are not redistributed. The rewrites show the same
+selected code without destructuring. They are source comparisons, not
+separate applications. React hooks still belong at the component's top
+level and must not be called again just to read another result.
 
 \subsection{Case 1: TaskRow receives one props
 object}\label{case-1-taskrow-receives-one-props-object}
@@ -1250,6 +1250,15 @@ line 5.
 
 \begin{lstlisting}
 export default function TaskRow({ task, onNext, onDelete }: TaskRowProps) {
+  return (
+    <li style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+      <span style={{ flex: 1 }}>{task.title}</span>
+      <em>{task.status}</em>
+      <button onClick={onNext}>Next</button>
+      <button onClick={onDelete}>Delete</button>
+    </li>
+  )
+}
 \end{lstlisting}
 
 \end{minipage}\par
@@ -1263,19 +1272,25 @@ export default function TaskRow(props: TaskRowProps) {
   const task = props.task
   const onNext = props.onNext
   const onDelete = props.onDelete
-  // The original return body follows unchanged.
+  return (
+    <li style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+      <span style={{ flex: 1 }}>{task.title}</span>
+      <em>{task.status}</em>
+      <button onClick={onNext}>Next</button>
+      <button onClick={onDelete}>Delete</button>
+    </li>
+  )
 }
 \end{lstlisting}
 
 \end{minipage}\par
 
-Task, onNext and onDelete are named props supplied by TaskList. There is
-no children field in TaskRowProps, and the component does not read
-children. The text Next and Delete belongs to the inner button elements'
-children; it is not content passed to TaskRow. At the call site,
-key=\{t.id\} is React's special list identity rather than an ordinary
-field available as props.key. The short parameter pattern makes this
-small component's dependencies visible.
+TaskList passes task, onNext and onDelete as named props. TaskRowProps
+has no children field, and TaskRow does not read children. Next and
+Delete are children of the inner buttons. They are not children passed
+to TaskRow. React uses key=\{t.id\} to identify list items; key is not
+an ordinary props field. I would keep this short pattern because it
+shows which props the component uses.
 
 \subsection{Case 2: useReducer returns a
 pair}\label{case-2-usereducer-returns-a-pair}
@@ -1304,12 +1319,12 @@ const dispatch = reducerResult[1]
 
 \end{minipage}\par
 
-Tasks is the current state; dispatch is the action-dispatching function.
-Their positions carry the meaning, not their chosen names. Calling
-useReducer twice would not be an equivalent expansion: it would create
-two hook instances. Imports in this file use named-import syntax, which
-should not be counted as an object destructuring example despite the
-similar braces.
+Tasks holds the current state. Dispatch is the function used to send
+actions. The first and second positions decide what we receive, not the
+variable names. The rewrite calls useReducer once and reads both results
+from that call. Calling it twice would create two separate hooks. Named
+imports also use braces, but their syntax is different from object
+destructuring.
 
 \subsection{Case 3: a library helper extracts pattern
 fields}\label{case-3-a-library-helper-extracts-pattern-fields}
@@ -1344,11 +1359,10 @@ function patternText(pattern) {
 
 \end{minipage}\par
 
-This helper builds text for a wildcard pattern. The object fields
-describe the parts surrounding the wildcard; they are not arguments
-passed separately. Neither version accepts a null or undefined pattern.
-Here the two-field pattern is short and clear enough that I would keep
-it.
+The function puts * between prefix and suffix. Both values come from one
+object, not two separate arguments. Both versions fail if that object is
+null or undefined. I would keep the original pattern because two fields
+are easy to read.
 
 \subsection{Case 4: a dense library pattern I would
 simplify}\label{case-4-a-dense-library-pattern-i-would-simplify}
@@ -1380,15 +1394,14 @@ const build2 = match[5] === undefined ? '' : match[5]
 
 \end{minipage}\par
 
-The first match element is the whole matched text, so the leading comma
-skips it. Optional capture groups receive defaults. In this location,
-the destructuring makes review harder: five positional groups and a
-skipped whole match require counting commas and consulting the regex. I
-would use named capture groups or extract a documented parsing helper in
-hand-maintained code. The emitted build2 name is also less descriptive
-than buildMetadata, although editing generated library output itself
-would be inappropriate. The expansion assumes an ordinary RegExp match
-array with stable indexed values, which is what this function uses.
+The first match item is the whole matched text. The leading comma skips
+it. Missing groups use defaults. I find this pattern harder to read
+because I have to count positions and check the regular expression to
+understand each value. In code I maintain, I would use named groups or a
+small helper with clear names. BuildMetadata would also be clearer than
+build2. This is generated library code, so I would not edit the
+installed file itself. The rewrite uses the normal match array returned
+by this function's regular expression.
 
 \subsection{Case 5: an open-source hook
 result}\label{case-5-an-open-source-hook-result}
@@ -1401,7 +1414,14 @@ lines 21--30}.
 
 \begin{lstlisting}
 const { isPending, error, data, isFetching } = useQuery({
-  // The original query options and query function follow here.
+  queryKey: ['repoData'],
+  queryFn: async () => {
+    const response = await fetch(
+      'https://api.github.com/repos/TanStack/query',
+    )
+    if (!response.ok) throw new Error('Failed to fetch repo data')
+    return await response.json()
+  },
 })
 \end{lstlisting}
 
@@ -1413,7 +1433,14 @@ Form: 5. Expanded access, preserving one hook call:
 
 \begin{lstlisting}
 const query = useQuery({
-  // Keep the original options unchanged.
+  queryKey: ['repoData'],
+  queryFn: async () => {
+    const response = await fetch(
+      'https://api.github.com/repos/TanStack/query',
+    )
+    if (!response.ok) throw new Error('Failed to fetch repo data')
+    return await response.json()
+  },
 })
 const isPending = query.isPending
 const error = query.error
@@ -1423,15 +1450,15 @@ const isFetching = query.isFetching
 
 \end{minipage}\par
 
-This is not destructured props: it takes fields from a hook's return
-object. The component checks pending and error states before rendering
-data and separately uses isFetching for an updating indicator. Runtime
-property selection is the same in the expansion. TypeScript narrowing
-can depend on retaining related fields from a discriminated result
-together; the clearest typed rewrite can instead keep query.isPending
-and query.data on the query object. I would retain the original short
-destructuring here. The queryFn's network request was inspected as
-source, not run as part of this assignment's deterministic examples.
+These fields come from the object returned by useQuery, not from props.
+The rewrite keeps the same options and calls the hook once. The
+component checks loading and errors before showing data, and uses
+isFetching for Updating\ldots. The same values are selected at runtime.
+In typed code, separate variables can lose the relationship TypeScript
+uses to check a result after a condition. Keeping query.isPending and
+query.data on one object can preserve that relationship. I would keep
+the original short pattern. This is a source-code comparison; I did not
+run its GitHub network request as part of the local examples.
 
 \section{Extra example: const and
 readonly}\label{extra-example-const-and-readonly}
@@ -1913,5 +1940,12 @@ variable point to a new object. The original object keeps its B label.
 My earlier answer of 40 and 60 in the number example was an output-order
 slip. I explained that I had not paid attention to the order, so it is
 not counted as a misunderstanding of the rule.
+
+In a later reference example, I correctly predicted C and D. The local
+room had been given a new object, so changing the original object's
+label did not change it. I also explained the default rule correctly: a
+default is used for undefined or when no value has been supplied, but
+not for null. I corrected a typing slip in that sentence; it was not a
+new misunderstanding.
 
 \end{document}
