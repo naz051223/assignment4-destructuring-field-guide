@@ -104,7 +104,7 @@
 
 \title{Destructuring Field Guide}
 \author{Tuba Nazlı İpekyüz - 2200004532}
-\date{14 November 2026}
+\date{15 November 2026}
 
 \begin{document}
 \maketitle
@@ -1433,6 +1433,76 @@ and query.data on the query object. I would retain the original short
 destructuring here. The queryFn's network request was inspected as
 source, not run as part of this assignment's deterministic examples.
 
+\section{Follow-up experiment: const and shallow readonly (15 November
+2026)}\label{follow-up-experiment-const-and-shallow-readonly-15-november-2026}
+
+This guided follow-up extends the destructuring and TypeScript
+discussion. Run \texttt{npm run readonly}; the same experiment also runs
+in \texttt{npm run all}.
+\texttt{tools/\allowbreak{}readonly-review.\allowbreak{}cjs} compiles
+each statement independently with TypeScript 5.8.3 and strict checking.
+It checks the expected diagnostic codes, so an unexpected acceptance or
+rejection makes the command fail. Invalid assignments stay in in-memory
+compiler inputs, rather than requiring suppression comments in the
+project.
+
+\begin{minipage}{\linewidth}
+
+\begin{lstlisting}
+type Session = {
+  readonly minutes: number;
+  readonly room: { label: string };
+};
+const session: Session = { minutes: 40, room: { label: 'A' } };
+const { minutes, room } = session;
+\end{lstlisting}
+
+\end{minipage}\par
+
+There are two different restrictions here. The const binding
+\texttt{minutes} cannot be reassigned. The readonly properties
+\texttt{session.\allowbreak{}minutes} and
+\texttt{session.\allowbreak{}room} cannot be assigned through this
+TypeScript type. Neither restriction makes the nested label readonly.
+Destructuring \texttt{room} retains the same object reference, so
+changing its label also changes
+\texttt{session.\allowbreak{}room.\allowbreak{}label}. Destructuring a
+number into a new let binding allows that local binding to be reassigned
+without changing the source.
+
+Actual output, also saved in \texttt{readonly-output.\allowbreak{}txt}:
+
+\begin{minipage}{\linewidth}
+
+\begin{lstlisting}
+minutes = 60;
+TS2588: Cannot assign to 'minutes' because it is a constant.
+room.label = 'B';
+OK (no compiler errors)
+session.minutes = 60;
+TS2540: Cannot assign to 'minutes' because it is a read-only property.
+session.room = { label: 'B' };
+TS2540: Cannot assign to 'room' because it is a read-only property.
+session.room.label = 'C';
+OK (no compiler errors)
+let { minutes: editableMinutes } = session; editableMinutes = 60;
+OK (no compiler errors)
+runtime: 40 60 40 C
+runtime frozen: false false
+\end{lstlisting}
+
+\end{minipage}\par
+
+The runtime line prints, in order, the const number, the reassigned let
+number, the original object's number and the shared nested label. Only
+the accepted TypeScript program is transpiled and executed.
+\texttt{readonly} is a compile-time restriction; the two false values
+confirm this example has not frozen either object at runtime. This does
+not make an invalid readonly assignment acceptable to TypeScript. For a
+nested compile-time restriction, label itself would need
+\texttt{readonly label:\allowbreak{} string} (or a suitable deep
+readonly type).
+
 \section{Sources and assistance}\label{sources-and-assistance}
 
 The starter project and assignment handout supplied the required
@@ -1751,5 +1821,28 @@ console.log(a, b) // actual output: 2 2
 
 Both the caught failure and the working version are in
 \texttt{js/\allowbreak{}edge-review.\allowbreak{}mjs}.
+
+\subsection{8. I forgot that readonly rejects property reassignment (15
+November
+2026)}\label{i-forgot-that-readonly-rejects-property-reassignment-15-november-2026}
+
+In today's guided review, I correctly predicted that assigning 60 to the
+const-destructured minutes binding is invalid, while changing room.label
+is valid. When the assistant added readonly to the minutes and room
+properties of Session, I expected all three proposed assignments to be
+valid. I was surprised that \texttt{session.\allowbreak{}minutes = 60}
+and \texttt{session.\allowbreak{}room = \{ label:\allowbreak{} 'B' \}}
+both give errors. My explanation was: ``readonly değer atama
+engellediğini unutmuştum.''
+
+The assistant ran the compiler experiment on this computer. Both
+property reassignments produced TS2540, while
+\texttt{session.\allowbreak{}room.\allowbreak{}label = 'C'} produced no
+compiler errors. I had forgotten the readonly restriction when making my
+guess. The distinction clarified in this review is that readonly on room
+protects that property from replacement, but does not automatically make
+label readonly. The separate follow-up experiment above records the real
+diagnostics and runtime output; the additional let-binding and runtime
+checks were assistant-led extensions.
 
 \end{document}

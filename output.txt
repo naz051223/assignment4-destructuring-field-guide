@@ -1,6 +1,6 @@
 
 > destructuring-guide@0.0.0 all
-> npm run js && npm run ts && npm run review && npm run depth
+> npm run js && npm run ts && npm run review && npm run depth && npm run readonly
 
 
 > destructuring-guide@0.0.0 js
@@ -146,3 +146,21 @@ depth readable missing: Incomplete plan
 depth TS infer: 40 ["closures",true]
 depth TS Parameters: props: 25 min
 depth TS empty Rest: []
+
+> destructuring-guide@0.0.0 readonly
+> node tools/readonly-review.cjs
+
+minutes = 60;
+TS2588: Cannot assign to 'minutes' because it is a constant.
+room.label = 'B';
+OK (no compiler errors)
+session.minutes = 60;
+TS2540: Cannot assign to 'minutes' because it is a read-only property.
+session.room = { label: 'B' };
+TS2540: Cannot assign to 'room' because it is a read-only property.
+session.room.label = 'C';
+OK (no compiler errors)
+let { minutes: editableMinutes } = session; editableMinutes = 60;
+OK (no compiler errors)
+runtime: 40 60 40 C
+runtime frozen: false false

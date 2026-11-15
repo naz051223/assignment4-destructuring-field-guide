@@ -1,0 +1,14 @@
+minutes = 60;
+TS2588: Cannot assign to 'minutes' because it is a constant.
+room.label = 'B';
+OK (no compiler errors)
+session.minutes = 60;
+TS2540: Cannot assign to 'minutes' because it is a read-only property.
+session.room = { label: 'B' };
+TS2540: Cannot assign to 'room' because it is a read-only property.
+session.room.label = 'C';
+OK (no compiler errors)
+let { minutes: editableMinutes } = session; editableMinutes = 60;
+OK (no compiler errors)
+runtime: 40 60 40 C
+runtime frozen: false false

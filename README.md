@@ -970,6 +970,58 @@ query.isPending and query.data on the query object. I would retain the original
 short destructuring here. The queryFn's network request was inspected as source,
 not run as part of this assignment's deterministic examples.
 
+## Follow-up experiment: const and shallow readonly (15 November 2026)
+
+This guided follow-up extends the destructuring and TypeScript discussion.
+Run `npm run readonly`; the same experiment also runs in `npm run all`.
+`tools/readonly-review.cjs` compiles each statement independently with TypeScript
+5.8.3 and strict checking. It checks the expected diagnostic codes, so an unexpected
+acceptance or rejection makes the command fail. Invalid assignments stay in
+in-memory compiler inputs, rather than requiring suppression comments in the project.
+
+```ts
+type Session = {
+  readonly minutes: number;
+  readonly room: { label: string };
+};
+const session: Session = { minutes: 40, room: { label: 'A' } };
+const { minutes, room } = session;
+```
+
+There are two different restrictions here. The const binding `minutes` cannot be
+reassigned. The readonly properties `session.minutes` and `session.room` cannot be
+assigned through this TypeScript type. Neither restriction makes the nested label
+readonly. Destructuring `room` retains the same object reference, so changing its
+label also changes `session.room.label`. Destructuring a number into a new let
+binding allows that local binding to be reassigned without changing the source.
+
+Actual output, also saved in `readonly-output.txt`:
+
+```text
+minutes = 60;
+TS2588: Cannot assign to 'minutes' because it is a constant.
+room.label = 'B';
+OK (no compiler errors)
+session.minutes = 60;
+TS2540: Cannot assign to 'minutes' because it is a read-only property.
+session.room = { label: 'B' };
+TS2540: Cannot assign to 'room' because it is a read-only property.
+session.room.label = 'C';
+OK (no compiler errors)
+let { minutes: editableMinutes } = session; editableMinutes = 60;
+OK (no compiler errors)
+runtime: 40 60 40 C
+runtime frozen: false false
+```
+
+The runtime line prints, in order, the const number, the reassigned let number,
+the original object's number and the shared nested label. Only the accepted
+TypeScript program is transpiled and executed. `readonly` is a compile-time
+restriction; the two false values confirm this example has not frozen either
+object at runtime. This does not make an invalid readonly assignment acceptable
+to TypeScript. For a nested compile-time restriction, label itself would need
+`readonly label: string` (or a suitable deep readonly type).
+
 ## Sources and assistance
 
 The starter project and assignment handout supplied the required structure.
@@ -1182,3 +1234,20 @@ console.log(a, b) // actual output: 2 2
 
 Both the caught failure and the working version are in `js/edge-review.mjs`.
 
+
+### 8. I forgot that readonly rejects property reassignment (15 November 2026)
+
+In today's guided review, I correctly predicted that assigning 60 to the
+const-destructured minutes binding is invalid, while changing room.label is valid.
+When the assistant added readonly to the minutes and room properties of Session,
+I expected all three proposed assignments to be valid. I was surprised that
+`session.minutes = 60` and `session.room = { label: 'B' }` both give errors.
+My explanation was: "readonly değer atama engellediğini unutmuştum."
+
+The assistant ran the compiler experiment on this computer. Both property
+reassignments produced TS2540, while `session.room.label = 'C'` produced no
+compiler errors. I had forgotten the readonly restriction when making my guess.
+The distinction clarified in this review is that readonly on room protects that
+property from replacement, but does not automatically make label readonly.
+The separate follow-up experiment above records the real diagnostics and runtime
+output; the additional let-binding and runtime checks were assistant-led extensions.

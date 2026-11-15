@@ -45,3 +45,14 @@ Clean-clone validation completed on 14 November 2026: restored the real Git hist
 
 Remote publication verified: https://github.com/naz051223/assignment4-destructuring-field-guide (PRIVATE). The initial remote HEAD matched c157664fc82d790bab905b49d14ee0bf73c0ac26, preserving the five original commits. README and PDF are updated with the actual repository link.
 
+
+## 15 November 2026 follow-up
+
+- Added six independent strict TypeScript compiler probes for const bindings,
+  shallow readonly properties and destructuring into a let binding.
+- Verified exact diagnostic codes TS2588 and TS2540; the runner fails on a mismatch.
+- Executed only the accepted program: runtime values 40 60 40 C; neither object frozen.
+- npm run all and npm run check passed after the change.
+- Rebuilt the complete 20-page PDF; rendered all pages, visually inspected contact
+  sheets, and checked the TeX log for missing characters and over/underfull boxes.
+- Recorded the student's actual initial guesses and readonly surprise in log entry 8.
