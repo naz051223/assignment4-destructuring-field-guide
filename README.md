@@ -577,7 +577,7 @@ The source was generated from this README with Pandoc 3.14 and compiled with
 Tectonic 0.17.0. From the assignment4 project root, after installing those tools:
 
 ```sh
-pandoc README.md --standalone --shift-heading-level-by=-1 --toc --number-sections --listings --pdf-engine=xelatex --lua-filter=latex/layout.lua -V documentclass=article -V papersize=a4 -V fontsize=10pt -V geometry:margin=22mm -V title="Destructuring Field Guide" -V author="Tuba Nazlı İpekyüz - 2200004532" -V date="14 November 2026" -H latex/style.tex -o latex/main.tex
+pandoc README.md --standalone --shift-heading-level-by=-1 --toc --number-sections --listings --pdf-engine=xelatex --lua-filter=latex/layout.lua -V documentclass=article -V papersize=a4 -V fontsize=10pt -V geometry:margin=22mm -V title="Destructuring Field Guide" -V author="Tuba Nazlı İpekyüz - 2200004532" -V date="" -H latex/style.tex -o latex/main.tex
 tectonic --keep-logs --keep-intermediates --outdir latex latex/main.tex
 ```
 
@@ -594,7 +594,7 @@ are recorded in VERIFICATION.md. The desktop LaTeX editor can also compile main.
 The project is published in a private repository under naz051223. The five original
 commits were pushed with their real history preserved. The repository has a
 .gitignore excluding node_modules, and a clean local clone was installed and run
-successfully. The current work was committed on 14 November 2026.
+successfully. Further reviews are saved as new commits.
 
 This bonus is not yet claimed as fully complete: the instructor's GitHub username
 has not been announced, so instructor access remains pending. The handout also
@@ -970,14 +970,11 @@ query.isPending and query.data on the query object. I would retain the original
 short destructuring here. The queryFn's network request was inspected as source,
 not run as part of this assignment's deterministic examples.
 
-## Follow-up experiment: const and shallow readonly (15 November 2026)
+## Extra example: const and readonly
 
-This guided follow-up extends the destructuring and TypeScript discussion.
-Run `npm run readonly`; the same experiment also runs in `npm run all`.
-`tools/readonly-review.cjs` compiles each statement independently with TypeScript
-5.8.3 and strict checking. It checks the expected diagnostic codes, so an unexpected
-acceptance or rejection makes the command fail. Invalid assignments stay in
-in-memory compiler inputs, rather than requiring suppression comments in the project.
+Run `npm run readonly` to check these assignments with TypeScript.
+The command is also part of `npm run all`. It checks each line separately, so
+one expected error does not hide the results of the other lines.
 
 ```ts
 type Session = {
@@ -988,12 +985,13 @@ const session: Session = { minutes: 40, room: { label: 'A' } };
 const { minutes, room } = session;
 ```
 
-There are two different restrictions here. The const binding `minutes` cannot be
-reassigned. The readonly properties `session.minutes` and `session.room` cannot be
-assigned through this TypeScript type. Neither restriction makes the nested label
-readonly. Destructuring `room` retains the same object reference, so changing its
-label also changes `session.room.label`. Destructuring a number into a new let
-binding allows that local binding to be reassigned without changing the source.
+`const` prevents assigning a new value to the local variable `minutes`.
+`readonly` prevents assigning a new value to `session.minutes` or `session.room`.
+However, `label` is not readonly, so `session.room.label` can still change.
+
+Destructuring `room` gives us another reference to the same object. Changing its
+label changes the shared object. A number works differently: a new `let` variable
+can change without changing the number stored in `session`.
 
 Actual output, also saved in `readonly-output.txt`:
 
@@ -1014,15 +1012,12 @@ runtime: 40 60 40 C
 runtime frozen: false false
 ```
 
-The runtime line prints, in order, the const number, the reassigned let number,
-the original object's number and the shared nested label. Only the accepted
-TypeScript program is transpiled and executed. `readonly` is a compile-time
-restriction; the two false values confirm this example has not frozen either
-object at runtime. This does not make an invalid readonly assignment acceptable
-to TypeScript. For a nested compile-time restriction, label itself would need
-`readonly label: string` (or a suitable deep readonly type).
+The runtime values are 40 for the const number, 60 for the local let number,
+40 for the original number, and C for the shared label. Only accepted code runs.
+`readonly` checks assignments in TypeScript; it does not freeze objects at runtime.
+Both frozen checks are false. To protect label too, use `readonly label: string`.
 
-## Follow-up experiment: mutation and rebinding (15 November 2026)
+## Extra example: changing an object or replacing a reference
 
 Run `npx tsx ts/reference-followup.ts`. The experiment is also included in
 `npm run ts` and `npm run all`, and is checked by `npm run check`.
@@ -1030,7 +1025,7 @@ The following is the complete runnable source:
 
 ```ts
 // Tuba Nazlı İpekyüz — 2200004532
-// Guided review, 15 November 2026: mutation versus rebinding.
+// Changing a shared object versus assigning a new object.
 export {}
 
 {
@@ -1066,19 +1061,17 @@ after local mutation: D B
 ordinary alias: B C
 ```
 
-The equality checks make the change in identity visible. Destructuring room
-initially copies the object reference, so both names reach the same object.
-Changing room.label to B mutates that shared object. Assigning a newly created
-object to the let binding room then changes only that binding: session.room still
-reaches the original object whose label is B. The new room is first C and then D.
-The readonly modifier prevents replacing session.room through that typed property;
-it does not prevent reassigning the separate local let binding.
+At first, `room` and `session.room` point to the same object. This is why
+`room === session.room` is true. Setting `room.label` to B changes that object.
 
-The second block shows that the same identity rule applies to an ordinary alias,
-without destructuring or readonly. After copy is rebound, changing original.label
-to C leaves the separate copy object at B. A name such as copy does not itself
-clone an object. In contrast, a destructured number is a primitive value, so
-reassigning its separate let binding does not mutate the number on the source.
+Then `room = { label: 'C' }` makes the local variable point to a new object.
+`session.room` still points to the first object, whose label is B. The two
+references are now different. Changing the new object's label to D leaves the
+first object at B. This gives C B first, then D B.
+
+The second example uses the same rule without destructuring. Assigning a new
+object to `copy` leaves it separate from `original`. The final labels are B and C.
+The name `copy` does not create a separate object by itself.
 
 ## Sources and assistance
 
@@ -1293,38 +1286,29 @@ console.log(a, b) // actual output: 2 2
 Both the caught failure and the working version are in `js/edge-review.mjs`.
 
 
-### 8. I forgot that readonly rejects property reassignment (15 November 2026)
+### 8. I forgot what readonly prevents
 
-In today's guided review, I correctly predicted that assigning 60 to the
-const-destructured minutes binding is invalid, while changing room.label is valid.
-When the assistant added readonly to the minutes and room properties of Session,
-I expected all three proposed assignments to be valid. I was surprised that
-`session.minutes = 60` and `session.room = { label: 'B' }` both give errors.
-My explanation was: "readonly değer atama engellediğini unutmuştum."
+I correctly predicted that the const variable minutes could not be assigned 60,
+while room.label could change. But after readonly was added, I thought all three
+assignments would work. I was surprised that changing session.minutes and
+replacing session.room both gave TS2540 errors. I had forgotten that readonly
+prevents assigning a new value to those properties.
 
-The assistant ran the compiler experiment on this computer. Both property
-reassignments produced TS2540, while `session.room.label = 'C'` produced no
-compiler errors. I had forgotten the readonly restriction when making my guess.
-The distinction clarified in this review is that readonly on room protects that
-property from replacement, but does not automatically make label readonly.
-The separate follow-up experiment above records the real diagnostics and runtime
-output; the additional let-binding and runtime checks were assistant-led extensions.
+The assistant checked the examples on this computer. Changing
+`session.room.label = 'C'` was allowed because label itself was not readonly.
+The compiler messages and actual output are in the extra example above.
 
-### 9. I mixed up mutation and rebinding (15 November 2026)
+### 9. I mixed up changing an object and replacing a reference
 
-In the guided follow-up, I predicted A and B after a shared room was mutated to B
-and the local room was rebound to a new object labelled C. The actual output was
-C and B. When the assistant added room.label = D after that rebinding, I predicted
-D and C; the actual output was D and B. In the ordinary-alias example, I predicted
-A and C, but the actual output was B and C. The assistant ran the examples on this
-computer; their outputs and reference equality checks are recorded above.
+I guessed A and B for the room example. The actual result was C and B.
+After `room.label = 'D'`, I guessed D and C, but the result was D and B.
+For the copy example, I guessed A and C; the result was B and C.
+The assistant ran these examples on this computer and saved the actual output.
 
-The distinction explained during the review was that room.label = B changes the
-object currently reached by room, while room = { label: C } redirects only that
-local binding. The source still points to the earlier object. After the redirect,
-further changes to the new object do not reach the old one. I acknowledged the
-explanations, but these predictions show which step I needed to review.
+The explanation helped me see which step I was mixing up. `room.label = 'B'`
+changes the shared object. `room = { label: 'C' }` makes only the local room
+variable point to a new object. The original object keeps its B label.
 
-A separate earlier answer of 40 and 60 for the primitive-number example was an
-output-order slip: I explicitly clarified that I had answered without attending
-to the order. It is not recorded as evidence of a conceptual misunderstanding.
+My earlier answer of 40 and 60 in the number example was an output-order slip.
+I explained that I had not paid attention to the order, so it is not counted as
+a misunderstanding of the rule.

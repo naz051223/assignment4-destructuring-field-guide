@@ -14,7 +14,7 @@ function run(command, args) {
 run(pandoc, ['README.md', '--standalone', '--shift-heading-level-by=-1', '--toc', '--number-sections', '--listings',
   '--pdf-engine=xelatex', '--lua-filter=latex/layout.lua', '-V', 'documentclass=article', '-V', 'papersize=a4', '-V', 'fontsize=10pt',
   '-V', 'geometry:margin=22mm', '-V', 'title=Destructuring Field Guide',
-  '-V', 'author=Tuba Nazlı İpekyüz - 2200004532', '-V', 'date=15 November 2026',
+  '-V', 'author=Tuba Nazlı İpekyüz - 2200004532', '-V', 'date=',
   '-H', 'latex/style.tex', '-o', 'latex/main.tex']);
 const tex = path.join(root, 'latex/main.tex');
 fs.writeFileSync(tex, '% Tuba Nazlı İpekyüz — 2200004532\n' + fs.readFileSync(tex, 'utf8'));

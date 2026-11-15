@@ -1,5 +1,5 @@
 // Tuba Nazlı İpekyüz — 2200004532
-// Guided review, 15 November 2026: compile each prediction independently.
+// Check each assignment separately with the TypeScript compiler.
 const ts = require('typescript');
 const path = require('path');
 const assert = require('node:assert/strict');

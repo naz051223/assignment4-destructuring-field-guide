@@ -1,5 +1,5 @@
 // Tuba Nazlı İpekyüz — 2200004532
-// Guided review, 15 November 2026: mutation versus rebinding.
+// Changing a shared object versus assigning a new object.
 export {}
 
 {
