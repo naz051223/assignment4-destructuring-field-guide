@@ -3,9 +3,9 @@
 Private repository:
 https://github.com/naz051223/assignment4-destructuring-field-guide
 
-The initial work is uploaded. Newer review and documentation commits are saved
-locally and still need to be pushed. The local history spans two days and has
-more than five commits. Instructor access and further review over several days
+The initial work and newer review commits are uploaded. Remote HEAD was checked
+against the local revision. The history spans two days and has more than five
+commits. Instructor access and further review over several days
 remain pending. Commit timestamps have not been changed.
 
 ## Continue work

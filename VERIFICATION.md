@@ -22,8 +22,8 @@ Environment: Node.js 22.23.3, npm 10.9.9, TypeScript 5.8.3.
 - Bonus 3: five cases use the instructor starter, TypeScript and a fixed TanStack
   Query revision. The two previously shortened rewrites now include their full
   function body or hook options. The comparisons are not separate applications.
-- Bonus 4: the initial private repository is published. Newer commits are local
-  and await a push. Local work spans two days. Instructor access and further work
+- Bonus 4: the initial private repository is published. Newer review commits are also
+  uploaded, and remote HEAD was verified. Work spans two days. Instructor access and further work
   over several days remain pending.
 
 ## Packaging and earlier checks
