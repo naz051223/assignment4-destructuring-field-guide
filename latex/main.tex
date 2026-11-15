@@ -1503,6 +1503,73 @@ nested compile-time restriction, label itself would need
 \texttt{readonly label:\allowbreak{} string} (or a suitable deep
 readonly type).
 
+\section{Follow-up experiment: mutation and rebinding (15 November
+2026)}\label{follow-up-experiment-mutation-and-rebinding-15-november-2026}
+
+Run \texttt{npx tsx ts/\allowbreak{}reference-followup.\allowbreak{}ts}.
+The experiment is also included in \texttt{npm run ts} and
+\texttt{npm run all}, and is checked by \texttt{npm run check}. The
+following is the complete runnable source:
+
+\begin{lstlisting}
+// Tuba Nazl(*@\texttt{ı}@*) (*@\texttt{İ}@*)peky(*@\texttt{ü}@*)z (*@\texttt{—}@*) 2200004532
+// Guided review, 15 November 2026: mutation versus rebinding.
+export {}
+
+{
+  const session: { readonly room: { label: string } } = {
+    room: { label: 'A' }
+  };
+  let { room } = session;
+  console.log('shared before:', room === session.room);
+  room.label = 'B';
+  room = { label: 'C' };
+  console.log('shared after:', room === session.room);
+  console.log('after rebinding:', room.label, session.room.label);
+  room.label = 'D';
+  console.log('after local mutation:', room.label, session.room.label);
+}
+
+{
+  const original = { label: 'A' };
+  let copy = original;
+  copy = { label: 'B' };
+  original.label = 'C';
+  console.log('ordinary alias:', copy.label, original.label);
+}
+\end{lstlisting}
+
+Actual output, also saved in
+\texttt{reference-followup-output.\allowbreak{}txt}:
+
+\begin{minipage}{\linewidth}
+
+\begin{lstlisting}
+shared before: true
+shared after: false
+after rebinding: C B
+after local mutation: D B
+ordinary alias: B C
+\end{lstlisting}
+
+\end{minipage}\par
+
+The equality checks make the change in identity visible. Destructuring
+room initially copies the object reference, so both names reach the same
+object. Changing room.label to B mutates that shared object. Assigning a
+newly created object to the let binding room then changes only that
+binding: session.room still reaches the original object whose label is
+B. The new room is first C and then D. The readonly modifier prevents
+replacing session.room through that typed property; it does not prevent
+reassigning the separate local let binding.
+
+The second block shows that the same identity rule applies to an
+ordinary alias, without destructuring or readonly. After copy is
+rebound, changing original.label to C leaves the separate copy object at
+B. A name such as copy does not itself clone an object. In contrast, a
+destructured number is a primitive value, so reassigning its separate
+let binding does not mutate the number on the source.
+
 \section{Sources and assistance}\label{sources-and-assistance}
 
 The starter project and assignment handout supplied the required
@@ -1844,5 +1911,28 @@ protects that property from replacement, but does not automatically make
 label readonly. The separate follow-up experiment above records the real
 diagnostics and runtime output; the additional let-binding and runtime
 checks were assistant-led extensions.
+
+\subsection{9. I mixed up mutation and rebinding (15 November
+2026)}\label{i-mixed-up-mutation-and-rebinding-15-november-2026}
+
+In the guided follow-up, I predicted A and B after a shared room was
+mutated to B and the local room was rebound to a new object labelled C.
+The actual output was C and B. When the assistant added room.label = D
+after that rebinding, I predicted D and C; the actual output was D and
+B. In the ordinary-alias example, I predicted A and C, but the actual
+output was B and C. The assistant ran the examples on this computer;
+their outputs and reference equality checks are recorded above.
+
+The distinction explained during the review was that room.label = B
+changes the object currently reached by room, while room = \{ label: C
+\} redirects only that local binding. The source still points to the
+earlier object. After the redirect, further changes to the new object do
+not reach the old one. I acknowledged the explanations, but these
+predictions show which step I needed to review.
+
+A separate earlier answer of 40 and 60 for the primitive-number example
+was an output-order slip: I explicitly clarified that I had answered
+without attending to the order. It is not recorded as evidence of a
+conceptual misunderstanding.
 
 \end{document}

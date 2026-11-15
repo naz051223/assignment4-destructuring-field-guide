@@ -56,3 +56,14 @@ Remote publication verified: https://github.com/naz051223/assignment4-destructur
 - Rebuilt the complete 20-page PDF; rendered all pages, visually inspected contact
   sheets, and checked the TeX log for missing characters and over/underfull boxes.
 - Recorded the student's actual initial guesses and readonly surprise in log entry 8.
+
+### Mutation and rebinding follow-up, 15 November 2026
+
+- Added a strictly checked TypeScript example with reference equality before and
+  after rebinding, shared mutation, a later independent mutation and an ordinary alias.
+- Actual results: shared true then false; C B; D B; ordinary alias B C.
+- npm run all and npm run check passed after integrating the new source.
+- Updated the guide and personal log using the student's actual predictions;
+  explicitly distinguished the earlier output-order slip from a conceptual error.
+- Rebuilt and visually reviewed all 21 PDF pages; no missing-character or
+  over/underfull warnings in the TeX log.

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "js": "node js/arrays.mjs && node js/objects.mjs && node js/params.mjs && node js/pitfalls.mjs && tsx js/props.jsx",
-    "ts": "tsx ts/arrays.ts && tsx ts/objects.ts && tsx ts/params.ts && tsx ts/types.ts && tsx ts/props.tsx",
+    "ts": "tsx ts/arrays.ts && tsx ts/objects.ts && tsx ts/params.ts && tsx ts/types.ts && tsx ts/props.tsx && tsx ts/reference-followup.ts",
     "check": "tsc --noEmit",
     "all": "npm run js && npm run ts && npm run review && npm run depth && npm run readonly",
     "review": "tsx js/review.jsx",

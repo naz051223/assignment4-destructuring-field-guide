@@ -56,7 +56,7 @@ P6 null: <h2></h2>
 P7 JS: No static props type checking; see ts/props.tsx and compiler probes.
 
 > destructuring-guide@0.0.0 ts
-> tsx ts/arrays.ts && tsx ts/objects.ts && tsx ts/params.ts && tsx ts/types.ts && tsx ts/props.tsx
+> tsx ts/arrays.ts && tsx ts/objects.ts && tsx ts/params.ts && tsx ts/types.ts && tsx ts/props.tsx && tsx ts/reference-followup.ts
 
 form 1: 40 8
 form 2: objects ["parameters","props"]
@@ -103,6 +103,11 @@ P6 null: <h2></h2>
 P7 ReactNode: <section><h2>Typed</h2>7</section>
 P7 PropsWithChildren: <article><em>Review</em></article>
 P7 ComponentProps: <button type="button" disabled="">Start</button>
+shared before: true
+shared after: false
+after rebinding: C B
+after local mutation: D B
+ordinary alias: B C
 
 > destructuring-guide@0.0.0 review
 > tsx js/review.jsx

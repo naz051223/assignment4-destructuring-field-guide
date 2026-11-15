@@ -1,0 +1,5 @@
+shared before: true
+shared after: false
+after rebinding: C B
+after local mutation: D B
+ordinary alias: B C
