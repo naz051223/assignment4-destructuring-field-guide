@@ -48,7 +48,9 @@ function Header(header)
 end
 function Para(paragraph)
   local text = pandoc.utils.stringify(paragraph.content)
-  if text == 'Output:' or text:match('[Aa]ctual output:%s*$') or text:match('[Aa]ctual HTML:%s*$') then
+  if text == 'JavaScript:' or text == 'TypeScript:' or text:match('^Types and functions from') then
+    return {pandoc.RawBlock('latex', '\\Needspace{12\\baselineskip}'), paragraph}
+  elseif text == 'Output:' or text:match('[Aa]ctual output:%s*$') or text:match('[Aa]ctual HTML:%s*$') then
     return {pandoc.RawBlock('latex', '\\Needspace{7\\baselineskip}'), paragraph}
   end
 end

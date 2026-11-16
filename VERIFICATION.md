@@ -44,6 +44,11 @@ against the project. The protected original ZIP is not overwritten.
 
 Final local audit: 12 forms, 5 TypeScript topics, 7 React topics, 5 source cases,
 11 comparison rows, 9 personal-log entries and 23 identified source files.
-The rebuilt PDF has 23 pages. All pages were rendered and visually inspected;
+The rebuilt PDF has 22 pages. All pages were rendered and visually inspected;
 no TeX layout or missing-character warnings remain. Clean-checkout output matches
 output.txt. The final GitHub upload and public visibility were also verified.
+
+The whole guide was reviewed for plain English. Forms, pitfalls, React, the
+comparison table, build notes and all personal-log entries were simplified.
+All fenced code and output blocks match the previous version exactly.
+This documentation edit does not change the tested executable code.

@@ -5,9 +5,9 @@ Student number: 2200004532
 
 Bonuses claimed: **Bonus 1: LaTeX**, **Bonus 2: Depth**, **Bonus 3: Real code**. **Bonus 4: Git repository** is included with a public repository, as requested by the instructor.
 
-This guide uses a study-session planner. The examples and explanations were
-prepared with AI assistance and need student review and explanation before submission.
-Forms 1–12, five pitfalls, T1–T5 and P1–P7 are implemented and verified.
+This guide uses a study-session planner. I used AI help to prepare the code and
+explanations. I still need to review and explain the work myself before submission.
+The project includes forms 1–12, five pitfalls, T1–T5 and P1–P7. They were checked.
 
 ## Run
 
@@ -20,8 +20,8 @@ npm run check
 npm run diagnose # separate intentional compiler failures
 ```
 
-`output.txt` contains the actual output of the current project. The JS and TS
-versions print the same values for forms 1–12. The all command also runs the guided-review examples through npm run review.
+`output.txt` saves the real output of this project. JS and TS print the same
+values for forms 1–12. `npm run all` also runs the review and extra examples.
 
 ## Field guide
 
@@ -41,11 +41,11 @@ console.log('form 1:', work, pause)
 
 **Output:** `form 1: 40 8`
 
-**Use it when:** a function returns a small ordered group of related values.
+**Use it when:** a function returns a few values in a fixed order.
 
-**Watch out:** names do not select positions. Swapping the names swaps their meaning.
-In plain assignments, save the result once, then read `result[0]` and `result[1]`.
-The TS return type `[number, number]` guarantees those two positions exist.
+**Watch out:** The first name gets the first value. The second name gets the second value.
+Names do not choose the positions. Without destructuring, save the result once
+and read `result[0]` and `result[1]`. In TS, `[number, number]` says both items exist.
 
 ### Form 2: skip and rest
 
@@ -61,11 +61,12 @@ console.log('form 2:', nextTopic, JSON.stringify(laterTopics))
 
 **Output:** `form 2: objects ["parameters","props"]`
 
-**Use it when:** only one position and the remaining items matter.
+**Use it when:** you need one item and all the items after it.
 
-**Watch out:** rest must be last. It creates a new array without changing the source.
-For this array the corresponding operations are `topics[1]` and `topics.slice(2)`.
-With `noUncheckedIndexedAccess`, TS gives `nextTopic` type `string | undefined`.
+**Watch out:** Rest must come last. It makes a new array and does not change topics.
+For this example, use `topics[1]` and `topics.slice(2)` without destructuring.
+With `noUncheckedIndexedAccess`, nextTopic has type `string | undefined`.
+The array may not have a second item.
 
 ### Form 3: swap
 
@@ -82,12 +83,12 @@ console.log('form 3:', morning, evening)
 
 **Output:** `form 3: JavaScript TypeScript`
 
-**Use it when:** exchanging two existing variables.
+**Use it when:** you want to swap two variables.
 
-**Watch out:** use mutable bindings. The leading semicolon prevents the array
-expression from continuing the preceding statement. Without destructuring, save
-`morning` in a temporary variable before overwriting it. TS also requires each
-assigned value to be compatible with its destination variable.
+**Watch out:** Use let variables because their values must change. The first semicolon keeps
+this line separate from the previous line. Without destructuring, save morning
+in a temporary variable before changing it. In TS, the new value must fit the
+type of the variable that receives it.
 
 ### Form 4: array defaults
 
@@ -103,12 +104,12 @@ console.log('form 4:', duration, reminder, rounds)
 
 **Output:** `form 4: 30 null 2`
 
-**Use it when:** missing positions should have fallback values.
+**Use it when:** a missing array item should use a default value.
 
-**Watch out:** undefined and a missing position trigger defaults; null does not.
-The plain version checks each indexed value with `=== undefined` before choosing
-a fallback. In TS the first two values use a two-element tuple; a separate empty
-`number[]` demonstrates the missing rounds position without indexing past a tuple.
+**Watch out:** A default is used for undefined or when no item was given. It is not used for
+null. Without destructuring, check each item with `=== undefined`.
+The TS example uses a two-item tuple for the first two values. It uses a separate
+empty `number[]` for rounds, so it does not read past the end of that tuple.
 
 ### Form 5: properties by name
 
@@ -124,11 +125,11 @@ console.log('form 5:', title, status)
 
 **Output:** `form 5: Review closures planned`
 
-**Use it when:** several fields of the same object are needed locally.
+**Use it when:** you need several properties from one object.
 
-**Watch out:** object fields are selected by name, regardless of their order.
-Plain assignments are `let title = session.title` and `let status = session.status`.
-Reassigning these string variables does not update the source object.
+**Watch out:** Object patterns use property names. The order of the properties does not matter.
+Without destructuring, write `let title = session.title` and
+`let status = session.status`. Changing these string variables does not change session.
 
 ### Form 6: rename
 
@@ -143,11 +144,11 @@ console.log('form 6:', heading)
 
 **Output:** `form 6: Review closures`
 
-**Use it when:** a local name would be clearer or the original name is already used.
+**Use it when:** you want a clearer name or the property name is already in use.
 
-**Watch out:** this declares `heading`, not a new `title` binding.
-It means `const heading = session.title`. The colon is a rename, including in TS;
-a type annotation belongs after the whole pattern.
+**Watch out:** This creates heading. It does not create another variable named title.
+It means `const heading = session.title`. The colon changes the local name in
+both JS and TS. To add a type in TS, write it after the whole pattern.
 
 ### Form 7: object defaults
 
@@ -163,11 +164,11 @@ console.log('form 7:', minutes, explicitNull)
 
 **Output:** `form 7: 40 null`
 
-**Use it when:** an optional configuration field needs a fallback.
+**Use it when:** an optional property should use a default value.
 
-**Watch out:** the fallback does not replace null or protect against a null source
-object. Plain code reads the property, then substitutes 40 only if it is undefined.
-The TS settings type allows `number | null`; a default removes undefined, not null.
+**Watch out:** Defaults replace undefined or missing values, never null.
+The source cannot be null. In TS, null stays allowed after a default.
+Without destructuring, check `=== undefined` before using 40.
 
 ### Form 8: object rest
 
@@ -182,12 +183,13 @@ console.log('form 8:', id, JSON.stringify(details))
 
 **Output:** `form 8: s1 {"title":"Review closures","status":"planned"}`
 
-**Use it when:** separating an identifier from the remaining fields.
+**Use it when:** you want to keep id separate from the other properties.
 
-**Watch out:** rest is a shallow copy of remaining own enumerable properties.
-Nested object references remain shared. For this specific plain object, the
-expanded version reads id, title and status separately and builds a details object.
-`...details` in an expression is spread: it expands fields instead of collecting them.
+**Watch out:** Object rest makes a new object. It copies the remaining own enumerable
+properties: the object's own properties that are marked for enumeration.
+It does not make separate copies of objects inside those properties.
+For our plain object, read id separately and put title and status in a new object.
+Rest collects properties into an object. Spread uses those properties in an expression.
 
 ### Form 9: nested patterns
 
@@ -203,11 +205,11 @@ console.log('form 9:', label, firstTopic)
 
 **Output:** `form 9: Library B closures`
 
-**Use it when:** a few values inside a known structure are needed.
+**Use it when:** you need values inside an object or array.
 
-**Watch out:** this does not declare room or topics. A missing room throws before
-label can be read. Plain assignments read `plan.room.label` and `plan.topics[0]`.
-The TS array element remains possibly undefined, because the topics array may be empty.
+**Watch out:** This creates label and firstTopic, not room or topics. If room is missing,
+reading label throws an error. Without destructuring, read `plan.room.label`
+and `plan.topics[0]`. In TS, firstTopic may still be undefined because topics can be empty.
 
 ### Form 10: computed property
 
@@ -223,11 +225,11 @@ console.log('form 10:', key, selectedValue)
 
 **Output:** `form 10: status planned`
 
-**Use it when:** a variable decides which property to read.
+**Use it when:** a variable holds the name of the property you need.
 
-**Watch out:** `[key]` evaluates the variable; `key` without brackets would select
-a property literally named key. Plain code is `const selectedValue = session[key]`.
-In TS, `keyof Session` restricts the key to known property names.
+**Watch out:** `[key]` uses the value stored in key. Without brackets, key would mean a
+property named key. The plain version is `const selectedValue = session[key]`.
+In TS, `keyof Session` limits the variable to known property names.
 
 ### Form 11: parameters
 
@@ -253,12 +255,12 @@ form 11 custom: {"title":"React","minutes":25}
 form 11 array: 48
 ```
 
-**Use it when:** callers should supply named options, or a small tuple parameter.
+**Use it when:** a function takes named options or a small tuple.
 
-**Watch out:** the outer `= {}` handles a missing argument; the inner defaults
-handle missing fields. Neither replaces a null argument. Without a parameter
-pattern, receive `options = {}` and read each field inside the function. TS writes
-`: Options` after the object pattern; its fields must be optional for `{}` to work.
+**Watch out:** The outer `= {}` handles a missing argument. The inner defaults handle missing
+properties. Neither replaces null. Without the pattern, receive `options = {}`
+and read the properties inside the function. In TS, put `: Options` after the
+pattern. Its properties must be optional for the default `{}` to work.
 
 ### Form 12: loop entries
 
@@ -286,39 +288,40 @@ form 12 map: Monday 2
 form 12 map: Tuesday 3
 ```
 
-**Use it when:** both the key and value are needed for each entry.
+**Use it when:** you need both the key and value in a loop.
 
-**Watch out:** use for...of for entries. for...in enumerates property names instead.
-Without destructuring, receive an entry variable, then read entry[0] and entry[1].
-Here TS uses `Record<string, number>` and `Map<string, number>` to describe the values.
+**Watch out:** Use for...of to read entries. A for...in loop gives property names instead.
+Without destructuring, store each pair in entry and read entry[0] and entry[1].
+The TS example uses `Record<string, number>` for the object and
+`Map<string, number>` for the Map.
 
 ## Pitfalls
 
-Code: `js/pitfalls.mjs`. The deliberately invalid assignment is compiled inside
-`new Function` and caught; otherwise a syntax error would prevent the whole file running.
+The examples are in `js/pitfalls.mjs`. The invalid syntax is tested with
+`new Function` and its error is caught. This lets the rest of the file run.
 
-1. Destructuring undefined throws before a property can be read. The actual output
-   was `pitfall 1: TypeError: Cannot destructure property 'minutes' of 'undefined' as it is undefined.`
-   Check the source first, or use an appropriate parameter default for undefined.
-   Null also cannot be destructured; an undefined-only default does not fix null.
-2. Defaults are not null replacement. `{ minutes = 40 } = { minutes: null }`
-   printed `pitfall 2: null`, because the default runs only for undefined.
-3. A statement starting with `{` is parsed as a block, not an object assignment
-   pattern. The unparenthesized attempt printed
-   `pitfall 3 invalid: SyntaxError: Unexpected token '='`.
-   `({ minutes: assignedMinutes } = { minutes: 25 })` printed
-   `pitfall 3 fixed: 25` because parentheses make it an expression.
-4. Object values can be shared references. Changing the destructured room changed
-   the original, while changing the copied rest object's string id did not.
-   `pitfall 4: Library C s1 s2` shows this is a shallow operation, not a deep copy.
-5. Object patterns select names, array patterns select positions. Reordered object
-   properties still printed `pitfall 5 object: React practice planned`; the array
-   printed `pitfall 5 array: planned React practice` because its positions differ.
+1. You cannot take properties from undefined. The actual output was
+   `pitfall 1: TypeError: Cannot destructure property 'minutes' of 'undefined' as it is undefined.`
+   Check the source first. A parameter default can handle undefined, but not null.
+   You also cannot take properties from null.
+2. A default does not replace null. `{ minutes = 40 } = { minutes: null }`
+   printed `pitfall 2: null`. Defaults are only used for undefined or missing values.
+3. At the start of a statement, `{` is read as a code block. The attempt without
+   parentheses printed `pitfall 3 invalid: SyntaxError: Unexpected token '='`.
+   Adding parentheses made it an expression. The fixed version
+   `({ minutes: assignedMinutes } = { minutes: 25 })` printed `pitfall 3 fixed: 25`.
+4. Two variables can point to the same object. Changing room.label changed the
+   original room. Changing the string id in the rest object did not change the
+   original id. The result was `pitfall 4: Library C s1 s2`. Rest is a shallow copy:
+   it does not make a separate copy of the nested room object.
+5. Object patterns use names. Array patterns use positions. Changing the order of
+   object properties still gave `pitfall 5 object: React practice planned`.
+   The array gave `pitfall 5 array: planned React practice` because its positions were different.
 
 ## TypeScript topics T1–T5
 
-Code: `ts/types.ts`. TypeScript checks patterns before execution; it does not
-change the JavaScript rules for choosing values.
+Code: `ts/types.ts`. TypeScript checks types before the code runs.
+It does not change how JavaScript takes values from a pattern.
 
 ### T1: a colon can rename
 
@@ -370,17 +373,17 @@ TypeScript also reports an error if an expect-error comment is no longer needed.
 
 ## Props and children P1–P7
 
-Runnable sources: `js/props.jsx` and `ts/props.tsx`. They use
-`renderToStaticMarkup`, so the output below is actual HTML from server rendering,
-not a browser screenshot or a prediction. It does not demonstrate browser events.
-The output excerpts after this section are copied from the real run.
+Run the examples in `js/props.jsx` and `ts/props.tsx`.
+They use `renderToStaticMarkup` to produce HTML as text.
+The output below comes from real runs. These runs do not test browser clicks or events.
 
 ### P1: one props object, two ways to read it
 
-`CardA(props)` reads `props.title` and `props.children` inside its body.
-`Card({ title, children })` takes those same fields apart at the parameter boundary.
-This combines form 5 (named object properties) with form 11 (a parameter pattern).
-Both receive one object, not two positional arguments, and both render the same HTML.
+React passes one props object to each component.
+`CardA(props)` reads `props.title` and `props.children` in the function body.
+`Card({ title, children })` reads the same properties in the parameter list.
+This uses form 5 for object properties and form 11 for function parameters.
+Both versions receive one object and produce the same HTML.
 
 ```jsx
 function Card({ title, children }) {
@@ -391,24 +394,23 @@ function Card({ title, children }) {
 ### P2: children is a field in that object
 
 `<Card title="Study">Practice</Card>` and
-`<Card title="Study" children="Practice" />` render identically.
-In the JS conflict experiment, nested content wins over the children attribute:
-`<Card children="Attribute">Nested</Card>` renders Nested.
-TypeScript rejects that spelling with TS2710, so the TS runnable file does not
-include the rejected expression. It is recorded in `compiler-diagnostics.txt`.
-Children is part of props; separating it is a useful convention, not a second
-argument that React supplies.
+`<Card title="Study" children="Practice" />` produce the same HTML.
+Children is one property inside props. React does not pass it as a second argument.
+
+In the JS example, `<Card children="Attribute">Nested</Card>` displays Nested.
+Content between the tags wins when children is also written as an attribute.
+TypeScript reports TS2710 for this example. We check that error separately in
+`compiler-diagnostics.txt`, so the normal TS file still passes its check.
 
 ### P3: the value of children matters
 
-A string becomes text, a number such as 0 also becomes text, and an element becomes
-its HTML. Several elements render in sequence. Undefined, null and false add no
-visible content; the surrounding section and heading still render.
+A string appears as text. A number, including 0, also appears as text.
+A React element becomes HTML. Several elements appear in order.
+Undefined, null and false show no child content. The section and heading still appear.
 
-A function is different: React does not call an arbitrary function child for us.
-The JS raw-function experiment logs React's actual diagnostic and renders no child
-content. A render-prop component instead explicitly calls `children(25)` and renders
-its returned element:
+React does not call a function child for us. The JS example passes a function
+without calling it. React logs a warning and shows no child content.
+RenderCard works differently: it calls `children(25)` and displays the returned element.
 
 ```jsx
 function RenderCard({ children }) {
@@ -416,11 +418,11 @@ function RenderCard({ children }) {
 }
 ```
 
-The TS type for this API is `{ children: (minutes: number) => ReactNode }`.
-That is a different contract from `children?: ReactNode`.
-The JS example temporarily redirects console.error to console.log so the real
-React diagnostic is included in output.txt, and restores it in finally.
-The `%s` markers in that captured diagnostic are React's raw logging arguments.
+For this function child, the TS type is
+`{ children: (minutes: number) => ReactNode }`.
+It is different from ordinary `children?: ReactNode`.
+The JS file copies React's warning to stdout so it appears in output.txt.
+It restores console.error in finally. The `%s` text is part of React's raw warning.
 
 ### P4: separate component props, forward DOM props
 
@@ -430,29 +432,28 @@ function RestFirst({ title, children, ...rest }) {
 }
 ```
 
-Title and children are consumed by the component; id and data-topic remain in rest.
-The section receives the remaining fields through expression spread.
-Only valid DOM attributes should be forwarded; custom component-only fields should
-be extracted first. In TS, `ComponentProps<'section'>` supplies DOM prop types.
+The pattern takes title and children out of props. The other properties, such as
+id and data-topic, stay in rest. `<section {...rest}>` passes them to section.
+Only pass valid HTML properties to an HTML element. Take out properties that are
+only meant for your own component. TS uses `ComponentProps<'section'>` for the section's types.
 
-A later explicit title overrides an earlier spread title. A later spread title
-overrides an earlier explicit title. There is no title collision inside RestFirst
-itself, because destructuring has already removed title from rest. RestLast uses
-a distinct heading prop to make the spread collision observable.
+If a spread and an explicit property use the same name, the last value wins.
+RestFirst already takes title out of rest, so those two values cannot conflict there.
+RestLast uses a separate heading property. This lets us test what happens when
+rest still contains title: the later spread replaces the earlier title.
 
 ### P5: named slots or composition
 
-Slots accepts header, footer and children. Header and footer are ordinary named
-props; children is the body content supplied between the tags. The component owns
-the header/main/footer structure. Choose this when a consistent layout matters.
+Slots takes header, footer and children. Header and footer are normal named props.
+Children is the body between the tags. Slots creates the header/main/footer layout.
+I would use this version when each card should have the same structure.
 
-Composition accepts only children and wraps it in article. The caller supplies
-header, main and footer elements in the desired order. Choose this when callers
-need flexible structure. Both versions render the same HTML in this example,
-but their responsibilities differ. Neither approach is automatically better.
+Composition takes children and puts it inside article. The caller chooses the
+elements and their order. I would use it when cards need different structures.
+Both versions produce the same HTML in this example. They give control of the layout
+to different parts of the code.
 
-
-Runnable API definitions (the complete JSX calls are in both props source files):
+These are the functions. Both source files include the full JSX calls:
 
 ```jsx
 function Slots({ header, footer, children }) {
@@ -465,36 +466,35 @@ function Composition({ children }) {
 
 ### P6: undefined triggers a default, null does not
 
-`function DefaultCard({ title = 'Free practice' })` uses a property default.
-Undefined produces `<h2>Free practice</h2>`; null produces `<h2></h2>`.
-In TS the prop is `title?: string | null` so both experiments are permitted.
-A default does not normalize every empty value. If the design should replace
-both null and undefined, an explicit `title ?? 'Free practice'` would do that.
+`function DefaultCard({ title = 'Free practice' })` gives title a default value.
+Undefined displays `<h2>Free practice</h2>`. Null displays `<h2></h2>`.
+A default is used for undefined or when no value was given. It is not used for null.
+The TS type `title?: string | null` allows both tests.
+To replace both null and undefined, use `title ?? 'Free practice'` instead.
 
 ### P7: three useful props types
 
-`{ title: string; children?: ReactNode }` requires title and permits optional
-renderable children, including text, numbers, elements, null and booleans.
-It rejects an ordinary function child; functions need a separate render-prop type.
-It also rejects an arbitrary object such as `{ topic: 'read' }` as rendered content.
+`{ title: string; children?: ReactNode }` requires title. Children is optional.
+It accepts text, numbers, elements, null and booleans. It does not accept a normal
+function child or a plain object such as `{ topic: 'read' }`.
+A function child needs its own function type, as in RenderCard.
 
-`PropsWithChildren<{ title: string }>` adds optional ReactNode children to the
-named props. It does not make title optional or require children to be supplied.
-Our Composition uses `PropsWithChildren` without additional required props.
+`PropsWithChildren<{ title: string }>` adds optional ReactNode children.
+Title is still required. Children does not become required.
+Our Composition uses `PropsWithChildren` without any other required props.
 
-`ComponentProps<'button'>` reuses the native button props contract, including
-children, disabled, type and event handler types. TypedButton forwards the remaining
-props after extracting children. It accepts type="button" and disabled, and rejects
-href because a button is not an anchor. Server-rendered output shows the disabled
-attribute; an event callback would require a browser interaction to demonstrate.
+`ComponentProps<'button'>` gives us the usual button prop types.
+It includes children, disabled, type and event handlers.
+TypedButton takes children out and passes the other props to button.
+It accepts type="button" and disabled. It rejects href because href belongs on a link.
+The HTML output shows disabled. Testing a click handler would need a browser.
 
-The real rejected cases and full messages are in `compiler-diagnostics.txt`:
+`compiler-diagnostics.txt` has the actual rejected cases:
 TS2322 for a function child, TS2353 for an object child, TS2322 for href on a button,
-and TS2710 for children specified twice. The probes ran separately from the valid
-project; no extra suppressions were added to make them pass.
+and TS2710 for children written twice. These errors are tested separately.
+We did not add more suppression comments to the normal project.
 
-
-Typed API definitions from ts/props.tsx:
+Types and functions from ts/props.tsx:
 
 ```tsx
 type CardProps = { title: string; children?: ReactNode }
@@ -546,12 +546,12 @@ P7 ComponentProps: <button type="button" disabled="">Start</button>
 
 ### Extra React experiment: key and a separate ID
 
-React uses key to identify an item. A component cannot read it as an ordinary
-prop. If the component needs the ID too, pass it under another name, such as itemId.
-Both versions below are included in the props source files and in `npm run all`.
-This is an assistant-run investigation, not a new student prediction.
+React uses key to identify an item. A component cannot read it as a normal prop.
+If the component also needs the ID, pass it with a different name, such as itemId.
+Both versions run in `npm run all`. The assistant ran this extra experiment;
+it is not a new prediction or mistake from me.
 
-JavaScript experiment:
+JavaScript:
 
 ```jsx
 function KeyCard(props) {
@@ -564,11 +564,11 @@ function KeyCard(props) {
 <KeyCard key="session-1" itemId="session-1">Read</KeyCard>
 ```
 
-The JavaScript source captures React's console.error arguments into stdout for
-this experiment, then restores console.error. The `%s` below is part of that raw
-warning. Object.keys lists the normal enumerable props, not React's special key.
+The JS source saves React's warning in stdout, then restores console.error.
+The `%s` below comes from that raw warning. Object.keys lists the normal
+enumerable properties. Key does not appear in that list.
 
-TypeScript version:
+The typed version uses itemId:
 
 ```tsx
 type KeyCardProps = { itemId: string; children?: ReactNode }
@@ -581,7 +581,7 @@ function KeyCard(props: KeyCardProps) {
 <KeyCard key="session-1" itemId="session-1">Read</KeyCard>
 ```
 
-Actual output from the two runs:
+Actual output:
 
 ```text
 key JS visible fields: children,itemId
@@ -592,67 +592,72 @@ key TS visible fields: children,itemId
 key TS output: <section data-item-id="session-1">Read</section>
 ```
 
-The separate compiler experiment in `tools/check-probes.cjs` also checks this
-boundary. JSX accepts key on KeyCard. Adding key to a value typed as
-`ComponentProps<typeof KeyCard>` gives TS2353. Trying to extract key from that
-props type gives TS2339. These expected errors are in `compiler-diagnostics.txt`;
-the valid project still has to pass `npm run check`.
+The separate tests in `tools/check-probes.cjs` check the types too.
+JSX accepts key on KeyCard. But adding key to an object with type
+`ComponentProps<typeof KeyCard>` gives TS2353. Reading key from that type gives TS2339.
+The full errors are in `compiler-diagnostics.txt`. The normal project passes
+`npm run check`.
 
-The fix is to use itemId for application code and leave key for React.
+The fix is to read itemId in our code and let React use key.
 See [React's special-props explanation](https://react.dev/warnings/special-props).
 
 ## JavaScript vs TypeScript
 
-The runtime selection rules stay the same. These errors came from intentional
-compiler experiments, saved with their source in compiler-diagnostics.txt.
+JS and TS choose the same values when the code runs.
+These error examples were tested separately. Their code and full messages are
+saved in compiler-diagnostics.txt.
 
-| Form/topic | Same at runtime | Type information or handling | Actual error when wrong |
+| Form/topic | Same when the code runs | TS type or check | Error in the wrong example |
 |---|---|---|---|
-| 1, tuple return | Positions select values | Return `[number, string]` | TS2339: toUpperCase does not exist on number |
-| 2, skipped array item | An absent position yields undefined | Narrow `string \| undefined` | TS18048: first is possibly undefined |
-| 3, swap | RHS is read before assignments | Compatible destination types | TS2322: string is not assignable to number |
-| 6, rename | Colon selects a new variable name | Annotation after the pattern | TS2339: toUpperCase does not exist on number |
-| 7, default | Null survives the default | Include null, then narrow it | TS18047: minutes is possibly null |
-| 8, rest/source fields | Only source fields can be extracted | Describe available properties | TS2339: missing does not exist on the source type |
-| 9, nesting | The nested source must exist | Guard an optional room | TS2339: label does not exist on room-or-undefined |
-| 10, computed key | The key expression selects a property | Use keyof the source type | TS2322: unknown is not assignable to minutes |
-| 11, options default | Empty argument defaults to an object | Fields must allow `{}` | TS2741: title is missing in type {} |
-| 12, entry loop | Each iteration supplies a pair | Record and Map value types | TS2339: toUpperCase does not exist on number |
-| P7, children | Props remain one runtime object | ReactNode or a render-function signature | TS2322: function is not assignable to ReactNode |
+| 1, tuple return | Read values by position | Return `[number, string]` | TS2339: toUpperCase does not exist on number |
+| 2, skipped array item | A missing item gives undefined | Check `string \| undefined` | TS18048: first is possibly undefined |
+| 3, swap | Read the right side first | New values must fit the types | TS2322: string is not assignable to number |
+| 6, rename | The colon gives a new name | Put the type after the pattern | TS2339: toUpperCase does not exist on number |
+| 7, default | A default does not replace null | Allow null and check for it | TS18047: minutes is possibly null |
+| 8, rest/source fields | Read properties the source has | Describe available properties | TS2339: missing does not exist on the source type |
+| 9, nesting | The inner object must exist | Check whether room exists | TS2339: label does not exist on room-or-undefined |
+| 10, computed key | Use the property name in key | Use keyof for valid property names | TS2322: unknown is not assignable to minutes |
+| 11, options default | A missing argument uses {} | Fields must allow `{}` | TS2741: title is missing in type {} |
+| 12, entry loop | Each loop step gives a pair | Record and Map value types | TS2339: toUpperCase does not exist on number |
+| P7, children | Props is still one object | ReactNode or a render-function signature | TS2322: function is not assignable to ReactNode |
 
 ## Verification and review
 
-Node.js 22.23.3, npm 10.9.9. Both npm run all and npm run check passed.
-output.txt is the actual current run. compiler-diagnostics.txt contains separately
-collected intentional failures, not failures hidden in the project check. Reproduce them with `node tools/check-probes.cjs`.
+The checks used Node.js 22.23.3 and npm 10.9.9.
+`npm run all` and `npm run check` passed. Output.txt has the real run output.
+Compiler-diagnostics.txt has expected errors from separate wrong-code examples.
+Run `node tools/check-probes.cjs` to repeat those examples.
 
-The log records my real guesses, surprises and follow-up answers. It includes
-more than five wrong guesses or surprises, and also records answers I got right.
-AI help and assistant-run experiments are stated clearly. I still need to explain
-the whole guide in my own words. All four bonuses are included. The public repository is linked below.
+The log records my real guesses, surprises and later answers.
+It has more than five wrong guesses or surprises. It also says which answers I got right.
+It shows where I used AI help and where the assistant ran the code.
+I still need to explain the guide in my own words. All four bonuses are included.
+The public repository link is below.
 
 ## Bonus 1: LaTeX
 
-The complete guide, including the required entries, pitfalls, React discussion,
-comparison table, bonus investigations, source analyses and personal log, is also
-provided as `latex/main.tex` and `latex/main.pdf`. It is not an abridged summary.
-The source uses listings for code, actual LaTeX tables, and a linked contents page.
-In the PDF's listings, [U+1F9E0] represents the brain symbol exactly; the executable
-source files and recorded output retain the original Unicode symbol.
+`latex/main.tex` and `latex/main.pdf` contain the full guide.
+They include the twelve forms, pitfalls, React examples, comparison table, bonuses
+and personal log. The PDF is not a shorter summary.
+It uses listings for code, real LaTeX tables, and a contents page with links.
+In PDF code blocks, [U+1F9E0] stands for the brain emoji. The source files and
+output files keep the original emoji.
 
-The source was generated from this README with Pandoc 3.14 and compiled with
-Tectonic 0.17.0. From the assignment4 project root, after installing those tools:
+Pandoc 3.14 converts this README to LaTeX. Tectonic 0.17.0 compiles it to PDF.
+After installing these tools, run these commands in assignment4:
 
 ```sh
 pandoc README.md --standalone --shift-heading-level-by=-1 --toc --number-sections --listings --pdf-engine=xelatex --lua-filter=latex/layout.lua -V documentclass=article -V papersize=a4 -V fontsize=10pt -V geometry:margin=22mm -V title="Destructuring Field Guide" -V author="Tuba Nazlı İpekyüz - 2200004532" -V date="" -H latex/style.tex -o latex/main.tex
 tectonic --keep-logs --keep-intermediates --outdir latex latex/main.tex
 ```
 
-Tectonic compiles the saved LaTeX source with its XeTeX-based engine. Pandoc's
-pdf-engine flag selects the appropriate Unicode-aware source preamble here;
-Pandoc is generating TeX, while the second command creates the PDF. Required TeX
-packages are downloaded on the first Tectonic run. Compilation and visual checks
-are recorded in VERIFICATION.md. The desktop LaTeX editor can also compile main.tex. With Pandoc and Tectonic on PATH, `npm run build:guide` runs these steps and adds the identity comment to the generated source.
+Pandoc only writes the TeX source here. Its pdf-engine option chooses a preamble
+that supports Unicode. Tectonic then creates the PDF with its XeTeX-based engine.
+The first Tectonic run may download the required TeX packages.
+VERIFICATION.md records the build and visual checks.
+The LaTeX editor can also compile main.tex.
+With both tools on PATH, `npm run build:guide` runs these steps and adds the name
+and student-number comment to the generated source.
 
 ## Bonus 4: Git repository
 
@@ -670,10 +675,10 @@ npm run check. The validation snapshot is recorded in CLEAN-CLONE-CHECK.txt.
 
 ## Bonus 2: Depth
 
-These are additional investigations, not just a list of syntax forms. The complete
-experiments are in `js/depth.mjs` and `ts/depth.ts`; run `npm run depth`.
-Actual output is in `depth-output.txt` and is also included by `npm run all`.
-These assistant-run experiments are separate from the student's personal log.
+These extra examples test how destructuring works.
+The full code is in `js/depth.mjs` and `ts/depth.ts`. Run `npm run depth`.
+Depth-output.txt has the real output. `npm run all` includes the same examples.
+The assistant ran these experiments. They are separate from my personal log.
 
 ### D1: an array pattern consumes an iterator
 
@@ -890,15 +895,15 @@ References: [ECMAScript iterator binding initialization](https://tc39.es/ecma262
 
 ## Bonus 3: Real code
 
-These five cases use the instructor's Assignment 3 Task Manager starter
-(`Downloads/starter.zip`), the installed TypeScript 5.8.3 package, and TanStack
-Query at the fixed revision
-`36dd7927c85ce6cee37ab1eb3af25e7fc7ccbb14`. Source line numbers refer to those exact
-copies. Extracted evidence and SHA-256 identifiers are in
-`references/source-excerpts.txt`; full third-party projects are not redistributed.
-The rewrites show the same selected code without destructuring. They are source
-comparisons, not separate applications. React hooks still belong at the component's
-top level and must not be called again just to read another result.
+These five cases use three sources: the instructor's Assignment 3 starter
+(`Downloads/starter.zip`), TypeScript 5.8.3, and TanStack Query.
+The TanStack version is commit `36dd7927c85ce6cee37ab1eb3af25e7fc7ccbb14`.
+The line numbers refer to those exact versions.
+References/source-excerpts.txt keeps the source extracts and SHA-256 hashes
+that identify the files. The full outside projects are not included.
+Each rewrite shows the same selected code without destructuring.
+These are code comparisons, not separate apps. Hooks stay at the component's top level.
+Do not call the hook again just to read a second value.
 
 ### Case 1: TaskRow receives one props object
 
@@ -1168,10 +1173,9 @@ The name `copy` does not create a separate object by itself.
 
 ## Sources and assistance
 
-The starter project and assignment handout supplied the required structure.
-The example theme and runnable files were developed with AI assistance; the log
-separates my predictions from runs performed by the assistant on this computer.
-The following references were consulted to check behavior, not copied as examples:
+The starter and handout gave the project structure. I used AI help for the
+examples and code. The log separates my guesses from the assistant's actual runs
+on this computer. These sources were used to check the rules, not to copy examples:
 
 - [MDN: Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring): defaults and source-value rules.
 - [TypeScript Handbook: Object Types](https://www.typescriptlang.org/docs/handbook/2/objects.html): property patterns, optional fields, tuples and readonly tuples.
@@ -1181,29 +1185,30 @@ The following references were consulted to check behavior, not copied as example
 
 ## Submission contents
 
-Submit one assignment4 folder inside the ZIP, without node_modules. The guide,
-source files, package files, tsconfig.json, output.txt and compiler-diagnostics.txt
-are included. Install dependencies again with npm install after extracting.
-All four bonuses are included. The public repository is linked above, and the final upload was verified.
+The ZIP contains one folder named assignment4. It does not include node_modules.
+It includes the guide, code, package files, tsconfig.json, output.txt,
+compiler-diagnostics.txt, LaTeX source and PDF.
+After extracting it, run npm install to install the dependencies.
+All four bonuses are included. The public repository link is above.
+The GitHub upload was checked against the local version.
 
 ## My own log
 
-These notes record my predictions and corrections during a guided review with
-an AI assistant. The assistant ran the project on this computer; I discussed the
-examples and their recorded results. These include actual wrong predictions, surprises and correct follow-up answers,
-not claims that I independently ran into compiler errors. The exact runtime and
-compiler diagnostics from the experiments appear above and in the output files.
+These are my real guesses and corrections from the review with an AI assistant.
+The assistant ran the code on this computer. I discussed the examples and results.
+The notes include wrong guesses, surprises and correct later answers.
+They do not claim that I found or ran every error on my own.
+The exact error messages and outputs are above and in the output files.
 
 ### 1. I expected the default function to run
 
-In the guided-review experiment in `js/default-review.mjs`, I expected fallback()
-to run. What surprised me was that it did not. The assistant ran the example on
-this computer and the real output was `0 0`: minutes stayed 0 and calls stayed 0.
-I did not understand this rule clearly before the experiment: a destructuring
-default is used only when the property is missing or its value is undefined.
-Since 0 is an existing value, the default expression is not evaluated at all.
-There was no error message. The lesson is not only that 0 is preserved, but that
-a function used as the default will not be called unless that default is needed.
+In `js/default-review.mjs`, I thought fallback() would run. It did not, which
+surprised me. The assistant ran the code on this computer. The output was `0 0`:
+minutes stayed 0 and the function was not called.
+
+I did not know the default rule clearly before this example. A default is used
+for undefined or when no value was given. It is not used for 0.
+The default function only runs when the default is needed. There was no error message.
 
 ```js
 let calls = 0
@@ -1215,17 +1220,17 @@ const { minutes = fallback() } = { minutes: 0 }
 console.log(minutes, calls)
 ```
 
-Run separately with `node js/default-review.mjs`. Actual output:
+Run `node js/default-review.mjs`. Actual output:
 
 ```text
 0 0
 ```
+
 ### 2. I expected renaming to change the existing title variable
 
-For the experiment in `js/rename-review.mjs`, I predicted that both console.log
-calls would print React çalışması. I thought the destructuring assignment had
-made the two variables equal, so the existing title would change too. The assistant
-ran the example on this computer. The actual output was:
+In `js/rename-review.mjs`, I guessed that both lines would print React çalışması.
+I thought making the values equal would also change title.
+The assistant ran it on this computer. The actual output was:
 
 ```text
 Haftalık plan
@@ -1240,21 +1245,18 @@ console.log(title)
 console.log(heading)
 ```
 
-In this declaration, title inside the pattern selects the source property;
-heading is the new binding. It is equivalent to `const heading = session.title`.
-It does not assign anything to the existing title variable, which keeps Haftalık
-plan. There was no error message. The distinction I needed to make was between
-selecting a property by its name and assigning to an existing variable of that name.
-Run separately with `node js/rename-review.mjs`.
+The title inside the pattern is the property name. Heading is the new variable.
+The line means `const heading = session.title`. It does not change the existing
+title variable, so title stays Haftalık plan. There was no error message.
+I needed to separate reading a property from changing another variable.
+Run `node js/rename-review.mjs`.
 
 ### 3. I compared a number with a shared nested object
 
-In the guided-review example in `js/reference-review.mjs`, I correctly predicted
-40 and B for the final two console.log calls. My reasoning was that minutes
-received 40 at the destructuring step, session.minutes was later set to 60, and
-the room label was later set to B. The distinction clarified in the discussion
-was that changing session.minutes does not reassign the separate minutes binding,
-whereas room and session.room refer to the same nested object.
+In `js/reference-review.mjs`, I correctly guessed 40 and B.
+Minutes received 40 when destructuring ran. The later change to session.minutes
+did not change that separate number variable. Room and session.room still pointed
+to the same object, so changing its label was visible through both names.
 
 ```js
 const session = {
@@ -1268,23 +1270,22 @@ console.log(minutes)
 console.log(session.room.label)
 ```
 
-The assistant ran the example on this computer. Actual output:
+The assistant ran this code on this computer. Actual output:
 
 ```text
 40
 B
 ```
 
-This comparison helped clarify why destructuring is not a deep copy: a number
-binding keeps the value it received, while a nested object reference still points
-to the source's object. There was no error message. Run separately with
-`node js/reference-review.mjs`.
+This example helped me compare a number with an object reference.
+Destructuring does not make a separate copy of every nested object.
+There was no error message. Run `node js/reference-review.mjs`.
 
 ### 4. I overlooked the zero passed to a conditional child
 
-In the guided-review example below, I predicted that Çalışma var would appear.
-I then explained that I had not noticed count={0} in the component usage; I knew
-that && short-circuits on a falsy left operand, but overlooked this input.
+I guessed that Çalışma var would appear. I then explained that I had missed
+count={0} in the example. I knew that && stops at a falsy left value, but I had
+not noticed which value was passed in.
 
 ```jsx
 function Session({ count }) {
@@ -1293,16 +1294,13 @@ function Session({ count }) {
 // Rendered usage: <Session count={0} />
 ```
 
-The assistant rendered the example on this computer. The actual HTML was
-`<section>0</section>`. The important distinction is that && returns the operand
-0, not the boolean false. React displays numeric 0 as text even though 0 is falsy
-in a JavaScript condition. Reading the supplied prop carefully and distinguishing
-short-circuit evaluation from React rendering explains the result.
+The assistant rendered it on this computer. The actual HTML was
+`<section>0</section>`. Here && returns 0, not false. React shows the number 0 as text.
 
-In `js/children-review.jsx`, the revised condition is
-`count > 0 && <span>Çalışma var</span>`. With count=0, that expression returns false,
-which React omits from the rendered content. There was no error message.
-Run separately with `npx tsx js/children-review.jsx`. Actual output:
+In `js/children-review.jsx`, the fixed check is
+`count > 0 && <span>Çalışma var</span>`. For count=0, it returns false.
+React does not show false. There was no error message.
+Run `npx tsx js/children-review.jsx`. Actual output:
 
 ```text
 original: <section>0</section>
@@ -1311,13 +1309,11 @@ checked: <section></section>
 
 ### 5. I traced a function child and its returned element
 
-In the guided review, I described children as a function and distinguished it from
-children(). For this example that distinction was correct: children holds the
-function, while the call returns a React element. The discussion clarified the
-terminology: children(2) is a call expression, not a second function. This entry
-records an examined example, not a claim that my original distinction was wrong.
-In the follow-up below, I correctly identified that children(2) calls the function,
-and correctly calculated 5 for number + 3.
+I said children was a function and separated it from children(). That was correct
+for this example. Children holds the function; children(2) calls it.
+The call returns a React element. It is not another function.
+I also correctly calculated 5 for number + 3. This note records an example I
+checked, not a wrong answer.
 
 ```jsx
 function Card({ children }) {
@@ -1327,87 +1323,80 @@ function Card({ children }) {
 <Card>{number => <strong>{number + 3}</strong>}</Card>
 ```
 
-The assistant rendered the example on this computer. Actual HTML:
+The assistant rendered it on this computer. Actual HTML:
 
 ```html
 <section><strong>5</strong></section>
 ```
 
-React does not automatically invoke an ordinary function child. This component
-explicitly calls the supplied function and renders its returned element. The
-function-child API needs a TS signature such as
-`{ children: (number: number) => ReactNode }`, rather than ordinary ReactNode children.
-There was no error message for this example. Run separately with
-`npx tsx js/function-review.jsx`.
-
+React does not call the function automatically. Card calls it and displays the result.
+The TS type must describe the function:
+`{ children: (number: number) => ReactNode }`.
+Ordinary ReactNode children do not include this function type.
+There was no error message. Run `npx tsx js/function-review.jsx`.
 
 ### 6. I predicted the wrong length for a destructured string property
 
-For `const { length } = 'React'; console.log(length)`, I predicted 2.
-I later explained that I had been thinking of React as one whole word rather
-than considering its individual characters. I had not distinguished word count
-from string length when interpreting the example.
-The assistant ran the experiment on this computer and the actual result was 5.
-The object pattern reads the named length property of the string through temporary
-object wrapping; it does not count variables in the pattern. React contains five
-ASCII characters, so its length is 5. String length counts UTF-16 code units in
-general, which need not equal the number of visible characters. This case showed
-that an object pattern can read a property from a non-null primitive value too.
-There was no error message. The runnable case is in `js/edge-review.mjs`.
+For `const { length } = 'React'; console.log(length)`, I guessed 2.
+I explained that I had thought of React as one whole word. I had not paid attention
+to its characters. The assistant ran it on this computer. The output was 5.
+
+The pattern reads the string's length property. It does not count words or the
+variables in the pattern. JavaScript temporarily wraps the string to read the property.
+React has five ASCII characters. In general, length counts UTF-16 code units,
+so it may differ from the number of visible characters.
+There was no error message. The code is in `js/edge-review.mjs`.
 
 ### 7. I expected a later default binding to be available
 
-For `const [a = b, b = 2] = []`, I predicted b for a and 2 for b.
-The assistant ran the experiment on this computer. Instead of printing values,
-it threw the exact error:
+For `const [a = b, b = 2] = []`, I guessed b for a and 2 for b.
+The assistant ran the code on this computer. It did not print the values.
+It threw this exact error:
 
 ```text
 ReferenceError: Cannot access 'b' before initialization
 ```
 
-The first missing position triggers a's default immediately. At that moment b
-has not been initialized, so evaluation stops before b can receive 2. The right
-side of a default is an expression evaluated at that step, not a promise that a
-later binding will be filled in first. This is the temporal dead zone for a lexical
-binding. Reversing the dependency makes it valid:
+The first missing item uses a's default straight away. At that point b is not
+ready yet, so reading it throws. The code stops before b gets its value 2.
+This is called the temporal dead zone: a let or const variable cannot be read
+before it is initialized. Putting the earlier value first fixes the dependency:
 
 ```js
 const [b = 2, a = b] = []
 console.log(a, b) // actual output: 2 2
 ```
 
-Both the caught failure and the working version are in `js/edge-review.mjs`.
-
+`js/edge-review.mjs` includes the caught error and the working example.
 
 ### 8. I forgot what readonly prevents
 
-I correctly predicted that the const variable minutes could not be assigned 60,
-while room.label could change. But after readonly was added, I thought all three
-assignments would work. I was surprised that changing session.minutes and
-replacing session.room both gave TS2540 errors. I had forgotten that readonly
-prevents assigning a new value to those properties.
+I correctly guessed that the const variable minutes could not be assigned 60,
+while room.label could change. After readonly was added, I thought all three
+assignments would work. I was surprised that assigning to session.minutes and
+replacing session.room both gave TS2540 errors.
+I had forgotten that readonly prevents assigning new values to those properties.
 
-The assistant checked the examples on this computer. Changing
-`session.room.label = 'C'` was allowed because label itself was not readonly.
-The compiler messages and actual output are in the extra example above.
+The assistant checked the code on this computer. `session.room.label = 'C'`
+was allowed because label was not readonly. The extra example above has the
+actual compiler messages and output.
 
 ### 9. I mixed up changing an object and replacing a reference
 
-I guessed A and B for the room example. The actual result was C and B.
-After `room.label = 'D'`, I guessed D and C, but the result was D and B.
-For the copy example, I guessed A and C; the result was B and C.
-The assistant ran these examples on this computer and saved the actual output.
+I guessed A and B for the room example. The result was C and B.
+After `room.label = 'D'`, I guessed D and C. The result was D and B.
+For the copy example, I guessed A and C. The result was B and C.
+The assistant ran the examples on this computer and saved their output.
 
-The explanation helped me see which step I was mixing up. `room.label = 'B'`
-changes the shared object. `room = { label: 'C' }` makes only the local room
-variable point to a new object. The original object keeps its B label.
+I was mixing up two steps. `room.label = 'B'` changes the shared object.
+`room = { label: 'C' }` makes only room point to a new object.
+The original object keeps its B label.
 
-My earlier answer of 40 and 60 in the number example was an output-order slip.
-I explained that I had not paid attention to the order, so it is not counted as
-a misunderstanding of the rule.
+My earlier answer of 40 and 60 in the number example was an order slip.
+I said I had not paid attention to the order. It is not counted as a new mistake
+about how the code works.
 
-In a later reference example, I correctly predicted C and D. The local room had
-been given a new object, so changing the original object's label did not change it.
+In a later example, I correctly guessed C and D. Room pointed to a new object,
+so changing the original object's label did not change it.
 I also explained the default rule correctly: a default is used for undefined or
-when no value has been supplied, but not for null. I corrected a typing slip in
-that sentence; it was not a new misunderstanding.
+when no value was given, but not for null. I corrected a typing slip in that sentence.
