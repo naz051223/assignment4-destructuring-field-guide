@@ -3,7 +3,7 @@
 Name: Tuba Nazlı İpekyüz  
 Student number: 2200004532
 
-Bonuses claimed: **Bonus 1: LaTeX**, **Bonus 2: Depth**, **Bonus 3: Real code**. **Bonus 4: Git repository** is being finalized with a public repository, as requested by the instructor.
+Bonuses claimed: **Bonus 1: LaTeX**, **Bonus 2: Depth**, **Bonus 3: Real code**. **Bonus 4: Git repository** is included with a public repository, as requested by the instructor.
 
 This guide uses a study-session planner. The examples and explanations were
 prepared with AI assistance and need student review and explanation before submission.
@@ -629,7 +629,7 @@ collected intentional failures, not failures hidden in the project check. Reprod
 The log records my real guesses, surprises and follow-up answers. It includes
 more than five wrong guesses or surprises, and also records answers I got right.
 AI help and assistant-run experiments are stated clearly. I still need to explain
-the whole guide in my own words. Bonuses 1–3 are included; Bonus 4 is being finalized through public publication.
+the whole guide in my own words. All four bonuses are included. The public repository is linked below.
 
 ## Bonus 1: LaTeX
 
@@ -659,15 +659,14 @@ are recorded in VERIFICATION.md. The desktop LaTeX editor can also compile main.
 [https://github.com/naz051223/assignment4-destructuring-field-guide](https://github.com/naz051223/assignment4-destructuring-field-guide)
 
 Owner: [naz051223](https://github.com/naz051223).
-The instructor has asked for a public repository. The final publication step makes
-this repository public and verifies that its main branch matches the submitted ZIP.
-A public repository can be read without a collaborator invitation.
+The repository is public, as requested by the instructor. It can be read without
+a collaborator invitation. The final upload was checked against the local version.
 
-The .gitignore excludes node_modules. The history preserves the real work in steps;
-there are more than five meaningful commits across three days after the final
-React review is committed. No earlier commit is redated or replaced.
-The latest version is checked from a clean checkout with npm install, npm run all
-and npm run check. The exact validation snapshot is recorded in CLEAN-CLONE-CHECK.txt.
+The .gitignore excludes node_modules. The real history shows more than five
+meaningful commits across three days, including the final React review.
+No earlier commit was redated or replaced.
+The latest runnable version passed a clean installation, npm run all and
+npm run check. The validation snapshot is recorded in CLEAN-CLONE-CHECK.txt.
 
 ## Bonus 2: Depth
 
@@ -1185,7 +1184,7 @@ The following references were consulted to check behavior, not copied as example
 Submit one assignment4 folder inside the ZIP, without node_modules. The guide,
 source files, package files, tsconfig.json, output.txt and compiler-diagnostics.txt
 are included. Install dependencies again with npm install after extracting.
-Bonuses 1–3 are included. Bonus 4 uses the public repository linked above; the final publication is verified before delivery.
+All four bonuses are included. The public repository is linked above, and the final upload was verified.
 
 ## My own log
 

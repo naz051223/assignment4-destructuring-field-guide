@@ -29,9 +29,9 @@ investigations, not invented student mistakes.
   include code, actual output and explanations.
 - Bonus 3: five cases use the instructor starter, TypeScript and a fixed TanStack
   Query revision. Rewrites include the selected function bodies or hook options.
-- Bonus 4: the instructor now asks for public visibility. The owner's repository
+- Bonus 4: the repository is public as requested by the instructor. The owner's repository
   link is in README. The history has more than five meaningful commits across
-  three days. Public visibility and matching remote HEAD are final upload checks.
+  three days. Public visibility and matching remote HEAD were verified.
 
 ## Final checks
 
@@ -46,4 +46,4 @@ Final local audit: 12 forms, 5 TypeScript topics, 7 React topics, 5 source cases
 11 comparison rows, 9 personal-log entries and 23 identified source files.
 The rebuilt PDF has 23 pages. All pages were rendered and visually inspected;
 no TeX layout or missing-character warnings remain. Clean-checkout output matches
-output.txt. The final GitHub upload and public visibility are still separate checks.
+output.txt. The final GitHub upload and public visibility were also verified.

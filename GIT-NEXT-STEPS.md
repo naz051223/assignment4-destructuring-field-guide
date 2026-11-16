@@ -3,8 +3,8 @@
 Owner: naz051223
 Repository: https://github.com/naz051223/assignment4-destructuring-field-guide
 
-The instructor asked for a public repository. Public visibility and remote HEAD
-are checked during the final upload. This allows the instructor to read the work
+The repository is public as requested by the instructor. Public visibility and
+matching remote HEAD were verified during the final upload. This allows the instructor to read the work
 without a collaborator invitation. The local history has more than five meaningful
 commits across three days, including the React key investigation.
 
