@@ -54,4 +54,17 @@ show('P6 undefined', <DefaultCard title={undefined} />)
 show('P6 null', <DefaultCard title={null} />)
 console.log('P7 JS:', 'No static props type checking; see ts/props.tsx and compiler probes.')
 
+// Extra investigation: key belongs to React, so pass a separate application ID.
+function KeyCard(props) {
+  console.log('key JS visible fields:', Object.keys(props).sort().join(','))
+  const { key, itemId, children } = props
+  console.log('key JS read:', String(key))
+  return <section data-item-id={itemId}>{children}</section>
+}
+const savedKeyError = console.error
+try {
+  console.error = (...args) => console.log('key JS diagnostic:', ...args)
+  show('key JS output', <KeyCard key="session-1" itemId="session-1">Read</KeyCard>)
+} finally { console.error = savedKeyError }
+
 

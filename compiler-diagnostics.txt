@@ -21,6 +21,10 @@ const invalidNode = <Card>{() => 'read'}</Card>;
 const invalidChildren = <Box title="Plan">{{ topic: 'read' }}</Box>;
 const invalidButton = <Button href="/read" />;
 const duplicateChildren = <Card children="attribute">Nested</Card>;
+function KeyCard({ itemId }: { itemId: string }) { return <section>{itemId}</section> }
+const validJSXKey = <KeyCard key="session-1" itemId="session-1" />;
+const invalidOwnKey: ComponentProps<typeof KeyCard> = { itemId: 'session-1', key: 'session-1' };
+const { key: missingKey } = {} as ComponentProps<typeof KeyCard>;
 
 ACTUAL DIAGNOSTICS
 probe:2 TS2339: Property 'duration' does not exist on type '{ minutes: number; }'.
@@ -41,3 +45,5 @@ probe:19 TS2353: Object literal may only specify known properties, and 'topic' d
 probe:20 TS2322: Type '{ href: string; }' is not assignable to type 'IntrinsicAttributes & ClassAttributes<HTMLButtonElement> & ButtonHTMLAttributes<HTMLButtonElement>'.
   Property 'href' does not exist on type 'IntrinsicAttributes & ClassAttributes<HTMLButtonElement> & ButtonHTMLAttributes<HTMLButtonElement>'. Did you mean 'ref'?
 probe:21 TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
+probe:24 TS2353: Object literal may only specify known properties, and 'key' does not exist in type '{ itemId: string; }'.
+probe:25 TS2339: Property 'key' does not exist on type '{ itemId: string; }'.

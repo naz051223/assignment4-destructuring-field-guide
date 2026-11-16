@@ -56,6 +56,15 @@ show('P7 ReactNode', <Card title="Typed">{7}</Card>)
 show('P7 PropsWithChildren', <Composition><em>Review</em></Composition>)
 show('P7 ComponentProps', <TypedButton type="button" disabled>Start</TypedButton>)
 
+// key is allowed in JSX but is not a field in this component's own props type.
+type KeyCardProps = { itemId: string; children?: ReactNode }
+function KeyCard(props: KeyCardProps) {
+  console.log('key TS visible fields:', Object.keys(props).sort().join(','))
+  const { itemId, children } = props
+  return <section data-item-id={itemId}>{children}</section>
+}
+show('key TS output', <KeyCard key="session-1" itemId="session-1">Read</KeyCard>)
+
 
 
 

@@ -54,6 +54,10 @@ P5 composition: <article><header><h2>Plan</h2></header><main><p>Read</p></main><
 P6 undefined: <h2>Free practice</h2>
 P6 null: <h2></h2>
 P7 JS: No static props type checking; see ts/props.tsx and compiler probes.
+key JS visible fields: children,itemId
+key JS diagnostic: %s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props) KeyCard
+key JS read: undefined
+key JS output: <section data-item-id="session-1">Read</section>
 
 > destructuring-guide@0.0.0 ts
 > tsx ts/arrays.ts && tsx ts/objects.ts && tsx ts/params.ts && tsx ts/types.ts && tsx ts/props.tsx && tsx ts/reference-followup.ts
@@ -103,6 +107,8 @@ P6 null: <h2></h2>
 P7 ReactNode: <section><h2>Typed</h2>7</section>
 P7 PropsWithChildren: <article><em>Review</em></article>
 P7 ComponentProps: <button type="button" disabled="">Start</button>
+key TS visible fields: children,itemId
+key TS output: <section data-item-id="session-1">Read</section>
 shared before: true
 shared after: false
 after rebinding: C B

@@ -25,6 +25,10 @@ const invalidNode = <Card>{() => 'read'}</Card>;
 const invalidChildren = <Box title="Plan">{{ topic: 'read' }}</Box>;
 const invalidButton = <Button href="/read" />;
 const duplicateChildren = <Card children="attribute">Nested</Card>;
+function KeyCard({ itemId }: { itemId: string }) { return <section>{itemId}</section> }
+const validJSXKey = <KeyCard key="session-1" itemId="session-1" />;
+const invalidOwnKey: ComponentProps<typeof KeyCard> = { itemId: 'session-1', key: 'session-1' };
+const { key: missingKey } = {} as ComponentProps<typeof KeyCard>;
 `;
 const options = { strict: true, noUncheckedIndexedAccess: true, noEmit: true, skipLibCheck: true, target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.NodeNext, moduleResolution: ts.ModuleResolutionKind.NodeNext, jsx: ts.JsxEmit.ReactJSX };
 const host = ts.createCompilerHost(options);
