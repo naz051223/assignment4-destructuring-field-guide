@@ -32,7 +32,7 @@ function CodeBlock(block)
   end
   block.text = table.concat(converted)
   local _, lines = block.text:gsub('\n', '\n')
-  if lines < 15 then
+  if lines < 35 then
     return {pandoc.RawBlock('latex', '\\begin{minipage}{\\linewidth}'), block,
       pandoc.RawBlock('latex', '\\end{minipage}\\par')}
   end

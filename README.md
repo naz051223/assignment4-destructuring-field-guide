@@ -3,7 +3,7 @@
 Name: Tuba Nazlı İpekyüz  
 Student number: 2200004532
 
-Bonuses claimed: **Bonus 1: LaTeX**, **Bonus 2: Depth**, **Bonus 3: Real code**. **Bonus 4: Git repository** is published; instructor access and work over several days remain in progress.
+Bonuses claimed: **Bonus 1: LaTeX**, **Bonus 2: Depth**, **Bonus 3: Real code**. **Bonus 4: Git repository** is being finalized with a public repository, as requested by the instructor.
 
 This guide uses a study-session planner. The examples and explanations were
 prepared with AI assistance and need student review and explanation before submission.
@@ -544,6 +544,63 @@ P7 PropsWithChildren: <article><em>Review</em></article>
 P7 ComponentProps: <button type="button" disabled="">Start</button>
 ```
 
+### Extra React experiment: key and a separate ID
+
+React uses key to identify an item. A component cannot read it as an ordinary
+prop. If the component needs the ID too, pass it under another name, such as itemId.
+Both versions below are included in the props source files and in `npm run all`.
+This is an assistant-run investigation, not a new student prediction.
+
+JavaScript experiment:
+
+```jsx
+function KeyCard(props) {
+  console.log('key JS visible fields:', Object.keys(props).sort().join(','))
+  const { key, itemId, children } = props
+  console.log('key JS read:', String(key))
+  return <section data-item-id={itemId}>{children}</section>
+}
+// Rendered with renderToStaticMarkup:
+<KeyCard key="session-1" itemId="session-1">Read</KeyCard>
+```
+
+The JavaScript source captures React's console.error arguments into stdout for
+this experiment, then restores console.error. The `%s` below is part of that raw
+warning. Object.keys lists the normal enumerable props, not React's special key.
+
+TypeScript version:
+
+```tsx
+type KeyCardProps = { itemId: string; children?: ReactNode }
+function KeyCard(props: KeyCardProps) {
+  console.log('key TS visible fields:', Object.keys(props).sort().join(','))
+  const { itemId, children } = props
+  return <section data-item-id={itemId}>{children}</section>
+}
+// key is allowed by JSX, without being a field of KeyCardProps:
+<KeyCard key="session-1" itemId="session-1">Read</KeyCard>
+```
+
+Actual output from the two runs:
+
+```text
+key JS visible fields: children,itemId
+key JS diagnostic: %s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props) KeyCard
+key JS read: undefined
+key JS output: <section data-item-id="session-1">Read</section>
+key TS visible fields: children,itemId
+key TS output: <section data-item-id="session-1">Read</section>
+```
+
+The separate compiler experiment in `tools/check-probes.cjs` also checks this
+boundary. JSX accepts key on KeyCard. Adding key to a value typed as
+`ComponentProps<typeof KeyCard>` gives TS2353. Trying to extract key from that
+props type gives TS2339. These expected errors are in `compiler-diagnostics.txt`;
+the valid project still has to pass `npm run check`.
+
+The fix is to use itemId for application code and leave key for React.
+See [React's special-props explanation](https://react.dev/warnings/special-props).
+
 ## JavaScript vs TypeScript
 
 The runtime selection rules stay the same. These errors came from intentional
@@ -572,7 +629,7 @@ collected intentional failures, not failures hidden in the project check. Reprod
 The log records my real guesses, surprises and follow-up answers. It includes
 more than five wrong guesses or surprises, and also records answers I got right.
 AI help and assistant-run experiments are stated clearly. I still need to explain
-the whole guide in my own words. Bonuses 1–3 are included; Bonus 4 is in progress.
+the whole guide in my own words. Bonuses 1–3 are included; Bonus 4 is being finalized through public publication.
 
 ## Bonus 1: LaTeX
 
@@ -601,15 +658,16 @@ are recorded in VERIFICATION.md. The desktop LaTeX editor can also compile main.
 
 [https://github.com/naz051223/assignment4-destructuring-field-guide](https://github.com/naz051223/assignment4-destructuring-field-guide)
 
-The project has a private repository under naz051223. The initial work is uploaded.
-The newer review commits are also uploaded; the remote revision was verified.
-The .gitignore excludes node_modules. A clean clone of the initial version was
-installed and run successfully. The local history now includes work on two days.
+Owner: [naz051223](https://github.com/naz051223).
+The instructor has asked for a public repository. The final publication step makes
+this repository public and verifies that its main branch matches the submitted ZIP.
+A public repository can be read without a collaborator invitation.
 
-Bonus 4 is still in progress. The instructor's GitHub username is not known,
-so access has not been added. The handout asks for at least five meaningful commits
-over several days. More than five commits are uploaded across two days.
-Further real review on another day is still planned.
+The .gitignore excludes node_modules. The history preserves the real work in steps;
+there are more than five meaningful commits across three days after the final
+React review is committed. No earlier commit is redated or replaced.
+The latest version is checked from a clean checkout with npm install, npm run all
+and npm run check. The exact validation snapshot is recorded in CLEAN-CLONE-CHECK.txt.
 
 ## Bonus 2: Depth
 
@@ -1127,7 +1185,7 @@ The following references were consulted to check behavior, not copied as example
 Submit one assignment4 folder inside the ZIP, without node_modules. The guide,
 source files, package files, tsconfig.json, output.txt and compiler-diagnostics.txt
 are included. Install dependencies again with npm install after extracting.
-Bonuses 1–3 are included; Bonus 4 has a private remote repository; instructor access and genuine work over several days remain pending.
+Bonuses 1–3 are included. Bonus 4 uses the public repository linked above; the final publication is verified before delivery.
 
 ## My own log
 

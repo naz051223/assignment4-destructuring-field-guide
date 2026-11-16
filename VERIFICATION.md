@@ -8,34 +8,42 @@ Environment: Node.js 22.23.3, npm 10.9.9, TypeScript 5.8.3.
 - Twelve forms in JavaScript and TypeScript; five pitfalls; T1–T5 and P1–P7.
 - Eleven comparison-table rows and nine personal-log entries.
 - Student predictions are separated from assistant-run experiments.
+- No explicit any annotations or ts-ignore comments. Only T5 uses ts-expect-error.
 - npm run all and npm run check passed after the latest runnable-code changes.
-- No any annotations or ts-ignore comments. Only T5 uses ts-expect-error.
-- compiler-diagnostics.txt contains separate expected compiler errors.
-- output.txt contains the real output of npm run all.
+- npm run diagnose reproduced the expected compiler errors separately.
+- output.txt is the real stdout of npm run all, including captured React warnings.
+
+## Extra React review
+
+The key experiment runs in both js/props.jsx and ts/props.tsx. JavaScript records
+React's warning and undefined result when reading key. Both components read the
+explicit itemId prop. Separate compiler probes show that JSX accepts key, while
+ComponentProps excludes it from the component's own props. These are assistant-run
+investigations, not invented student mistakes.
 
 ## Bonuses
 
-- Bonus 1: the complete guide is supplied as LaTeX and a 22-page PDF. Listings, real tables and linked contents
-  are included. The final PDF is rendered and visually checked.
+- Bonus 1: the full README is converted to LaTeX and PDF, including the latest
+  React example. Code listings, real tables and linked contents are included.
 - Bonus 2: iterator, default, evaluation-order, type and readability experiments
   include code, actual output and explanations.
 - Bonus 3: five cases use the instructor starter, TypeScript and a fixed TanStack
-  Query revision. The two previously shortened rewrites now include their full
-  function body or hook options. The comparisons are not separate applications.
-- Bonus 4: the initial private repository is published. Newer review commits are also
-  uploaded, and remote HEAD was verified. Work spans two days. Instructor access and further work
-  over several days remain pending.
+  Query revision. Rewrites include the selected function bodies or hook options.
+- Bonus 4: the instructor now asks for public visibility. The owner's repository
+  link is in README. The history has more than five meaningful commits across
+  three days. Public visibility and matching remote HEAD are final upload checks.
 
-## Packaging and earlier checks
+## Final checks
 
-The ZIP excludes node_modules, .git and intermediate TeX files. It includes an
-offline history bundle. The protected original ZIP is kept unchanged.
-CLEAN-CLONE-CHECK.txt records an earlier clean-clone check of its named commit;
-it is historical evidence, not a claim that the latest version was cloned again.
-Later changes to explanations and source excerpts do not alter the runnable examples.
-The guide and PDF are rebuilt together; the final TeX log is checked for errors,
-overfull/underfull boxes and missing characters.
+CLEAN-CLONE-CHECK.txt records the exact runnable-code commit tested from a fresh
+bundle clone with a clean dependency installation. Final documentation changes
+are checked separately. The full PDF is rendered and inspected, and its TeX log
+is checked for compilation errors, overfull/underfull boxes and missing characters.
+The ZIP excludes node_modules, .git and TeX intermediates. Its contents are checked
+against the project. The protected original ZIP is not overwritten.
 
-Final documentation checks passed: required-section audit, source comparisons,
-whitespace check, PDF compilation and visual review of all 22 pages. No TeX
-layout or missing-character warnings were found. Runnable code was unchanged.
+Final local audit: 12 forms, 5 TypeScript topics, 7 React topics, 5 source cases,
+11 comparison rows, 9 personal-log entries and 23 identified source files.
+The rebuilt PDF has 23 pages. All pages were rendered and visually inspected;
+no TeX layout or missing-character warnings remain. Clean-checkout output matches
+output.txt. The final GitHub upload and public visibility are still separate checks.

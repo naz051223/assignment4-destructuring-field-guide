@@ -1,17 +1,20 @@
-CLEAN CLONE VERIFICATION — 14 November 2026
+CLEAN CHECKOUT VERIFICATION
 
-Tested snapshot: 9c9bfdf (full guide, LaTeX/PDF, depth experiments, real-code analysis).
-Cloned from assignment4-history.bundle into a separate directory.
-Node.js: 22.23.3. npm: 10.9.9.
+Tested runnable-code snapshot: b1d689ce9a43e4c40542d25169bab13d335cdf25.
+The snapshot includes the final React key experiment in JavaScript and TypeScript.
+A fresh checkout was cloned from a newly created Git bundle into a separate folder.
+Dependencies were installed into an empty node_modules using the local npm cache.
+Node.js: 22.23.3. npm: 10.9.9. TypeScript: 5.8.3.
 
-npm install --offline --no-audit --no-fund: PASS (existing local npm cache).
+npm install --offline --no-audit --no-fund: PASS.
 npm run all: PASS.
 npm run check: PASS.
-The clean run output matched the submitted output.txt after newline normalization.
+Clean stdout matched output.txt after newline normalization: PASS.
 
-PDF verification: 19 A4 pages; full guide; all pages rendered and inspected;
-no overfull/underfull boxes or missing-character messages in the final TeX log.
-All nine font subsets are embedded. Turkish output strings were checked in PDF text.
+The main project also passed npm run diagnose. Its intentional in-memory compiler
+errors are separate from npm run check; no extra suppressions were introduced.
 
-This verification does not claim remote GitHub publication, instructor access,
-or a history spread over several days. Those Bonus 4 conditions remain pending.
+Later changes update the guide, PDF, layout and status documents only. They do not
+change the tested runnable JavaScript, TypeScript, package scripts or dependencies.
+The final PDF is separately rebuilt and visually checked. Public visibility and
+remote HEAD are checked during the final upload, not inferred from this local test.

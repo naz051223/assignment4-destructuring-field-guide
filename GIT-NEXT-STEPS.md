@@ -1,20 +1,14 @@
-# Bonus 4: Git repository - current status
+# Bonus 4: Git repository
 
-Private repository:
-https://github.com/naz051223/assignment4-destructuring-field-guide
+Owner: naz051223
+Repository: https://github.com/naz051223/assignment4-destructuring-field-guide
 
-The initial work and newer review commits are uploaded. Remote HEAD was checked
-against the local revision. The history spans two days and has more than five
-commits. Instructor access and further review over several days
-remain pending. Commit timestamps have not been changed.
+The instructor asked for a public repository. Public visibility and remote HEAD
+are checked during the final upload. This allows the instructor to read the work
+without a collaborator invitation. The local history has more than five meaningful
+commits across three days, including the React key investigation.
 
-## Continue work
-
-In an authenticated Git terminal, use git push origin main to upload local commits.
-Revoked GitHub CLI access requires a new authorization before using that method.
-Revoking CLI access does not delete the repository or its commits.
-
-For a new checkout:
+## Check a fresh copy
 
 ```sh
 git clone https://github.com/naz051223/assignment4-destructuring-field-guide.git
@@ -24,7 +18,9 @@ npm run all
 npm run check
 ```
 
-The ZIP also includes assignment4-history.bundle as an offline history backup:
+CLEAN-CLONE-CHECK.txt identifies the exact runnable-code snapshot tested from a
+fresh bundle clone. The final documentation changes do not change its code.
+The ZIP includes assignment4-history.bundle as an offline backup of the history:
 
 ```sh
 git clone assignment4-history.bundle assignment4-repository
@@ -32,5 +28,7 @@ cd assignment4-repository
 git remote set-url origin https://github.com/naz051223/assignment4-destructuring-field-guide.git
 ```
 
-Add instructor access according to CATS once the username is known. After later
-changes, update the PDF and export a new ZIP. Keep the protected original backup.
+Commit dates are automatic and unchanged. The README and PDF do not need manual
+date labels. The protected original ZIP is kept separately. If CLI authorization
+is revoked after upload, a later push needs a new authorization; the public
+repository and its uploaded commits remain available.
